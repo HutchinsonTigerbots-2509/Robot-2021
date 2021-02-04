@@ -11,5 +11,14 @@ package frc.robot;
  *
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
+ * 
+ * <p>When declaring constants, they should start with k. (i.e. kLeftMotorID).
+ * 
+ * @version 0.1.0 February 4, 2021
+ * @author First Generated
  */
-public final class Constants {}
+public final class Constants {
+    // public static final int testInt = 3;
+
+
+}
