@@ -136,7 +136,9 @@ $RECYCLE.BIN/
 
 ### Gradle ###
 .gradle
-/build/
+/build/*
+!/build/docs
+!/build/docs/javadoc/*.zip
 
 # Ignore Gradle GUI config
 gradle-app.setting
