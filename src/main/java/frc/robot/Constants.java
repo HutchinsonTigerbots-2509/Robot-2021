@@ -20,5 +20,21 @@ package frc.robot;
 public final class Constants {
     // public static final int testInt = 3;
 
-
+    // Xbox Controller Variables \\
+    public final static int kXboxLeftJoystickX = 0;
+    public final static int kXboxLeftJoystickY = 1;
+    public final static int kXboxLeftTrigger = 2;
+    public final static int kXboxRightTrigger = 3;
+    public final static int kXboxRightJoystickX = 4;
+    public final static int kXboxRightJoystickY = 5;
+    public final static int kXboxButtonA = 1;
+    public final static int kXboxButtonB = 2;
+    public final static int kXboxButtonX = 3;
+    public final static int kXboxButtonY = 4;
+    public final static int kXboxLeftBumper = 5;
+    public final static int kXboxRightBumper = 6;
+    public final static int kXboxButtonBack = 7;
+    public final static int kXboxButtonStart = 8;
+    public final static int kXboxLeftJoystickButton = 9;
+    public final static int kXboxRightJoystickButton = 10;
 }
