@@ -141,6 +141,7 @@ $RECYCLE.BIN/
 # Javadocs
 !/docs/*
 
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
