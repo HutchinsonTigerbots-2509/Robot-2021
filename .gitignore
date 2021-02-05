@@ -136,10 +136,8 @@ $RECYCLE.BIN/
 
 ### Gradle ###
 .gradle
-/build
-
-# Javadocs
-!/docs/*
+/build/*
+!/build/docs/
 
 
 # Ignore Gradle GUI config
