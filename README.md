@@ -1,6 +1,7 @@
 # Robot-2021
 
 ## Hutchinson Robotics Team 2509
+#### Click [here](https://hutchinsontigerbots-2509.github.io/Robot-2021/docs/frc/robot/package-summary.html) to see Javadoc API for this code.
 
 - ### Code Highlights
   - #### Commands
@@ -12,7 +13,8 @@
     subsystems
 
 - ### Important Information for Attributaries
-  - Master branch is to only be updated from psuedoMaster and should never, ever be directly commited to or merged from another branch.
+  - Master branch is to only be updated from psuedoMaster and should never, ever be directly commited to or merged from another branch.  When you push to Master you will need a review
+  before you can merge branches (Assign FerisJumbo or ceciliaschmitz1 to review).
   - psuedoMaster will contain documentation and never merge to psuedoMaster until you have corretly formatted code with javadoc style comments. (ex: @author, @version, @category ect.)
     - Javadoc comment style
       - Class declaration

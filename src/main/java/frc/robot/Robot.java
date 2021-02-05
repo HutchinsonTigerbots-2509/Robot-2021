@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {}
 
+  /** This function is called during the beginning of operator control. */
   @Override
   public void teleopInit() {
     // // This makes sure that the autonomous stops running when
