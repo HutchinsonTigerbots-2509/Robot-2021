@@ -4,10 +4,6 @@
 #### Click [here](https://hutchinsontigerbots-2509.github.io/Robot-2021/build/docs/javadoc/frc/robot/package-summary.html) to see Javadoc API for this code.
 
 - ### Code Highlights
-  - #### Commands
-  
-    commands
-  
   - #### Subsystems
   
     subsystems
