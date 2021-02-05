@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * call.
  * 
  * @author First Generated
+ * @version 0.0.1 ~~/~~/~~~~
  */
 public final class Main {
   private Main() {}
