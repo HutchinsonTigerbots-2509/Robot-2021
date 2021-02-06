@@ -35,6 +35,7 @@
 - psuedoMaster will contain documentation and never merge to psuedoMaster until you have corretly formatted code with javadoc style comments. (ex: @author, @version, @category ect.)
   - Javadoc comment style
     - Class declaration
+
       ```
       /**
        * [Class Name].
@@ -46,11 +47,14 @@
        */
       public testClass {...}
       ```
+
     - Constructor
+
       ```
       /** [Class Name] constructor. */
       public testClass() {...}
       ```
+
       ```
       /**
        * [Class Name] constructor.
@@ -59,7 +63,9 @@
        */
       public testClass() {...}
       ```
+
     - Method
+
       ```
       /**
        * [Method Name].
@@ -71,6 +77,7 @@
        */
       public int testMethod(int arg1) {...}
       ```
+      
 - Before psuedoMaster is pushed to the Master branch run `gradle javadoc` in the terminal to generate documentation (Make sure first that every class has correct documentation and version control).
 - Always create a branch from psuedoMaster.
 - Comment logic statements if they are unclear as what they do.
