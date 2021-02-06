@@ -90,6 +90,6 @@
 - [Grace Swaja](https://github.com/BakedBeans2)             - BakedBeans2
 - [Quinton MacMullan](https://github.com/quintonmacmullan4) - quintonmacmullan4
 - [Noah Sturges](https://github.com/noahsturges18)          - noahsturges18
-  - ##### Moral Supporters
-    - [DJ Scheele](https://github.com/DScheele1)            - DScheele1
-    - [Cole Rahne](https://github.com/CRahne)               - CRahne
+##### Moral Supporters
+- [DJ Scheele](https://github.com/DScheele1)                - DScheele1
+- [Cole Rahne](https://github.com/CRahne)                   - CRahne
