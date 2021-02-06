@@ -16,11 +16,13 @@ package frc.robot;
  * 
  * <p>When declaring constants, they should start with k. (i.e. kLeftMotorID).
  * 
- * @version 0.1.0 February 5, 2021
+ * @version 0.1.1 February 6, 2021
  * @author First Generated
+ * @author Quinton MacMullan 
+ * @author Noah Sturges
  */
 public final class Constants {
-    // public static final int testInt = 3;
+    public final static int kOpStickID = 1;
 
     // Xbox Controller Variables \\
     public final static int kXboxLeftJoystickX = 0;

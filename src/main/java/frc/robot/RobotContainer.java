@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -16,11 +17,17 @@ import edu.wpi.first.wpilibj2.command.Command;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  * 
- * @version 0.1.0 February 4, 2021
+ * @version 0.1.1 February 6, 2021
  * @author First Generated
+ * @author Noah Sturges
+ * @author Quinton MacMullan
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
+  // Joysticks are defined here...
+  public Joystick mOpStick = new Joystick(Constants.kOpStickID);
+
 
   /**
    * RobotContainer Constructor.
