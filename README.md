@@ -29,7 +29,7 @@
 
 
 
-## Important Information for Attributaries
+## Important Information for Contributers
 - Master branch is to only be updated from psuedoMaster and should never, ever be directly commited to or merged from another branch.  When you push to Master you will need a review
   before you can merge branches (Assign FerisJumbo or ceciliaschmitz1 to review).
 - psuedoMaster will contain documentation and never merge to psuedoMaster until you have corretly formatted code with javadoc style comments. (ex: @author, @version, @category ect.)
@@ -90,3 +90,6 @@
 - [Grace Swaja](https://github.com/BakedBeans2)             - BakedBeans2
 - [Quinton MacMullan](https://github.com/quintonmacmullan4) - quintonmacmullan4
 - [Noah Sturges](https://github.com/noahsturges18)          - noahsturges18
+  - ##### Moral Supporters
+    - [DJ Scheele](https://github.com/DScheele1)            - DScheele1
+    - [Cole Rahne](https://github.com/CRahne)               - CRahne
