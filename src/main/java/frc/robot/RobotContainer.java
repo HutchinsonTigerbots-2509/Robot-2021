@@ -17,16 +17,18 @@ import edu.wpi.first.wpilibj2.command.Command;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  * 
- * @version 0.1.1 February 6, 2021
+ * @version 0.1.2 February 6, 2021
  * @author First Generated
  * @author Noah Sturges
  * @author Quinton MacMullan
+ * @author Teagan Young
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // Joysticks are defined here...
   public Joystick mOpStick = new Joystick(Constants.kOpStickID);
+  public Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
 
 
   /**
