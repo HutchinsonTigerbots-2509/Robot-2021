@@ -141,7 +141,7 @@ public class Drivetrain extends SubsystemBase {
   // ***** GYRO METHODS ***** //
 
   /**
-   * Get's gyro X displacement
+   * Gets gyro X displacement
    * @return The X displacement (distance) of the gyro
    */
   public double GetGyroX() {
@@ -149,7 +149,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Get's gyro Y displacement
+   * Gets gyro Y displacement
    * @return The Y displacement (distance) of the gyro
    */
   public double GetGyroY() {
@@ -157,7 +157,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Get's gyro angle
+   * Gets gyro angle
    * @return The gyro angle
    */
   public double GetGyroAngle() {
