@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.Joystick;
  * <p>The Drivetrain Subsystem is reponsible for the Drivetrain motors and the gyro. Drive methods and
  * getter methods for the gyro values are located here.
  * 
- * @version February 6, 2021
+ * @version 1.0.0 February 6, 2021
  * @author Cece
  */
 public class Drivetrain extends SubsystemBase {
