@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -20,9 +21,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * @version February 4, 2021.
  * @author First Generated
  * @author Cole Gartner
+ * @author Noah Sturges
+ * @author Quinton MacMullan
+ * @author Cece
  */
 public class Robot extends TimedRobot {
   private static RobotContainer mRobotContainer;
+  public static String Gart = "Dumb";
 
   /**
    * Initialization.

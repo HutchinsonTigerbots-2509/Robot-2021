@@ -43,8 +43,8 @@ public class RobotContainer {
   private Vision sVision = new Vision();
 
   // Joysticks are defined here...
-  public static Joystick mOpStick = new Joystick(Constants.kOpStickID);
-  public static Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
+  public static Joystick OpStick = new Joystick(Constants.kOpStickID);
+  public static Joystick CoOpStick = new Joystick(Constants.kCoOpStickID);
 
   // Joystick Buttons
   private JoystickButton bAutoCommands; // A temporary button for running Autonomous Commands
@@ -70,7 +70,7 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    bAutoCommands = new JoystickButton(mOpStick, Constants.kXboxButtonStart);
+    bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
     // ***** BARREL RACING PATH ***** //
     // Semi-functional. Will need to be redone once more weight is added to the robot.
