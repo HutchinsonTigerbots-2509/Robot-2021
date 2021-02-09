@@ -51,6 +51,7 @@ public class DriveStraight extends CommandBase {
     addRequirements(sDrivetrain);
   }
 
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     //If the gyro target wasn't specified, use the current angle instead.
@@ -60,18 +61,21 @@ public class DriveStraight extends CommandBase {
     SmartDashboard.putNumber("Gyro Target", mGyroTarget);
   }
 
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
     //Sends the voltage to the Drivetrain motors
     sDrivetrain.DriveWithoutStrafe(mXSpeed, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mZMultiplier);
   }
 
+  /** Called once the command ends or is interrupted. */
   @Override
   public void end(boolean interrupted) {
     //Stops the robot
     sDrivetrain.StopDrivetrain();
   }
 
+  /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {
     return false;

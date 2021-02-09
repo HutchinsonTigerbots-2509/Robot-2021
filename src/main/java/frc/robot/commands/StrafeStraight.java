@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
  * 
  * <p>This commmand uses the Drivetrain and Gyro to strafe while maintaining rotation
  * 
- * @version February 6, 2021
+ * @version February 9, 2021
  * @author Cece
  */
 public class StrafeStraight extends CommandBase {
@@ -20,7 +20,11 @@ public class StrafeStraight extends CommandBase {
   private double mYSpeed;
   private double mRotationMultiplier = 0.06;
   private double mGyroTarget;
-  /** Creates a new StrafeStraight. */
+
+  /** 
+   * Creates a new StrafeStraight.
+   * <p> Strafes while correcting for rotation using the current gyro angle
+   */
   public StrafeStraight(Drivetrain pDrivetrain, double pYSpeed) {
     sDrivetrain = pDrivetrain;
     mYSpeed = pYSpeed;
@@ -28,25 +32,25 @@ public class StrafeStraight extends CommandBase {
     addRequirements(sDrivetrain);
   }
 
-  // Called when the command is initially scheduled.
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     mGyroTarget = sDrivetrain.GetGyroAngle();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
     sDrivetrain.DriveWithStrafe(mYSpeed, 0, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mRotationMultiplier);
   }
 
-  // Called once the command ends or is interrupted.
+  /** Called once the command ends or is interrupted. */
   @Override
   public void end(boolean interrupted) {
     sDrivetrain.StopDrivetrain();
   }
 
-  // Returns true when the command should end.
+  /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {
     return false;

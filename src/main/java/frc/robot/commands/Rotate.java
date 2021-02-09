@@ -30,6 +30,11 @@ public class Rotate extends CommandBase {
   //Y Target
   private double mYTarget;
   
+  /** 
+   * The Rotate Constructor
+   * 
+   * <p> Rotates the robot around a vision target, using a specified speed and Y Target
+   */
   public Rotate(Drivetrain pDrivetrain, Vision pVision, double pStrafeSpeed, double pYTarget) {
     sDrivetrain = pDrivetrain;
     sVision = pVision;
@@ -40,9 +45,11 @@ public class Rotate extends CommandBase {
     addRequirements(sVision);
   }
 
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {}
 
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
     //Sets the forward speed based on the Y position of the target
@@ -64,9 +71,11 @@ public class Rotate extends CommandBase {
     sDrivetrain.DriveWithStrafe(mStrafeSpeed, mForwardSpeed, sVision.getTargetX() * mRotationMultiplier);
   }
 
+  /** Called once the command ends or is interrupted. */
   @Override
   public void end(boolean interrupted) {}
 
+  /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {
     return false;

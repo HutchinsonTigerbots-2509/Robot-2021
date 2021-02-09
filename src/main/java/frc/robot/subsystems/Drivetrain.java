@@ -23,8 +23,9 @@ import edu.wpi.first.wpilibj.Joystick;
  * The Drivetrain Subsystem is reponsible for the Drivetrain motors and the
  * gyro. Drive methods and getter methods for the gyro values are located here.
  * 
- * @version 1.0.1 February 9, 2021
+ * @version February 9, 2021
  * @author Cece
+ * @author Grace
  */
 public class Drivetrain extends SubsystemBase {
   // Motors
@@ -71,6 +72,7 @@ public class Drivetrain extends SubsystemBase {
     ResetGyro();
   }
 
+  /**Periodic function */
   @Override
   public void periodic() {
     // Drives the robot using a joystick
@@ -81,7 +83,10 @@ public class Drivetrain extends SubsystemBase {
 
   // ***** TELEOP DRIVE METHODS ***** //
 
-  // Drives without ramp using the Joystick
+  /**
+   * Drives the robot without ramp using the Joystick
+   * @param pStick The Joystick to get inputs from
+   */
   private void JoystickDrive(Joystick pStick) {
     // Calculates the Y Speed based on the joystick values
     if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
@@ -109,39 +114,57 @@ public class Drivetrain extends SubsystemBase {
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //
 
-  // Drives without strafe (arcadeDrive, essentially)
+  /**
+   * Drives without strafe (arcadeDrive, essentially)
+   * @param pXSpeed forward speed
+   * @param pZSpeed rotational speed
+   */
   public void DriveWithoutStrafe(double pXSpeed, double pZSpeed) {
     mDrive.driveCartesian(0, pXSpeed, pZSpeed);
   }
 
-  // Drives with strafe (cartesianDrive)
+  /**
+   * Drives with strafe (cartesianDrive)
+   * @param pYSpeed strafe speed
+   * @param pXSpeed forward speed
+   * @param pZSpeed rotational speed
+   */
   public void DriveWithStrafe(double pYSpeed, double pXSpeed, double pZSpeed) {
     mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
   }
 
-  // Stops the robot
+  /** Stops the robot */
   public void StopDrivetrain() {
     mDrive.driveCartesian(0, 0, 0);
   }
 
   // ***** GYRO METHODS ***** //
 
-  // Returns the X displacement (distance) of the gyro
+  /**
+   * Get's gyro X displacement
+   * @return The X displacement (distance) of the gyro
+   */
   public double GetGyroX() {
     return mGyro.getDisplacementX();
   }
 
-  // Returns the Y displacement (distance) of the gyro
+  /**
+   * Get's gyro Y displacement
+   * @return The Y displacement (distance) of the gyro
+   */
   public double GetGyroY() {
     return mGyro.getDisplacementY();
   }
 
-  // Returns the angle (rotation) of the gyro
+  /**
+   * Get's gyro angle
+   * @return The gyro angle
+   */
   public double GetGyroAngle() {
     return mGyro.getAngle();
   }
 
-  // Zeros the gyro
+  /** Zeros the gyro */
   public void ResetGyro() {
     mGyro.reset();
     mGyro.resetDisplacement();
