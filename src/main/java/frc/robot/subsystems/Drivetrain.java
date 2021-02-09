@@ -72,7 +72,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     //Drives the robot using a joystick
-    JoystickDrive(RobotContainer.OpStick);
+    JoystickDrive(Robot.RobotContainer.mOpStick);
     //Prints the gyro angle to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
   }

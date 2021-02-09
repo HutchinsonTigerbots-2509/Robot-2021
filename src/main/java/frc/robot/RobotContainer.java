@@ -27,19 +27,20 @@ import frc.robot.commands.Rotate;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  * 
- * @version 0.1.1 February 6, 2021
+ * @version 0.1.2 February 6, 2021
  * @author First Generated
  * @author Noah Sturges
  * @author Quinton MacMullan
+ * @author Teagan Young
  */
 public class RobotContainer {
   // Subsystems
   private Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
 
-  // Joysticks
-  public static Joystick OpStick = new Joystick(Constants.kOpStickID);
-  public static Joystick CoOpStick = new Joystick(Constants.kCoOpStickID);
+  // Joysticks are defined here...
+  public Joystick mOpStick = new Joystick(Constants.kOpStickID);
+  public Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
 
   //Joystick Buttons
   private JoystickButton AutoButton; // A temporary button for running Autonomous Commands
