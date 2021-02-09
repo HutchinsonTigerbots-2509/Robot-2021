@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -20,14 +21,15 @@ import edu.wpi.first.wpilibj.Joystick;
 /**
  * Drivetrain Subsystem.
  * 
- * <p>The Drivetrain Subsystem is reponsible for the Drivetrain motors and the gyro. Drive methods and
- * getter methods for the gyro values are located here.
+ * <p>
+ * The Drivetrain Subsystem is reponsible for the Drivetrain motors and the
+ * gyro. Drive methods and getter methods for the gyro values are located here.
  * 
- * @version February 6, 2021
+ * @version 1.0.1 February 9, 2021
  * @author Cece
  */
 public class Drivetrain extends SubsystemBase {
-  //Motors
+  // Motors
   private WPI_TalonFX FrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
   private WPI_TalonFX FrontRight = new WPI_TalonFX(Constants.kFrontRightID);
   private WPI_TalonFX RearLeft = new WPI_TalonFX(Constants.kRearLeftID);
@@ -35,10 +37,10 @@ public class Drivetrain extends SubsystemBase {
 
   private MecanumDrive drive = new MecanumDrive(FrontLeft, RearLeft, FrontRight, RearRight);
 
-  //Gyro
+  // Gyro
   private AHRS gyro = new AHRS();
 
-  //Speed Variables
+  // Speed Variables
   private double XSpeed = 0;
   private double YSpeed = 0;
   private double ZSpeed = 0;
@@ -50,7 +52,8 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Drivetrain Constructor.
    * 
-   * <p>The Drivetrain of the robots. Contains Drivetrain motors and gyro.
+   * <p>
+   * The Drivetrain of the robots. Contains Drivetrain motors and gyro.
    */
   public Drivetrain() {
     // Sets whether or not the motors are inverted
@@ -59,7 +62,8 @@ public class Drivetrain extends SubsystemBase {
     FrontLeft.setInverted(true);
     RearLeft.setInverted(true);
 
-    // Sets the Neutral Mode of the motors (what the motors do when their recieved voltage is 0)
+    // Sets the Neutral Mode of the motors (what the motors do when their recieved
+    // voltage is 0)
     FrontRight.setNeutralMode(NeutralMode.Brake);
     RearRight.setNeutralMode(NeutralMode.Brake);
     FrontLeft.setNeutralMode(NeutralMode.Brake);
@@ -71,32 +75,32 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //Drives the robot using a joystick
-    JoystickDrive(RobotContainer.OpStick);
-    //Prints the gyro angle to the SmartDashboard
+    // Drives the robot using a joystick
+    JoystickDrive(Robot.getRC().mOpStick);
+    // Prints the gyro angle to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
 
-  //Drives without ramp using the Joystick
-  private void JoystickDrive(Joystick stick){
-    //Calculates the Y Speed based on the joystick values
-    if(stick.getRawAxis(Constants.kXboxRightTrigger) > 0.4){
+  // Drives without ramp using the Joystick
+  private void JoystickDrive(Joystick stick) {
+    // Calculates the Y Speed based on the joystick values
+    if (stick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
       YSpeed = stick.getRawAxis(Constants.kXboxRightTrigger) * YMultiplier;
-    } else if (stick.getRawAxis(Constants.kXboxLeftTrigger) > 0.4){
+    } else if (stick.getRawAxis(Constants.kXboxLeftTrigger) > 0.4) {
       YSpeed = -stick.getRawAxis(Constants.kXboxLeftTrigger) * YMultiplier;
     } else {
       YSpeed = 0;
     }
-    //Calculates the X Speed based on the joystick values;
-    if(Math.abs(stick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.4){
+    // Calculates the X Speed based on the joystick values;
+    if (Math.abs(stick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.4) {
       XSpeed = -stick.getRawAxis(Constants.kXboxLeftJoystickY) * XMultiplier;
     } else {
       XSpeed = 0;
     }
-    //Calculates the Z Speed based on the joystick values
-    if(Math.abs(stick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.4){
+    // Calculates the Z Speed based on the joystick values
+    if (Math.abs(stick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.4) {
       ZSpeed = stick.getRawAxis(Constants.kXboxRightJoystickX) * ZMultiplier;
     } else {
       ZSpeed = 0;
@@ -107,40 +111,40 @@ public class Drivetrain extends SubsystemBase {
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //
 
-  //Drives without strafe (arcadeDrive, essentially)
-  public void DriveWithoutStrafe(double XSpeed, double ZSpeed){
+  // Drives without strafe (arcadeDrive, essentially)
+  public void DriveWithoutStrafe(double XSpeed, double ZSpeed) {
     drive.driveCartesian(0, XSpeed, ZSpeed);
   }
 
-  //Drives with strafe (cartesianDrive)
-  public void DriveWithStrafe(double YSpeed, double XSpeed, double ZSpeed){
+  // Drives with strafe (cartesianDrive)
+  public void DriveWithStrafe(double YSpeed, double XSpeed, double ZSpeed) {
     drive.driveCartesian(YSpeed, XSpeed, ZSpeed);
   }
 
-  //Stops the robot
-  public void StopDrivetrain(){
+  // Stops the robot
+  public void StopDrivetrain() {
     drive.driveCartesian(0, 0, 0);
   }
 
   // ***** GYRO METHODS ***** //
 
   // Returns the X displacement (distance) of the gyro
-  public double GetGyroX(){
+  public double GetGyroX() {
     return gyro.getDisplacementX();
   }
 
   // Returns the Y displacement (distance) of the gyro
-  public double GetGyroY(){
+  public double GetGyroY() {
     return gyro.getDisplacementY();
   }
 
   // Returns the angle (rotation) of the gyro
-  public double GetGyroAngle(){
+  public double GetGyroAngle() {
     return gyro.getAngle();
   }
 
   // Zeros the gyro
-  public void ResetGyro(){
+  public void ResetGyro() {
     gyro.reset();
     gyro.resetDisplacement();
   }

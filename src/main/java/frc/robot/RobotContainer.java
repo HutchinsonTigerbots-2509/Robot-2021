@@ -23,32 +23,37 @@ import frc.robot.commands.StrafeStraight;
 /**
  * RobotContainer class.
  * 
- * <p>This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * <p>
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  * 
  * @version February 6, 2021
  * @author Cece
  * @author Noah Sturges
  * @author Quinton MacMullan
+ * @author Teagan Young
+ * @author Cole Gartner
  */
 public class RobotContainer {
   // Subsystems
   private Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
 
-  // Joysticks
-  public static Joystick OpStick = new Joystick(Constants.kOpStickID);
-  public static Joystick CoOpStick = new Joystick(Constants.kCoOpStickID);
+  // Joysticks are defined here...
+  public Joystick mOpStick = new Joystick(Constants.kOpStickID);
+  public Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
 
-  //Joystick Buttons
+  // Joystick Buttons
   private JoystickButton AutoButton; // A temporary button for running Autonomous Commands
 
   /**
    * RobotContainer Constructor.
    * 
-   * <p>The container for the robot. Contains subsystems, OI devices, and commands.
+   * <p>
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
@@ -58,13 +63,14 @@ public class RobotContainer {
   /**
    * Configure Button Bindings.
    * 
-   * <p>Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * <p>
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    AutoButton = new JoystickButton(OpStick, Constants.kXboxButtonStart);
+    AutoButton = new JoystickButton(mOpStick, Constants.kXboxButtonStart);
 
     // ***** BARREL RACING PATH ***** //
     // Semi-functional. Will need to be redone once more weight is added to the robot.
@@ -156,7 +162,8 @@ public class RobotContainer {
   /**
    * Get Auto Command.
    * 
-   * <p>Use this to pass the autonomous command to the main {@link Robot} class.
+   * <p>
+   * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
