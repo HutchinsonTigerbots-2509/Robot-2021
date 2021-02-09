@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  * 
- * @version 0.1.0 February 4, 2021.
+ * @version February 4, 2021.
  * @author First Generated
  */
 public class Robot extends TimedRobot {

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.Rotate;
+import frc.robot.commands.StrafeStraight;
 
 /**
  * RobotContainer class.
@@ -27,8 +28,8 @@ import frc.robot.commands.Rotate;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  * 
- * @version 0.1.1 February 6, 2021
- * @author First Generated
+ * @version February 6, 2021
+ * @author Cece
  * @author Noah Sturges
  * @author Quinton MacMullan
  */
@@ -66,31 +67,32 @@ public class RobotContainer {
     AutoButton = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
     // ***** BARREL RACING PATH ***** //
-    // DOES NOT WORK LIKE AT ALL
+    // Semi-functional. Will need to be redone once more weight is added to the robot.
     AutoButton.whenPressed(new SequentialCommandGroup(
       //Drives straight to set up for first marker
       new InstantCommand(() -> sDrivetrain.ResetGyro()),
-      new DriveStraight(sDrivetrain, 1).withTimeout(0.6),
+      new DriveStraight(sDrivetrain, 1).withTimeout(0.5),
       new WaitCommand(0.2),
       //Rotates around first marker
-      new Rotate(sDrivetrain, sVision, -0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 320),
+      new Rotate(sDrivetrain, sVision, -0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 315), //320
       //Strafes + Drives to set up for second marker
-      new RunCommand(() -> sDrivetrain.DriveWithStrafe(-0.9, 0, 0)).withTimeout(0.35),
-      new DriveStraight(sDrivetrain, 1).withTimeout(0.9),
-      new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.4, 0.5, 0)).withTimeout(0.6),
+      new StrafeStraight(sDrivetrain, -1).withTimeout(0.3),
+      new DriveStraight(sDrivetrain, 1).withTimeout(0.6),
       new WaitCommand(0.2),
+      //Turns if the robot isn't facing the marker
+      new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
       //Rotates around second marker
       new Rotate(sDrivetrain, sVision, 0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
       //Strafes + Drives to set up for third marker
-      new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, -0.3, 0)).withTimeout(0.7),
-      new DriveStraight(sDrivetrain, 1).withTimeout(0.7),
+      new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.7),
+      new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
       new WaitCommand(0.4),
       //Turns if the robot isn't facing the marker
-      new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
+      new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
       //Rotates around third marker
       new Rotate(sDrivetrain, sVision, 0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
       //Strafes to the side for final run
-      new RunCommand(() -> sDrivetrain.DriveWithStrafe(1, 0, 0)).withTimeout(0.3),
+      new StrafeStraight(sDrivetrain, 1).withTimeout(0.2),
       //Switches pipeline to dual target mode
       new InstantCommand(() -> sVision.SwitchPipeline(2)),
       //Drives forward until several requirements have been satisfied
@@ -111,6 +113,7 @@ public class RobotContainer {
 
     // ***** SLALOM PATH ***** //
     // WILL NOT WORK LIKE AT ALL DO NOT RUN THIS WITHOUT CECE OR ELSE EXPECT CHAOS
+    // LongDrive, GryoTurn, and DriveToVision commands all have to be rewritten
     /*
     AutoButton.whenPressed(new SequentialCommandGroup(
       //Diagonal strafes to the left of the first marker
@@ -127,7 +130,7 @@ public class RobotContainer {
       new Rotate(sDrivetrain, sVision, 0.5, -23).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -250),//240
       new WaitCommand(0.2),
       //Strafes to the right until a target X & Y are hit
-      new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.7, 0, 0)).withInterrupt(() -> sVision.getTargetX() < 27 && sVision.getTargetY() > 5),
+      new StrafeStraight(sDrivetrain, 0.7).withInterrupt(() -> sVision.getTargetX() < 27 && sVision.getTargetY() > 5),
       new WaitCommand(0.2),
       //Drives forward (time based)
       new DriveStraight(sDrivetrain, 0.7).withTimeout(1.25),
@@ -144,10 +147,9 @@ public class RobotContainer {
       new RunCommand(() -> sDrivetrain.DriveWithStrafe(1, 0.3, 0)).withInterrupt(() -> sVision.getTargetY() < -20),
       //Strafes diagonally, then drives forward. Time based.
       new RunCommand(() -> sDrivetrain.DriveWithStrafe(1, 0.3, 0)).withTimeout(0.35),
-      new RunCommand(() -> sDrivetrain.DriveWithStrafe(0, 1, 0)).withTimeout(0.7)
+      new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(1, 0)).withTimeout(0.7)
       ));
       */
-      
 
   }
 

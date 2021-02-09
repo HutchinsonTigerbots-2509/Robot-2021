@@ -43,9 +43,9 @@ public class Drivetrain extends SubsystemBase {
   private double YSpeed = 0;
   private double ZSpeed = 0;
   //Multipliers
-  private double XMultiplier = 0.6;
-  private double YMultiplier = 0.8;
-  private double ZMultiplier = 0.6;
+  private double XMultiplier = 1; //0.6
+  private double YMultiplier = 1; //0.8
+  private double ZMultiplier = 1; //0.6
 
   /**
    * Drivetrain Constructor.
@@ -102,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
       ZSpeed = 0;
     }
     //Sets the motors to the speed
-    drive.driveCartesian(YSpeed, XSpeed, -ZSpeed);
+    drive.driveCartesian(YSpeed, XSpeed, ZSpeed);
   }
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //

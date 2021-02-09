@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -21,7 +22,7 @@ public class DriveStraight extends CommandBase {
   private Drivetrain sDrivetrain;
   //Speed variables
   private double XSpeed;
-  private double ZMultiplier = 0.01;
+  private double ZMultiplier = 0.04;
   //Gyro
   private Double gyroTarget;
   
@@ -56,12 +57,13 @@ public class DriveStraight extends CommandBase {
     if(gyroTarget == null){
       gyroTarget = sDrivetrain.GetGyroAngle();
     }
+    SmartDashboard.putNumber("Gyro Target", gyroTarget);
   }
 
   @Override
   public void execute() {
     //Sends the voltage to the Drivetrain motors
-    sDrivetrain.DriveWithoutStrafe(XSpeed, (sDrivetrain.GetGyroAngle() - gyroTarget) * ZMultiplier);
+    sDrivetrain.DriveWithoutStrafe(XSpeed, -(sDrivetrain.GetGyroAngle() - gyroTarget) * ZMultiplier);
   }
 
   @Override

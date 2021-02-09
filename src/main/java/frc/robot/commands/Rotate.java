@@ -23,9 +23,10 @@ public class Rotate extends CommandBase {
   // Speed variables
   private double strafeSpeed;
   private double forwardSpeed;
+  private double maxForwardSpeed = 0.6;
   //Multipliers
-  private double forwardMultiplier = 0.06;
-  private double rotationMultiplier = 0.06;
+  private double forwardMultiplier = 0.05; // 0.06
+  private double rotationMultiplier = 0.05; //0.06
   //Y Target
   private double YTarget;
   
@@ -46,15 +47,21 @@ public class Rotate extends CommandBase {
   public void execute() {
     //Sets the forward speed based on the Y position of the target
     if(YTarget < sVision.getTargetY()){
-      forwardSpeed = (Math.abs(YTarget - sVision.getTargetY()));
+      forwardSpeed = (Math.abs(YTarget - sVision.getTargetY())) * forwardMultiplier;
     }else if(YTarget > sVision.getTargetY()){
-      forwardSpeed = -(Math.abs(YTarget - sVision.getTargetY()));
+      forwardSpeed = -(Math.abs(YTarget - sVision.getTargetY())) * forwardMultiplier;
     }else{
       forwardSpeed = 0;
     }
+    //Checks to make sure the speed is less than the max speed
+    if(forwardSpeed > maxForwardSpeed){
+      forwardSpeed = maxForwardSpeed;
+    } else if (forwardSpeed < -maxForwardSpeed){
+      forwardSpeed = -maxForwardSpeed;
+    }
 
     //Updates the speed of the Drivetrain motors
-    sDrivetrain.DriveWithStrafe(strafeSpeed, forwardSpeed * forwardMultiplier, sVision.getTargetX() * rotationMultiplier);
+    sDrivetrain.DriveWithStrafe(strafeSpeed, forwardSpeed, sVision.getTargetX() * rotationMultiplier);
   }
 
   @Override
