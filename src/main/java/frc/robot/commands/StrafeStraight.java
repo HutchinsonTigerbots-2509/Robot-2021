@@ -17,13 +17,13 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class StrafeStraight extends CommandBase {
   private Drivetrain sDrivetrain;
-  private double YSpeed;
-  private double rotationMultiplier = 0.06;
-  private double gyroTarget;
+  private double mYSpeed;
+  private double mRotationMultiplier = 0.06;
+  private double mGyroTarget;
   /** Creates a new StrafeStraight. */
   public StrafeStraight(Drivetrain pDrivetrain, double pYSpeed) {
     sDrivetrain = pDrivetrain;
-    YSpeed = pYSpeed;
+    mYSpeed = pYSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
@@ -31,13 +31,13 @@ public class StrafeStraight extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    gyroTarget = sDrivetrain.GetGyroAngle();
+    mGyroTarget = sDrivetrain.GetGyroAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sDrivetrain.DriveWithStrafe(YSpeed, 0, -(sDrivetrain.GetGyroAngle() - gyroTarget) * rotationMultiplier);
+    sDrivetrain.DriveWithStrafe(mYSpeed, 0, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mRotationMultiplier);
   }
 
   // Called once the command ends or is interrupted.

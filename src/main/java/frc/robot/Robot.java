@@ -117,13 +117,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-
-  /**
-   * Get RobotContainer
-   * 
-   * @return RobotContainer Instance
-   */
-  public static RobotContainer getRC() {
-    return mRobotContainer;
-  }
 }

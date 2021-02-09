@@ -21,20 +21,20 @@ public class Rotate extends CommandBase {
   private Drivetrain sDrivetrain;
   private Vision sVision;
   // Speed variables
-  private double strafeSpeed;
-  private double forwardSpeed;
-  private double maxForwardSpeed = 0.6;
+  private double mStrafeSpeed;
+  private double mForwardSpeed;
+  private double mMaxForwardSpeed = 0.6;
   //Multipliers
-  private double forwardMultiplier = 0.05; // 0.06
-  private double rotationMultiplier = 0.05; //0.06
+  private double mForwardMultiplier = 0.05; // 0.06
+  private double mRotationMultiplier = 0.05; //0.06
   //Y Target
-  private double YTarget;
+  private double mYTarget;
   
   public Rotate(Drivetrain pDrivetrain, Vision pVision, double pStrafeSpeed, double pYTarget) {
     sDrivetrain = pDrivetrain;
     sVision = pVision;
-    strafeSpeed = pStrafeSpeed;
-    YTarget = pYTarget;
+    mStrafeSpeed = pStrafeSpeed;
+    mYTarget = pYTarget;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
     addRequirements(sVision);
@@ -46,22 +46,22 @@ public class Rotate extends CommandBase {
   @Override
   public void execute() {
     //Sets the forward speed based on the Y position of the target
-    if(YTarget < sVision.getTargetY()){
-      forwardSpeed = (Math.abs(YTarget - sVision.getTargetY())) * forwardMultiplier;
-    }else if(YTarget > sVision.getTargetY()){
-      forwardSpeed = -(Math.abs(YTarget - sVision.getTargetY())) * forwardMultiplier;
+    if(mYTarget < sVision.getTargetY()){
+      mForwardSpeed = (Math.abs(mYTarget - sVision.getTargetY())) * mForwardMultiplier;
+    }else if(mYTarget > sVision.getTargetY()){
+      mForwardSpeed = -(Math.abs(mYTarget - sVision.getTargetY())) * mForwardMultiplier;
     }else{
-      forwardSpeed = 0;
+      mForwardSpeed = 0;
     }
     //Checks to make sure the speed is less than the max speed
-    if(forwardSpeed > maxForwardSpeed){
-      forwardSpeed = maxForwardSpeed;
-    } else if (forwardSpeed < -maxForwardSpeed){
-      forwardSpeed = -maxForwardSpeed;
+    if(mForwardSpeed > mMaxForwardSpeed){
+      mForwardSpeed = mMaxForwardSpeed;
+    } else if (mForwardSpeed < -mMaxForwardSpeed){
+      mForwardSpeed = -mMaxForwardSpeed;
     }
 
     //Updates the speed of the Drivetrain motors
-    sDrivetrain.DriveWithStrafe(strafeSpeed, forwardSpeed, sVision.getTargetX() * rotationMultiplier);
+    sDrivetrain.DriveWithStrafe(mStrafeSpeed, mForwardSpeed, sVision.getTargetX() * mRotationMultiplier);
   }
 
   @Override

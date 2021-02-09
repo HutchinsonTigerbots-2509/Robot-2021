@@ -43,11 +43,11 @@ public class RobotContainer {
   private Vision sVision = new Vision();
 
   // Joysticks are defined here...
-  public Joystick mOpStick = new Joystick(Constants.kOpStickID);
-  public Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
+  public static Joystick mOpStick = new Joystick(Constants.kOpStickID);
+  public static Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
 
   // Joystick Buttons
-  private JoystickButton AutoButton; // A temporary button for running Autonomous Commands
+  private JoystickButton bAutoCommands; // A temporary button for running Autonomous Commands
 
   /**
    * RobotContainer Constructor.
@@ -70,11 +70,11 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    AutoButton = new JoystickButton(mOpStick, Constants.kXboxButtonStart);
+    bAutoCommands = new JoystickButton(mOpStick, Constants.kXboxButtonStart);
 
     // ***** BARREL RACING PATH ***** //
     // Semi-functional. Will need to be redone once more weight is added to the robot.
-    AutoButton.whenPressed(new SequentialCommandGroup(
+    bAutoCommands.whenPressed(new SequentialCommandGroup(
       //Drives straight to set up for first marker
       new InstantCommand(() -> sDrivetrain.ResetGyro()),
       new DriveStraight(sDrivetrain, 1).withTimeout(0.5),
@@ -121,7 +121,7 @@ public class RobotContainer {
     // WILL NOT WORK LIKE AT ALL DO NOT RUN THIS WITHOUT CECE OR ELSE EXPECT CHAOS
     // LongDrive, GryoTurn, and DriveToVision commands all have to be rewritten
     /*
-    AutoButton.whenPressed(new SequentialCommandGroup(
+    bAutoCommands.whenPressed(new SequentialCommandGroup(
       //Diagonal strafes to the left of the first marker
       new DriveToVision(sDrivetrain, sVision, 12.9), //12.7
       new WaitCommand(0.2),

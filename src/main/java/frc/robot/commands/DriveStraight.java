@@ -21,10 +21,10 @@ public class DriveStraight extends CommandBase {
   //Subsystems
   private Drivetrain sDrivetrain;
   //Speed variables
-  private double XSpeed;
-  private double ZMultiplier = 0.04;
+  private double mXSpeed;
+  private double mZMultiplier = 0.04;
   //Gyro
-  private Double gyroTarget;
+  private Double mGyroTarget;
   
    /**
    * Drive Straight Constructor.
@@ -33,7 +33,7 @@ public class DriveStraight extends CommandBase {
    */
   public DriveStraight(Drivetrain pDrivetrain, double pXSpeed) {
     sDrivetrain = pDrivetrain;
-    XSpeed = pXSpeed;
+    mXSpeed = pXSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
@@ -45,8 +45,8 @@ public class DriveStraight extends CommandBase {
    */
   public DriveStraight(Drivetrain pDrivetrain, double pXSpeed, double pGyroTarget){
     sDrivetrain = pDrivetrain;
-    XSpeed = pXSpeed;
-    gyroTarget = pGyroTarget;
+    mXSpeed = pXSpeed;
+    mGyroTarget = pGyroTarget;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
@@ -54,16 +54,16 @@ public class DriveStraight extends CommandBase {
   @Override
   public void initialize() {
     //If the gyro target wasn't specified, use the current angle instead.
-    if(gyroTarget == null){
-      gyroTarget = sDrivetrain.GetGyroAngle();
+    if(mGyroTarget == null){
+      mGyroTarget = sDrivetrain.GetGyroAngle();
     }
-    SmartDashboard.putNumber("Gyro Target", gyroTarget);
+    SmartDashboard.putNumber("Gyro Target", mGyroTarget);
   }
 
   @Override
   public void execute() {
     //Sends the voltage to the Drivetrain motors
-    sDrivetrain.DriveWithoutStrafe(XSpeed, -(sDrivetrain.GetGyroAngle() - gyroTarget) * ZMultiplier);
+    sDrivetrain.DriveWithoutStrafe(mXSpeed, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mZMultiplier);
   }
 
   @Override
