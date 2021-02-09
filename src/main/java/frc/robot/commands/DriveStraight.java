@@ -30,6 +30,8 @@ public class DriveStraight extends CommandBase {
    * Drive Straight Constructor.
    * 
    * <p>Drives the robot straight, using the current gyro angle to correct for rotation
+   * @param pDrivetrain Drivetrain subsystem
+   * @param pXSpeed Forward Speed
    */
   public DriveStraight(Drivetrain pDrivetrain, double pXSpeed) {
     sDrivetrain = pDrivetrain;
@@ -42,6 +44,9 @@ public class DriveStraight extends CommandBase {
    * Drive Straight Constructor.
    * 
    * <p>Drives the robot straight, using a specified gyro angle to correct for rotation
+   * @param pDrivetrain Drivetrain Subsystem
+   * @param pXSpeed Forward Speed
+   * @param pGyroTarget The gyro angle to Target
    */
   public DriveStraight(Drivetrain pDrivetrain, double pXSpeed, double pGyroTarget){
     sDrivetrain = pDrivetrain;

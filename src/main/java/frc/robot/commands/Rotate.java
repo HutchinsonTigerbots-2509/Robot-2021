@@ -29,11 +29,15 @@ public class Rotate extends CommandBase {
   private double mRotationMultiplier = 0.05; //0.06
   //Y Target
   private double mYTarget;
-  
-  /** 
+
+  /**
    * The Rotate Constructor
    * 
    * <p> Rotates the robot around a vision target, using a specified speed and Y Target
+   * @param pDrivetrain Drivetrain subsystem
+   * @param pVision Vision subsystem
+   * @param pStrafeSpeed Strafe speed
+   * @param pYTarget Y Value to Target
    */
   public Rotate(Drivetrain pDrivetrain, Vision pVision, double pStrafeSpeed, double pYTarget) {
     sDrivetrain = pDrivetrain;

@@ -24,6 +24,8 @@ public class StrafeStraight extends CommandBase {
   /** 
    * Creates a new StrafeStraight.
    * <p> Strafes while correcting for rotation using the current gyro angle
+   * @param pDrivetrain Drivetrain subsystem
+   * @param pYSpeed strafe speed
    */
   public StrafeStraight(Drivetrain pDrivetrain, double pYSpeed) {
     sDrivetrain = pDrivetrain;
