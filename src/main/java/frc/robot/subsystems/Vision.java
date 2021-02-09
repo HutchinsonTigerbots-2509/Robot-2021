@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * <p>The Vision subsystems accesses the Limelight Network Table and contains methods to retrieve those values.
  * It is also responsible for any pipeline changes and anything else regarding the Limelight camera.
  * 
- * @version February 6, 2021
+ * @version 1.0.0 February 6, 2021
  * @author Cece
  */
 public class Vision extends SubsystemBase {
