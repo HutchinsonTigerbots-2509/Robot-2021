@@ -20,7 +20,7 @@ package frc.robot;
  * <p>
  * When declaring constants, they should start with k. (i.e. kLeftMotorID).
  * 
- * @version 0.1.3 February 9, 2021
+ * @version February 9, 2021
  * @author First Generated
  * @author Quinton MacMullan
  * @author Noah Sturges

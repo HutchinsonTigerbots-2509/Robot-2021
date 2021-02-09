@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -20,10 +21,10 @@ public class DriveStraight extends CommandBase {
   //Subsystems
   private Drivetrain sDrivetrain;
   //Speed variables
-  private double XSpeed;
-  private double ZMultiplier = 0.01;
+  private double mXSpeed;
+  private double mZMultiplier = 0.04;
   //Gyro
-  private Double gyroTarget;
+  private Double mGyroTarget;
   
    /**
    * Drive Straight Constructor.
@@ -32,7 +33,7 @@ public class DriveStraight extends CommandBase {
    */
   public DriveStraight(Drivetrain pDrivetrain, double pXSpeed) {
     sDrivetrain = pDrivetrain;
-    XSpeed = pXSpeed;
+    mXSpeed = pXSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
@@ -44,32 +45,37 @@ public class DriveStraight extends CommandBase {
    */
   public DriveStraight(Drivetrain pDrivetrain, double pXSpeed, double pGyroTarget){
     sDrivetrain = pDrivetrain;
-    XSpeed = pXSpeed;
-    gyroTarget = pGyroTarget;
+    mXSpeed = pXSpeed;
+    mGyroTarget = pGyroTarget;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
 
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     //If the gyro target wasn't specified, use the current angle instead.
-    if(gyroTarget == null){
-      gyroTarget = sDrivetrain.GetGyroAngle();
+    if(mGyroTarget == null){
+      mGyroTarget = sDrivetrain.GetGyroAngle();
     }
+    SmartDashboard.putNumber("Gyro Target", mGyroTarget);
   }
 
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
     //Sends the voltage to the Drivetrain motors
-    sDrivetrain.DriveWithoutStrafe(XSpeed, (sDrivetrain.GetGyroAngle() - gyroTarget) * ZMultiplier);
+    sDrivetrain.DriveWithoutStrafe(mXSpeed, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mZMultiplier);
   }
 
+  /** Called once the command ends or is interrupted. */
   @Override
   public void end(boolean interrupted) {
     //Stops the robot
     sDrivetrain.StopDrivetrain();
   }
 
+  /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {
     return false;

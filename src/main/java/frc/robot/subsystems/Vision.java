@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * <p>The Vision subsystems accesses the Limelight Network Table and contains methods to retrieve those values.
  * It is also responsible for any pipeline changes and anything else regarding the Limelight camera.
  * 
- * @version 1.0.0 February 6, 2021
+ * @version February 9, 2021
  * @author Cece
  */
 public class Vision extends SubsystemBase {
@@ -59,6 +59,7 @@ public class Vision extends SubsystemBase {
     mLimelightTable.getEntry("pipeline").setNumber(Constants.kLimelightStartingPipeline);
   }
 
+  /** Periodic function */
   @Override
   public void periodic() {
     //Prints Vision values to the SmartDashboard
@@ -74,20 +75,30 @@ public class Vision extends SubsystemBase {
 
   // ***** VISION VALUE METHODS ***** //
 
-  // Returns the horizontal offset from crosshair to target (+/- 27 degrees)
+  /**
+   * Gets the Target X value
+   * @return The horizontal offset from crosshair to target (+/- 27 degrees)
+   */
   public double getTargetX() {
     mTableX = mLimelightTable.getEntry(Constants.kLimelightTargetXID); 
     mTargetX = mTableX.getDouble(0.0); 
     return mTargetX; 
   }
 
-  // Returns the vertical offset from crosshair to target (+/- 20.5 degrees)
+  /**
+   * Gets the Target Y value
+   * @return The vertical offset from crosshair to target (+/- 20.5 degrees)
+   */
   public double getTargetY() {
     mTableY = mLimelightTable.getEntry(Constants.kLimelightTargetYID);
     mTargetY = mTableY.getDouble(0.0);
     return mTargetY;
   }
 
+  /**
+   * Gets whether or not a vision target is found
+   * @return True is a target is found, false if not
+   */
   public boolean GetTargetFound(){
     mTableTargetFound = mLimelightTable.getEntry(Constants.kLimelightTargetID);
     mTargetFound = mTableTargetFound.getDouble(0.0);
@@ -130,7 +141,10 @@ public class Vision extends SubsystemBase {
 
   // ***** VISION PIPELINE METHODS ***** //
 
-  // Changes the pipeline to a specified pipeline
+  /**
+   * Switches to a specified pipeline
+   * @param pipeline The pipeline to switch to
+   */
   public void SwitchPipeline(int pipeline){
     mLimelightTable.getEntry("pipeline").setNumber(pipeline);
   }

@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * creating this project, you must also update the build.gradle file in the
  * project.
  * 
- * @version 0.1.1 February 9, 2021.
+ * @version February 4, 2021.
  * @author First Generated
  * @author Cole Gartner
  */
@@ -116,14 +116,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-  }
-
-  /**
-   * Get RobotContainer
-   * 
-   * @return RobotContainer Instance
-   */
-  public static RobotContainer getRC() {
-    return mRobotContainer;
   }
 }
