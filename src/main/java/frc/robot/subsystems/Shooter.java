@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,13 +24,16 @@ public class Shooter extends SubsystemBase {
   private WPI_TalonFX mShooterMotor = new WPI_TalonFX(Constants.kShooterMotorID);
 
   /** Creates a new Shooter. */
-  public Shooter() {}
+  public Shooter() {
+    mShooterMotor.setNeutralMode(NeutralMode.Coast);
+  }
 
   /** periodic method */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter RPM", GetRPM());
+    SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
   } 
 
   /**
@@ -38,6 +42,11 @@ public class Shooter extends SubsystemBase {
    */
   public double GetRPM() {
     return Math.abs((600 * mShooterMotor.getSelectedSensorVelocity()) / Constants.kShooterTicksPerRevolution);
+  }
+  
+  public double GetMotorOutputPercent() {
+    // return mShooterMotor.getMotorOutputPercent();
+    return mShooterMotor.getMotorOutputVoltage();
   }
 
   /**

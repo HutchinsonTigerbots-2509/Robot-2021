@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveStraight;
+import frc.robot.commands.RampDownShooter;
+import frc.robot.commands.RampUpShooter;
 import frc.robot.commands.Rotate;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.StrafeStraight;
 
 /**
@@ -30,7 +33,7 @@ import frc.robot.commands.StrafeStraight;
  * scheduler calls). Instead, the structure of the robot (including subsystems,
  * commands, and button mappings) should be declared here.
  * 
- * @version February 6, 2021
+ * @version February 11, 2021
  * @author Cece
  * @author Noah Sturges
  * @author Quinton MacMullan
@@ -41,6 +44,7 @@ public class RobotContainer {
   // Subsystems
   private Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
+  private Shooter sShooter = new Shooter();
 
   // Joysticks are defined here...
   public static Joystick OpStick = new Joystick(Constants.kOpStickID);
@@ -48,7 +52,8 @@ public class RobotContainer {
 
   // Joystick Buttons
   private JoystickButton bAutoCommands; // A temporary button for running Autonomous Commands
-
+  private JoystickButton bRampUpShooter;
+  private JoystickButton bRampDownShooter;
   /**
    * RobotContainer Constructor.
    * 
@@ -70,6 +75,14 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    bRampUpShooter = new JoystickButton(OpStick, Constants.kXboxButtonA);
+    bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
+
+    bRampDownShooter = new JoystickButton(OpStick, Constants.kXboxButtonB);
+    bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
+
+
     bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
     // ***** BARREL RACING PATH ***** //
