@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * @author Cole Gartner
  */
 public class Robot extends TimedRobot {
-  private static RobotContainer mRobotContainer;
+  private static RobotContainer mRobotContainer = new RobotContainer();
 
   /**
    * Initialization.
@@ -36,7 +36,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    mRobotContainer = new RobotContainer();
   }
 
   /**
