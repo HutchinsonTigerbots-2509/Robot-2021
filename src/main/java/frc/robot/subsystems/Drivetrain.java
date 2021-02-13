@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -45,8 +46,14 @@ public class Drivetrain extends SubsystemBase {
   private double mZSpeed = 0;
   //Multipliers
   private double mXMultiplier = 1; //0.6
-  private double mYMultiplier = 1; //0.8
+  private double mYMultiplier = 0.8; //0.8
   private double mZMultiplier = 1; //0.6
+  //Previous Values
+  private double mPreviousXSpeed = 0;
+  private double mPreviousZSpeed = 0;
+  //Ramp Down Values
+  private double mRampDownX = 0.06;
+  private double mRampDownZ = 0.06;
 
   /**
    * Drivetrain Constructor.
@@ -75,7 +82,6 @@ public class Drivetrain extends SubsystemBase {
     JoystickDrive(RobotContainer.OpStick);
     // Prints the gyro angle to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
-    SmartDashboard.putBoolean("RearRightInverted", mRearRight.getInverted());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
@@ -107,6 +113,53 @@ public class Drivetrain extends SubsystemBase {
     }
     //Sets the motors to the speed
     mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
+  }
+
+  private void JoystickDriveRamp(Joystick pStick){
+    // Calculates the Y Speed based on the joystick values
+    if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
+      mYSpeed = pStick.getRawAxis(Constants.kXboxRightTrigger) * mYMultiplier;
+    } else if (pStick.getRawAxis(Constants.kXboxLeftTrigger) > 0.4) {
+      mYSpeed = -pStick.getRawAxis(Constants.kXboxLeftTrigger) * mYMultiplier;
+    } else {
+      mYSpeed = 0;
+    }
+
+    // Calculates the X Target Speed based on the joystick values;
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.4) {
+      mXSpeed = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
+    } else {
+      mXSpeed = 0;
+    }
+    // Calculates the Z Target Speed based on the joystick values
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.4) {
+      mZSpeed = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
+    } else {
+      mZSpeed = 0;
+    }
+
+    if(Math.abs(mXSpeed) < Math.abs(mPreviousXSpeed)){
+      mXSpeed = mPreviousXSpeed - mRampDownX * Normalize(mPreviousXSpeed);
+    }
+    if(Math.abs(mZSpeed ) < Math.abs(mPreviousZSpeed)){
+      mZSpeed = mPreviousZSpeed - mRampDownZ * Normalize(mPreviousZSpeed);
+    }
+
+    if(Math.abs(mXSpeed) < 0.4){
+      mXSpeed = 0;
+    }
+    if(Math.abs(mZSpeed) < 0.4){
+      mZSpeed = 0;
+    }
+
+    mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
+
+    mPreviousXSpeed = mXSpeed;
+    mPreviousZSpeed = mZSpeed;
+
+    SmartDashboard.putNumber("Z Speed", mZSpeed);
+    SmartDashboard.putNumber("X Speed", mXSpeed);
+
   }
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //
@@ -180,5 +233,16 @@ public class Drivetrain extends SubsystemBase {
     mRearRight.setInverted(true);
     mFrontLeft.setInverted(true);
     mRearLeft.setInverted(true);
+  }
+
+  //Converts a double into 1 or -1 depending on if it is positive or negative
+  private int Normalize(double pNum){
+    if(pNum < 0){
+      return -1;
+    } else if (pNum > 0){
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

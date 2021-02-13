@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * Robot class.
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private static RobotContainer mRobotContainer;
+  private Command m_autonomousCommand;
   public static String Gart = "Dumb";
 
   /**
@@ -83,12 +85,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = mRobotContainer.getAutonomousCommand();
 
     // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    // m_autonomousCommand.schedule();
-    // }
+    if (m_autonomousCommand != null) {
+    m_autonomousCommand.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */

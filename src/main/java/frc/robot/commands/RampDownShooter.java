@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import org.opencv.features2d.MSER;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
