@@ -42,7 +42,7 @@ import frc.robot.commands.StrafeStraight;
  */
 public class RobotContainer {
   // Subsystems
-  private Drivetrain sDrivetrain = new Drivetrain();
+  public Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
   private Shooter sShooter = new Shooter();
 

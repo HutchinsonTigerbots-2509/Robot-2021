@@ -42,6 +42,8 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     mRobotContainer = new RobotContainer();
+    //Sets up the Drivetrain motors
+    mRobotContainer.sDrivetrain.InitializeDrivetrain();
   }
 
   /**

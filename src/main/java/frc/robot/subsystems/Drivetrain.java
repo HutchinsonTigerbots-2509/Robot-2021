@@ -55,24 +55,11 @@ public class Drivetrain extends SubsystemBase {
    * The Drivetrain of the robots. Contains Drivetrain motors and gyro.
    */
   public Drivetrain() {
-
+    //Defines the Drivetrain motors
     mFrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
     mFrontRight = new WPI_TalonFX(Constants.kFrontRightID);
     mRearLeft = new WPI_TalonFX(Constants.kRearLeftID);
     mRearRight = new WPI_TalonFX(Constants.kRearRightID);
-
-    // Sets whether or not the motors are inverted
-    // mFrontRight.setInverted(true);
-    // mRearRight.setInverted(true);
-    // mFrontLeft.setInverted(true);
-    // mRearLeft.setInverted(true);
-
-    // Sets the Neutral Mode of the motors (what the motors do when their recieved
-    // voltage is 0)
-    mFrontRight.setNeutralMode(NeutralMode.Brake);
-    mRearRight.setNeutralMode(NeutralMode.Brake);
-    mFrontLeft.setNeutralMode(NeutralMode.Brake);
-    mRearLeft.setNeutralMode(NeutralMode.Brake);
 
     //Defines the mecanumDrive
     mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
@@ -119,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
       mZSpeed = 0;
     }
     //Sets the motors to the speed
-    mDrive.driveCartesian(-mYSpeed, -mXSpeed, -mZSpeed);
+    mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
   }
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //
@@ -178,5 +165,20 @@ public class Drivetrain extends SubsystemBase {
   public void ResetGyro() {
     mGyro.reset();
     mGyro.resetDisplacement();
+  }
+
+  public void InitializeDrivetrain(){
+    // Sets the Neutral Mode of the motors (what the motors do when their recieved
+    // voltage is 0)
+    mFrontRight.setNeutralMode(NeutralMode.Brake);
+    mRearRight.setNeutralMode(NeutralMode.Brake);
+    mFrontLeft.setNeutralMode(NeutralMode.Brake);
+    mRearLeft.setNeutralMode(NeutralMode.Brake);
+
+    // Sets whether or not the motors are inverted
+    mFrontRight.setInverted(true);
+    mRearRight.setInverted(true);
+    mFrontLeft.setInverted(true);
+    mRearLeft.setInverted(true);
   }
 }
