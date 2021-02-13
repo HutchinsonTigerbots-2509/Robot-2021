@@ -39,7 +39,7 @@ public final class Constants {
     public static double kDrivetrainMinVoltage = 0.4;
 
     // Shooter
-    public static int kShooterMotorID = 4;
+    public static int kShooterMotorID;
 
     public static double kShooterTicksPerRevolution = 2048;
 

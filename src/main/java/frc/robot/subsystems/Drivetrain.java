@@ -29,12 +29,12 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class Drivetrain extends SubsystemBase {
   // Motors
-  private WPI_TalonFX mFrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
-  private WPI_TalonFX mFrontRight = new WPI_TalonFX(Constants.kFrontRightID);
-  private WPI_TalonFX mRearLeft = new WPI_TalonFX(Constants.kRearLeftID);
-  private WPI_TalonFX mRearRight = new WPI_TalonFX(Constants.kRearRightID);
+  private WPI_TalonFX mFrontLeft;
+  private WPI_TalonFX mFrontRight;
+  private WPI_TalonFX mRearLeft;
+  private WPI_TalonFX mRearRight;
 
-  private MecanumDrive mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
+  private MecanumDrive mDrive;
 
   // Gyro
   private AHRS mGyro = new AHRS();
@@ -55,11 +55,17 @@ public class Drivetrain extends SubsystemBase {
    * The Drivetrain of the robots. Contains Drivetrain motors and gyro.
    */
   public Drivetrain() {
+
+    mFrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
+    mFrontRight = new WPI_TalonFX(Constants.kFrontRightID);
+    mRearLeft = new WPI_TalonFX(Constants.kRearLeftID);
+    mRearRight = new WPI_TalonFX(Constants.kRearRightID);
+
     // Sets whether or not the motors are inverted
-    mFrontRight.setInverted(true);
-    mRearRight.setInverted(true);
-    mFrontLeft.setInverted(true);
-    mRearLeft.setInverted(true);
+    // mFrontRight.setInverted(true);
+    // mRearRight.setInverted(true);
+    // mFrontLeft.setInverted(true);
+    // mRearLeft.setInverted(true);
 
     // Sets the Neutral Mode of the motors (what the motors do when their recieved
     // voltage is 0)
@@ -67,6 +73,9 @@ public class Drivetrain extends SubsystemBase {
     mRearRight.setNeutralMode(NeutralMode.Brake);
     mFrontLeft.setNeutralMode(NeutralMode.Brake);
     mRearLeft.setNeutralMode(NeutralMode.Brake);
+
+    //Defines the mecanumDrive
+    mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
 
     // Zeros the gyro
     ResetGyro();
@@ -79,6 +88,7 @@ public class Drivetrain extends SubsystemBase {
     JoystickDrive(RobotContainer.OpStick);
     // Prints the gyro angle to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
+    SmartDashboard.putBoolean("RearRightInverted", mRearRight.getInverted());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
@@ -109,7 +119,7 @@ public class Drivetrain extends SubsystemBase {
       mZSpeed = 0;
     }
     //Sets the motors to the speed
-    mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
+    mDrive.driveCartesian(-mYSpeed, -mXSpeed, -mZSpeed);
   }
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //

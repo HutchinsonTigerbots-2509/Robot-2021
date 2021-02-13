@@ -47,7 +47,8 @@ public class RampDownShooter extends CommandBase {
       mVoltage = -(mStartingVoltage / mRampTime) * (mCurrentTime - mStartTime) + mStartingVoltage;
       sShooter.RunShooter(mVoltage);
     }else{
-      sShooter.RunShooter(0);
+      mVoltage = 0;
+      sShooter.RunShooter(mVoltage);
       mFinished = true;
     }
 

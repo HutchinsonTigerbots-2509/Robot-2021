@@ -76,10 +76,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    bRampUpShooter = new JoystickButton(OpStick, Constants.kXboxButtonA);
+    bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
     bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
-    bRampDownShooter = new JoystickButton(OpStick, Constants.kXboxButtonB);
+    bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
     bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
 
 

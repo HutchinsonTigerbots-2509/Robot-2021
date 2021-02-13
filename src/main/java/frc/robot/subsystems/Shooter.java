@@ -45,8 +45,7 @@ public class Shooter extends SubsystemBase {
   }
   
   public double GetMotorOutputPercent() {
-    // return mShooterMotor.getMotorOutputPercent();
-    return mShooterMotor.getMotorOutputVoltage();
+    return mShooterMotor.getMotorOutputPercent();
   }
 
   /**
