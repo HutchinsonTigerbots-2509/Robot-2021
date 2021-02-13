@@ -51,6 +51,7 @@ loadScripts(document, 'script');</script>
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
+<li><a href="../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -134,10 +135,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends java.lang.Object</pre>
 <div class="block">RobotContainer class.
  
- <p>This class is where the bulk of the robot should be declared. Since Command-based is a
- "declarative" paradigm, very little robot logic should actually be handled in the <a href="Robot.html" title="class in frc.robot"><code>Robot</code></a>
- periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- subsystems, commands, and button mappings) should be declared here.</div>
+ <p>
+ This class is where the bulk of the robot should be declared. Since
+ Command-based is a "declarative" paradigm, very little robot logic should
+ actually be handled in the <a href="Robot.html" title="class in frc.robot"><code>Robot</code></a> periodic methods (other than the
+ scheduler calls). Instead, the structure of the robot (including subsystems,
+ commands, and button mappings) should be declared here.</div>
 </li>
 </ul>
 </div>
@@ -159,12 +162,12 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>edu.wpi.first.wpilibj.Joystick</code></td>
+<td class="colFirst"><code>static edu.wpi.first.wpilibj.Joystick</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mCoOpStick">mCoOpStick</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>edu.wpi.first.wpilibj.Joystick</code></td>
+<td class="colFirst"><code>static edu.wpi.first.wpilibj.Joystick</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mOpStick">mOpStick</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -246,7 +249,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>mOpStick</h4>
-<pre>public&nbsp;edu.wpi.first.wpilibj.Joystick mOpStick</pre>
+<pre>public static&nbsp;edu.wpi.first.wpilibj.Joystick mOpStick</pre>
 </li>
 </ul>
 <a id="mCoOpStick">
@@ -255,7 +258,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>mCoOpStick</h4>
-<pre>public&nbsp;edu.wpi.first.wpilibj.Joystick mCoOpStick</pre>
+<pre>public static&nbsp;edu.wpi.first.wpilibj.Joystick mCoOpStick</pre>
 </li>
 </ul>
 </li>
@@ -277,7 +280,8 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;RobotContainer()</pre>
 <div class="block">RobotContainer Constructor.
  
- <p>The container for the robot. Contains subsystems, OI devices, and commands.</div>
+ <p>
+ The container for the robot. Contains subsystems, OI devices, and commands.</div>
 </li>
 </ul>
 </li>
@@ -299,7 +303,8 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">public&nbsp;edu.wpi.first.wpilibj2.command.Command&nbsp;getAutonomousCommand()</pre>
 <div class="block">Get Auto Command.
  
- <p>Use this to pass the autonomous command to the main <a href="Robot.html" title="class in frc.robot"><code>Robot</code></a> class.</div>
+ <p>
+ Use this to pass the autonomous command to the main <a href="Robot.html" title="class in frc.robot"><code>Robot</code></a> class.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the command to run in autonomous</dd>
@@ -326,6 +331,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
+<li><a href="../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>

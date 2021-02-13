@@ -24,6 +24,7 @@
 | c | Command | `cAutonomous` |
 | k | Constants | `kJoystickID` |
 | m | Private Instance| `mHighGear` |
+| b | Button Instance| `bIntakeForward`|
 | p | Argument | `pStick` |
 
 
@@ -92,4 +93,4 @@
 - [Noah Sturges](https://github.com/noahsturges18)          - noahsturges18
 ##### Moral Supporters
 - [DJ Scheele](https://github.com/DScheele1)                - DScheele1
-- [Cole Rahne](https://github.com/CRahne)                   - CRahne
+- [hehe I Cole Rahne](https://github.com/CRahne)                   - CRahne
