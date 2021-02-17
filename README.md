@@ -94,3 +94,5 @@
 ##### Moral Supporters
 - [DJ Scheele](https://github.com/DScheele1)                - DScheele1
 - [hehe I Cole Rahne](https://github.com/CRahne)                   - CRahne
+##### Worst Mentor
+- [Nate Christensen](https://google.com)
