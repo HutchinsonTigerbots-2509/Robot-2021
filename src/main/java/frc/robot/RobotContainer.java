@@ -97,9 +97,12 @@ public class RobotContainer {
     // ***** BOUNCE PATH ***** //
     // Description
     bAutoCommands.whenPressed(new SequentialCommandGroup(
+      //Resets the gyro and Encoders
       new InstantCommand(() -> sDrivetrain.ResetGyro()),
       new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+      //Drives straight until the average encoder count is above 64,000
       new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
+      //Strafes left until the average encoder count is above 100,000
       new InstantCommand(() -> sDrivetrain.ResetEncoders()),
       new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
     ));
