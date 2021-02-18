@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -29,12 +30,12 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class Drivetrain extends SubsystemBase {
   // Motors
-  private WPI_TalonFX mFrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
-  private WPI_TalonFX mFrontRight = new WPI_TalonFX(Constants.kFrontRightID);
-  private WPI_TalonFX mRearLeft = new WPI_TalonFX(Constants.kRearLeftID);
-  private WPI_TalonFX mRearRight = new WPI_TalonFX(Constants.kRearRightID);
+  private WPI_TalonFX mFrontLeft;
+  private WPI_TalonFX mFrontRight;
+  private WPI_TalonFX mRearLeft;
+  private WPI_TalonFX mRearRight;
 
-  private MecanumDrive mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
+  private MecanumDrive mDrive;
 
   // Gyro
   private AHRS mGyro = new AHRS();
@@ -45,8 +46,14 @@ public class Drivetrain extends SubsystemBase {
   private double mZSpeed = 0;
   //Multipliers
   private double mXMultiplier = 1; //0.6
-  private double mYMultiplier = 1; //0.8
+  private double mYMultiplier = 0.8; //0.8
   private double mZMultiplier = 1; //0.6
+  //Previous Values
+  private double mPreviousXSpeed = 0;
+  private double mPreviousZSpeed = 0;
+  //Ramp Down Values
+  private double mRampDownX = 0.06;
+  private double mRampDownZ = 0.06;
 
   /**
    * Drivetrain Constructor.
@@ -55,18 +62,14 @@ public class Drivetrain extends SubsystemBase {
    * The Drivetrain of the robots. Contains Drivetrain motors and gyro.
    */
   public Drivetrain() {
-    // Sets whether or not the motors are inverted
-    mFrontRight.setInverted(true);
-    mRearRight.setInverted(true);
-    mFrontLeft.setInverted(true);
-    mRearLeft.setInverted(true);
+    //Defines the Drivetrain motors
+    mFrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
+    mFrontRight = new WPI_TalonFX(Constants.kFrontRightID);
+    mRearLeft = new WPI_TalonFX(Constants.kRearLeftID);
+    mRearRight = new WPI_TalonFX(Constants.kRearRightID);
 
-    // Sets the Neutral Mode of the motors (what the motors do when their recieved
-    // voltage is 0)
-    mFrontRight.setNeutralMode(NeutralMode.Brake);
-    mRearRight.setNeutralMode(NeutralMode.Brake);
-    mFrontLeft.setNeutralMode(NeutralMode.Brake);
-    mRearLeft.setNeutralMode(NeutralMode.Brake);
+    //Defines the mecanumDrive
+    mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
 
     // Zeros the gyro
     ResetGyro();
@@ -76,7 +79,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // Drives the robot using a joystick
-    JoystickDrive(RobotContainer.mOpStick);
+    JoystickDrive(RobotContainer.OpStick);
     // Prints the gyro angle to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
   }
@@ -110,6 +113,53 @@ public class Drivetrain extends SubsystemBase {
     }
     //Sets the motors to the speed
     mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
+  }
+
+  private void JoystickDriveRamp(Joystick pStick){
+    // Calculates the Y Speed based on the joystick values
+    if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
+      mYSpeed = pStick.getRawAxis(Constants.kXboxRightTrigger) * mYMultiplier;
+    } else if (pStick.getRawAxis(Constants.kXboxLeftTrigger) > 0.4) {
+      mYSpeed = -pStick.getRawAxis(Constants.kXboxLeftTrigger) * mYMultiplier;
+    } else {
+      mYSpeed = 0;
+    }
+
+    // Calculates the X Target Speed based on the joystick values;
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.4) {
+      mXSpeed = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
+    } else {
+      mXSpeed = 0;
+    }
+    // Calculates the Z Target Speed based on the joystick values
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.4) {
+      mZSpeed = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
+    } else {
+      mZSpeed = 0;
+    }
+
+    if(Math.abs(mXSpeed) < Math.abs(mPreviousXSpeed)){
+      mXSpeed = mPreviousXSpeed - mRampDownX * Normalize(mPreviousXSpeed);
+    }
+    if(Math.abs(mZSpeed ) < Math.abs(mPreviousZSpeed)){
+      mZSpeed = mPreviousZSpeed - mRampDownZ * Normalize(mPreviousZSpeed);
+    }
+
+    if(Math.abs(mXSpeed) < 0.4){
+      mXSpeed = 0;
+    }
+    if(Math.abs(mZSpeed) < 0.4){
+      mZSpeed = 0;
+    }
+
+    mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
+
+    mPreviousXSpeed = mXSpeed;
+    mPreviousZSpeed = mZSpeed;
+
+    SmartDashboard.putNumber("Z Speed", mZSpeed);
+    SmartDashboard.putNumber("X Speed", mXSpeed);
+
   }
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //
@@ -168,5 +218,31 @@ public class Drivetrain extends SubsystemBase {
   public void ResetGyro() {
     mGyro.reset();
     mGyro.resetDisplacement();
+  }
+
+  public void InitializeDrivetrain(){
+    // Sets the Neutral Mode of the motors (what the motors do when their recieved
+    // voltage is 0)
+    mFrontRight.setNeutralMode(NeutralMode.Brake);
+    mRearRight.setNeutralMode(NeutralMode.Brake);
+    mFrontLeft.setNeutralMode(NeutralMode.Brake);
+    mRearLeft.setNeutralMode(NeutralMode.Brake);
+
+    // Sets whether or not the motors are inverted
+    mFrontRight.setInverted(true);
+    mRearRight.setInverted(true);
+    mFrontLeft.setInverted(true);
+    mRearLeft.setInverted(true);
+  }
+
+  //Converts a double into 1 or -1 depending on if it is positive or negative
+  private int Normalize(double pNum){
+    if(pNum < 0){
+      return -1;
+    } else if (pNum > 0){
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

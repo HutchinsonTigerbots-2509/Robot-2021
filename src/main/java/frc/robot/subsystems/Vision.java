@@ -111,7 +111,7 @@ public class Vision extends SubsystemBase {
 
   // ***** UNUSED VISION VALUE METHODS ***** //
 
-  // Returns target area (0-100 % of image)
+  // // Returns target area (0-100 % of image)
   // public double getTargetArea() {
   //   mTableArea = mLimelightTable.getEntry(Constants.kLimelightTargetAreaID);
   //   mTargetArea = mTableArea.getDouble(0.0);

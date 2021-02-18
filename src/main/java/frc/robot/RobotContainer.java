@@ -6,7 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Drivetrain;
@@ -17,7 +19,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveStraight;
+import frc.robot.commands.RampDownShooter;
+import frc.robot.commands.RampUpShooter;
 import frc.robot.commands.Rotate;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.StrafeStraight;
 
 /**
@@ -30,7 +35,7 @@ import frc.robot.commands.StrafeStraight;
  * scheduler calls). Instead, the structure of the robot (including subsystems,
  * commands, and button mappings) should be declared here.
  * 
- * @version February 6, 2021
+ * @version February 11, 2021
  * @author Cece
  * @author Noah Sturges
  * @author Quinton MacMullan
@@ -39,16 +44,21 @@ import frc.robot.commands.StrafeStraight;
  */
 public class RobotContainer {
   // Subsystems
-  private Drivetrain sDrivetrain = new Drivetrain();
+  public Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
+  private Shooter sShooter = new Shooter();
 
   // Joysticks are defined here...
-  public static Joystick mOpStick = new Joystick(Constants.kOpStickID);
-  public static Joystick mCoOpStick = new Joystick(Constants.kCoOpStickID);
+  public static Joystick OpStick = new Joystick(Constants.kOpStickID);
+  public static Joystick CoOpStick = new Joystick(Constants.kCoOpStickID);
 
   // Joystick Buttons
   private JoystickButton bAutoCommands; // A temporary button for running Autonomous Commands
+  private JoystickButton bRampUpShooter;
+  private JoystickButton bRampDownShooter;
 
+  //Autonomous
+  private double AutoStartTime;
   /**
    * RobotContainer Constructor.
    * 
@@ -70,7 +80,15 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    bAutoCommands = new JoystickButton(mOpStick, Constants.kXboxButtonStart);
+
+    bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
+    bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
+
+    bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+    bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
+
+
+    bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
     // ***** BARREL RACING PATH ***** //
     // Semi-functional. Will need to be redone once more weight is added to the robot.
@@ -92,7 +110,7 @@ public class RobotContainer {
       //Strafes + Drives to set up for third marker
       new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.7),
       new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
-      new WaitCommand(0.4),
+      // new WaitCommand(0.4),
       //Turns if the robot isn't facing the marker
       new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
       //Rotates around third marker
@@ -110,7 +128,7 @@ public class RobotContainer {
           new WaitCommand(0.5),
           new WaitCommand(1000).withInterrupt(() -> !sVision.GetTargetFound()),
           // CHECK THIS WAITCOMMAND BEFORE RUNNING
-          new WaitCommand(0.2)
+          new WaitCommand(0.35)
         )
       ),
       //Switches pipeline back to original pipeline
@@ -159,6 +177,56 @@ public class RobotContainer {
 
   }
 
+
+  // ********** AUTONOMOUS COMMANDS ********* //
+
+  //Barrel Racing Path
+  private Command cAutoCommands = new SequentialCommandGroup(
+    //Sets the start time for the timer
+    new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
+    //Drives straight to set up for first marker
+    new InstantCommand(() -> sDrivetrain.ResetGyro()),
+    new DriveStraight(sDrivetrain, 1).withTimeout(0.5),
+    // new WaitCommand(0.2),
+    //Rotates around first marker
+    new Rotate(sDrivetrain, sVision, -0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 315), //320
+    //Strafes + Drives to set up for second marker
+    new StrafeStraight(sDrivetrain, -1).withTimeout(0.3),
+    new DriveStraight(sDrivetrain, 1).withTimeout(0.6),
+    // new WaitCommand(0.2),
+    //Turns if the robot isn't facing the marker
+    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
+    //Rotates around second marker
+    new Rotate(sDrivetrain, sVision, 0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
+    //Strafes + Drives to set up for third marker
+    new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.7),
+    new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
+    //Turns if the robot isn't facing the marker
+    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
+    //Rotates around third marker
+    new Rotate(sDrivetrain, sVision, 0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
+    //Strafes to the side for final run
+    new StrafeStraight(sDrivetrain, 1).withTimeout(0.2),
+    //Switches pipeline to dual target mode
+    new InstantCommand(() -> sVision.SwitchPipeline(2)),
+    //Drives forward until several requirements have been satisfied
+    new ParallelRaceGroup(
+      new DriveStraight(sDrivetrain, 1, -180),
+      new SequentialCommandGroup(
+        new WaitCommand(0.5),
+        new WaitCommand(1000).withInterrupt(() -> sVision.GetTargetFound()),
+        new WaitCommand(0.5),
+        new WaitCommand(1000).withInterrupt(() -> !sVision.GetTargetFound()),
+        // CHECK THIS WAITCOMMAND BEFORE RUNNING
+        new WaitCommand(0.3)
+      )
+    ),
+    //Switches pipeline back to original pipeline
+    new InstantCommand(() -> sVision.SwitchPipeline(Constants.kLimelightStartingPipeline)),
+    //Prints out the time it took to run the path
+    new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
+  );
+
   /**
    * Get Auto Command.
    * 
@@ -169,6 +237,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // The Command to run in Autonomous
-    return null;
+    return cAutoCommands;
   }
 }
