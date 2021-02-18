@@ -93,5 +93,6 @@
 - [Noah Sturges](https://github.com/noahsturges18)          - noahsturges18
 ##### Moral Supporters
 - [DJ Scheele](https://github.com/DScheele1)                - DScheele1
-##### He He I
-- [Cole Rahne](https://github.com/CRahne)                   - CRahne
+- [hehe I Cole Rahne](https://github.com/CRahne)                   - CRahne
+##### Worst Mentor
+- [Nate Christensen](https://google.com)
