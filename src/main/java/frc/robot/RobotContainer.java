@@ -56,6 +56,7 @@ public class RobotContainer {
   private JoystickButton bAutoCommands; // A temporary button for running Autonomous Commands
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
+  private JoystickButton bResetEncoders;
 
   //Autonomous
   private double AutoStartTime;
@@ -87,10 +88,24 @@ public class RobotContainer {
     bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
     bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
 
+    bResetEncoders = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
+    bResetEncoders.whenPressed(new InstantCommand(() -> sDrivetrain.ResetEncoders()));
+
 
     bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
+    // ***** BOUNCE PATH ***** //
+    // Description
+    bAutoCommands.whenPressed(new SequentialCommandGroup(
+      new InstantCommand(() -> sDrivetrain.ResetGyro()),
+      new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+      new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
+      new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+      new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
+    ));
+
     // ***** BARREL RACING PATH ***** //
+    /*
     // Semi-functional. Will need to be redone once more weight is added to the robot.
     bAutoCommands.whenPressed(new SequentialCommandGroup(
       //Drives straight to set up for first marker
@@ -134,6 +149,7 @@ public class RobotContainer {
       //Switches pipeline back to original pipeline
       new InstantCommand(() -> sVision.SwitchPipeline(Constants.kLimelightStartingPipeline))
     ));
+    */
 
     // ***** SLALOM PATH ***** //
     // WILL NOT WORK LIKE AT ALL DO NOT RUN THIS WITHOUT CECE OR ELSE EXPECT CHAOS

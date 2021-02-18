@@ -19,7 +19,7 @@ public class StrafeStraight extends CommandBase {
   private Drivetrain sDrivetrain;
   private double mYSpeed;
   private double mRotationMultiplier = 0.06;
-  private double mGyroTarget;
+  private Double mGyroTarget;
 
   /** 
    * Creates a new StrafeStraight.
@@ -34,10 +34,20 @@ public class StrafeStraight extends CommandBase {
     addRequirements(sDrivetrain);
   }
 
+  public StrafeStraight(Drivetrain pDrivetrain, double pYSpeed, double pGyroTarget){
+    sDrivetrain = pDrivetrain;
+    mYSpeed = pYSpeed;
+    mGyroTarget = pGyroTarget;
+    // Use addRequirements() here to delcare subsystem dependencies
+    addRequirements(sDrivetrain);
+  }
+
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
-    mGyroTarget = sDrivetrain.GetGyroAngle();
+    if(mGyroTarget == null){
+      mGyroTarget = sDrivetrain.GetGyroAngle();
+    }
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
