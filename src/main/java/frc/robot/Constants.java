@@ -37,6 +37,8 @@ public final class Constants {
     public static int kRearRightID = 0;
 
     public static double kDrivetrainMinVoltage = 0.4;
+    public static int kDrivetrainTicksPerRev = 2048;
+    public static double kDrivetrainWheelDiameter = 6.0;
 
     // Shooter
     public static int kShooterMotorID = 4;

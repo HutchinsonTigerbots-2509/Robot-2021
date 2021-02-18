@@ -52,8 +52,8 @@ public class Drivetrain extends SubsystemBase {
   private double mPreviousXSpeed = 0;
   private double mPreviousZSpeed = 0;
   //Ramp Down Values
-  private double mRampDownX = 0.06;
-  private double mRampDownZ = 0.06;
+  private double mRampDownX = 0.08;
+  private double mRampDownZ = 0.08;
 
   /**
    * Drivetrain Constructor.
@@ -71,8 +71,9 @@ public class Drivetrain extends SubsystemBase {
     //Defines the mecanumDrive
     mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
 
-    // Zeros the gyro
+    // Zeros the gyro & encoders
     ResetGyro();
+    ResetEncoders();
   }
 
   /**Periodic function */
@@ -80,8 +81,16 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // Drives the robot using a joystick
     JoystickDrive(RobotContainer.OpStick);
-    // Prints the gyro angle to the SmartDashboard
+    // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
+    SmartDashboard.putNumber("Gyro X", GetGyroX());
+    SmartDashboard.putNumber("Gyro Y", GetGyroY());
+    // Prints the encoder values to the SmartDashboard
+    SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
+    SmartDashboard.putNumber("LeftRear", mRearLeft.getSelectedSensorPosition());
+    SmartDashboard.putNumber("RightFront", mFrontRight.getSelectedSensorPosition());
+    SmartDashboard.putNumber("RightRear", mRearRight.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Average Encoder Ticks", EncoderAverage());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
@@ -186,6 +195,22 @@ public class Drivetrain extends SubsystemBase {
   /** Stops the robot */
   public void StopDrivetrain() {
     mDrive.driveCartesian(0, 0, 0);
+  }
+
+  // ***** ENCODER METHODS ***** //
+
+  public void ResetEncoders(){
+    mRearRight.setSelectedSensorPosition(0);
+    mRearLeft.setSelectedSensorPosition(0);
+    mFrontRight.setSelectedSensorPosition(0);
+    mFrontLeft.setSelectedSensorPosition(0);
+  }
+
+  public double EncoderAverage(){
+    return (Math.abs(mRearRight.getSelectedSensorPosition()) + 
+    Math.abs(mRearLeft.getSelectedSensorPosition()) + 
+    // Math.abs(mFrontRight.getSelectedSensorPosition()) + 
+    Math.abs(mFrontLeft.getSelectedSensorPosition())) / 3;
   }
 
   // ***** GYRO METHODS ***** //
