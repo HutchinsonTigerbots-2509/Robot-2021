@@ -20,13 +20,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.ConveyorShiftDown;
+import frc.robot.commands.ConveyorShiftUp;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.RampDownShooter;
 import frc.robot.commands.RampUpShooter;
 import frc.robot.commands.Rotate;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.StrafeStraight;
-import frc.robot.commands.StrafeTest;
 
 /**
  * RobotContainer class.
@@ -92,7 +93,6 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
     bRampUpShooter = new JoystickButton(OpStick, Constants.kXboxButtonA);
     bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
@@ -103,12 +103,12 @@ public class RobotContainer {
     bResetEncoders.whenPressed(new InstantCommand(() -> sDrivetrain.ResetEncoders()));
 
     bConveyorDown = new JoystickButton(OpStick, Constants.kXboxButtonX);
-    bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-1.0)));
-    bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
-
+    bConveyorDown.whenPressed(new ConveyorShiftDown(sConveyor));//new InstantCommand(() -> sConveyor.MoveConveyor(-1.0)));
+    //bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
+    
     bConveyorUp = new JoystickButton(OpStick, Constants.kXboxButtonY);
-    bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(1.0)));
-    bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
+    bConveyorUp.whenPressed(new ConveyorShiftUp(sConveyor));//(new InstantCommand(() -> sConveyor.MoveConveyor(1.0)));
+    // bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
 
     bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
     bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.RunIntakeIn(1.0)));
@@ -117,6 +117,8 @@ public class RobotContainer {
     bIntakeOut = new JoystickButton(OpStick, Constants.kXboxButtonBack);
     bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.RunIntakeOut(1.0)));
     bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
+
+    
 
     bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
@@ -277,6 +279,8 @@ public class RobotContainer {
     // new StrafeStraight(sDrivetrain, -0.9).withTimeout(3), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(3)
     // new StrafeStraight(sDrivetrain, -0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, -0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(0.75)
   );
+
+  //private Command ConveyorTest = new ConveyorShiftUp(sConveyor);
   
   /**
    * Get Auto Command.

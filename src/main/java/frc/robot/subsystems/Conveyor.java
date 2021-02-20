@@ -4,9 +4,8 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,37 +28,32 @@ public class Conveyor extends SubsystemBase {
   private boolean canSensorMove = true;
 
   private int BallsIn = 0;
+  
   private boolean previousTopSensorValue = false;
   private boolean previousMiddleSensorValue = false;
   private boolean previousBottomSensorValue = false;
 
+  private AnalogInput[] listOfSensors = new AnalogInput[3];
   //#endregion
   
   /**
    * Creates a new conveyor object.
    */
-  public Conveyor() {}
+  public Conveyor() {
+    listOfSensors[0] = bottomLightSensor;
+    listOfSensors[1] = middleLightSensor;
+    listOfSensors[2] = topLightSensor;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Sensor Move", canSensorMove);
-    //SmartDashboard.putNumber("Balls seen", BallsIn);
-    // System.out.println(topLightSensor.getVoltage());
-    System.out.println(BallsIn);
+    FindNumberOfBalls();
+    //System.out.println(BallsIn);
     GetTopSensorValue();
     GetMiddleSensorValue();
     GetBottomSensorValue();
-
-    // if (canSensorMove) {
-    //   if (!GetTopSensorValue() && GetBottomSensorValue()) {
-    //     ConveyorForward(0.8);
-    //   } else if (GetBottomSensorValue()) {
-    //     ConveyorForward(0.8);
-    //   } else {
-    //     StopMotors();
-    //   }
-    // }
   }
 
   /**
@@ -101,6 +95,7 @@ public class Conveyor extends SubsystemBase {
       return false;
     }
   }
+
   public void FindNumberOfBalls(){
     if(GetMiddleSensorValue() != previousMiddleSensorValue){
       if(GetMiddleSensorValue()){
@@ -108,6 +103,7 @@ public class Conveyor extends SubsystemBase {
       }else {
         BallsIn -= 1;
       }
+      previousMiddleSensorValue = GetMiddleSensorValue();
     }
     if(GetTopSensorValue() != previousTopSensorValue){
       if(GetTopSensorValue()) {
@@ -115,6 +111,7 @@ public class Conveyor extends SubsystemBase {
       }else {
         BallsIn -= 1;
       }
+      previousTopSensorValue = GetTopSensorValue();
     }
     if(GetBottomSensorValue() != previousBottomSensorValue){
       if(GetBottomSensorValue()){
@@ -122,6 +119,7 @@ public class Conveyor extends SubsystemBase {
       }else {
         BallsIn -= 1;
       }
+      previousBottomSensorValue = GetBottomSensorValue();
     }
   }
 
@@ -132,11 +130,6 @@ public class Conveyor extends SubsystemBase {
   public void MoveConveyor (double Speed) {
     ConveyorMotor.set(Speed);
   }
-
-  /**
-   * Reverses the conveyor motors at full speed
-   */
-
 
   /**
    * Stops the conveyor motors
@@ -150,5 +143,30 @@ public class Conveyor extends SubsystemBase {
    */
   public void ToggleSensor() {
     canSensorMove = !canSensorMove;
+  }
+
+  public int getTopIndex() {
+    if(GetTopSensorValue()) {
+      return 2;
+    } else if (GetMiddleSensorValue()) {
+      return 1;
+    } else if (GetBottomSensorValue()) {
+      return 0;
+    } else {
+      return -1;
+    }
+  }
+
+  public int getBallsIn() {
+    return BallsIn;
+  }
+
+  public boolean isGap() {
+    if (GetMiddleSensorValue() && !GetBottomSensorValue()) {
+      return true;
+    } else if (GetTopSensorValue() && !GetMiddleSensorValue()) {
+      return true;
+    }
+    return false;
   }
 }
