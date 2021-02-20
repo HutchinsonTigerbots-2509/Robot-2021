@@ -44,12 +44,17 @@ public final class Constants {
     public static int kShooterMotorID = 4;
 
     public static double kShooterTicksPerRevolution = 2048;
+      
 
     // Conveyor
-    public static int kConveyorMotorID;
+    public static int kConveyorMotorID = 8;
+    public static int kTopLightSensorID = 0;
+    public static int kMiddleLightSensorID = 1;
+    public static int kBottomLightSensorID = 2;
 
     // Intake
-    public static int kIntakeMotorID;
+    public static int kIntakeMotorID = 9;
+    
 
     // ***** Vision Constants ***** //
 

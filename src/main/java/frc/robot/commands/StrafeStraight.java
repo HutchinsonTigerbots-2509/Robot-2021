@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -42,6 +43,19 @@ public class StrafeStraight extends CommandBase {
     addRequirements(sDrivetrain);
   }
 
+  public void CustomDriveCartesian(double YValue, double XValue, double ZValue){
+    Vector2d input = new Vector2d(YValue, XValue);
+    input.rotate(0);
+
+    double[] wheelSpeeds = new double[4];
+    wheelSpeeds[0] = input.x + input.y + ZValue;
+    wheelSpeeds[1] = -input.x + input.y - ZValue;
+    wheelSpeeds[2] = -input.x + input.y + ZValue;
+    wheelSpeeds[3] = input.x + input.y - ZValue;
+
+    sDrivetrain.StrafeSpeeds(-wheelSpeeds[1], wheelSpeeds[0], -wheelSpeeds[3], wheelSpeeds[2]);
+  }
+
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
@@ -53,7 +67,7 @@ public class StrafeStraight extends CommandBase {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    sDrivetrain.DriveWithStrafe(mYSpeed, 0, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mRotationMultiplier);
+    CustomDriveCartesian(mYSpeed, 0, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mRotationMultiplier);
   }
 
   /** Called once the command ends or is interrupted. */
@@ -67,4 +81,6 @@ public class StrafeStraight extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+
 }

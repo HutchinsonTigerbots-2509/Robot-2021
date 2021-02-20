@@ -46,6 +46,7 @@ public class RampUpShooter extends CommandBase {
     mStartTime = Timer.getFPGATimestamp();
     mCurrentTime = mStartTime;
     mVoltage = 0;
+    SmartDashboard.putNumber("Im here", 1);
   }
   
   /** Called every time the scheduler runs while the command is scheduled. */

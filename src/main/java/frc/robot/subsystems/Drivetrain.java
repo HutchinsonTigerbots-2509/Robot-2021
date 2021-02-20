@@ -10,12 +10,16 @@ import frc.robot.RobotContainer;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * Drivetrain Subsystem.
@@ -39,12 +43,13 @@ public class Drivetrain extends SubsystemBase {
 
   // Gyro
   private AHRS mGyro = new AHRS();
+  // private AHRS mGyro = new AHRS(SPI.Port.kMXP);
 
   // Speed Variables
   private double mXSpeed = 0;
   private double mYSpeed = 0;
   private double mZSpeed = 0;
-  //Multipliers
+  //Multipliers <-  10/10 Comment right there
   private double mXMultiplier = 1; //0.6
   private double mYMultiplier = 0.8; //0.8
   private double mZMultiplier = 1; //0.6
@@ -189,7 +194,8 @@ public class Drivetrain extends SubsystemBase {
    * @param pZSpeed rotational speed
    */
   public void DriveWithStrafe(double pYSpeed, double pXSpeed, double pZSpeed) {
-    mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
+
+    mDrive.driveCartesian(pYSpeed, 0, pZSpeed);
   }
 
   /** Stops the robot */
@@ -199,6 +205,7 @@ public class Drivetrain extends SubsystemBase {
 
   // ***** ENCODER METHODS ***** //
 
+  /** Zeroes the encoders */
   public void ResetEncoders(){
     mRearRight.setSelectedSensorPosition(0);
     mRearLeft.setSelectedSensorPosition(0);
@@ -206,6 +213,7 @@ public class Drivetrain extends SubsystemBase {
     mFrontLeft.setSelectedSensorPosition(0);
   }
 
+  /** Gets the average encoder count from 3 of the drivetrain motors */
   public double EncoderAverage(){
     return (Math.abs(mRearRight.getSelectedSensorPosition()) + 
     Math.abs(mRearLeft.getSelectedSensorPosition()) + 
@@ -245,6 +253,7 @@ public class Drivetrain extends SubsystemBase {
     mGyro.resetDisplacement();
   }
 
+  /** Initializes the drivetrain motors. Called in Robot */
   public void InitializeDrivetrain(){
     // Sets the Neutral Mode of the motors (what the motors do when their recieved
     // voltage is 0)
@@ -260,7 +269,7 @@ public class Drivetrain extends SubsystemBase {
     mRearLeft.setInverted(true);
   }
 
-  //Converts a double into 1 or -1 depending on if it is positive or negative
+  /** Converts a double into 1 or -1 depending on if it is positive or negative */
   private int Normalize(double pNum){
     if(pNum < 0){
       return -1;
@@ -269,5 +278,12 @@ public class Drivetrain extends SubsystemBase {
     } else {
       return 0;
     }
+  }
+
+  public void StrafeSpeeds(double RightFrontSpeed, double LeftFrontSpeed, double RightRearSpeed, double LeftRearSpeed){
+    mFrontLeft.set(LeftFrontSpeed);
+    mFrontRight.set(RightFrontSpeed);
+    mRearLeft.set(LeftRearSpeed);
+    mRearRight.set(RightRearSpeed);
   }
 }

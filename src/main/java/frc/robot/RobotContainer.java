@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -24,6 +26,7 @@ import frc.robot.commands.RampUpShooter;
 import frc.robot.commands.Rotate;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.StrafeStraight;
+import frc.robot.commands.StrafeTest;
 
 /**
  * RobotContainer class.
@@ -40,6 +43,8 @@ import frc.robot.commands.StrafeStraight;
  * @author Noah Sturges
  * @author Quinton MacMullan
  * @author Teagan Young
+ * @author Grace Swaja
+ * @Cheerleader Cole Rahne
  * @author Cole Gartner
  */
 public class RobotContainer {
@@ -47,6 +52,8 @@ public class RobotContainer {
   public Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
   private Shooter sShooter = new Shooter();
+  private Conveyor sConveyor = new Conveyor();
+  private Intake sIntake = new Intake();
 
   // Joysticks are defined here...
   public static Joystick OpStick = new Joystick(Constants.kOpStickID);
@@ -57,6 +64,10 @@ public class RobotContainer {
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
   private JoystickButton bResetEncoders;
+  private JoystickButton bConveyorUp;
+  private JoystickButton bConveyorDown;
+  private JoystickButton bIntakeIn;
+  private JoystickButton bIntakeOut;
 
   //Autonomous
   private double AutoStartTime;
@@ -82,15 +93,30 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
+    bRampUpShooter = new JoystickButton(OpStick, Constants.kXboxButtonA);
     bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
-    bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+    bRampDownShooter = new JoystickButton(OpStick, Constants.kXboxButtonB);
     bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
 
     bResetEncoders = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
     bResetEncoders.whenPressed(new InstantCommand(() -> sDrivetrain.ResetEncoders()));
 
+    bConveyorDown = new JoystickButton(OpStick, Constants.kXboxButtonX);
+    bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-1.0)));
+    bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
+
+    bConveyorUp = new JoystickButton(OpStick, Constants.kXboxButtonY);
+    bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(1.0)));
+    bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
+
+    bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
+    bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.RunIntakeIn(1.0)));
+    bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
+
+    bIntakeOut = new JoystickButton(OpStick, Constants.kXboxButtonBack);
+    bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.RunIntakeOut(1.0)));
+    bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
 
     bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
@@ -196,7 +222,7 @@ public class RobotContainer {
 
   }
 
-
+  
   // ********** AUTONOMOUS COMMANDS ********* //
 
   //Barrel Racing Path
@@ -246,6 +272,12 @@ public class RobotContainer {
     new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
   );
 
+  private Command strafeTest = new SequentialCommandGroup(
+    new StrafeStraight(sDrivetrain, 0.9).withTimeout(3)
+    // new StrafeStraight(sDrivetrain, -0.9).withTimeout(3), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(3)
+    // new StrafeStraight(sDrivetrain, -0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, -0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(0.75)
+  );
+  
   /**
    * Get Auto Command.
    * 
@@ -256,6 +288,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // The Command to run in Autonomous
-    return cAutoCommands;
+    return strafeTest;
   }
 }
