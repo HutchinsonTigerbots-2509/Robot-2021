@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 /**
- * RampUpShooter Command
+ * RampUpShooter Command.
  * 
  * <p>This command uses the Shooter subsystem to ramp the shooter up to the target Voltage.
  * 

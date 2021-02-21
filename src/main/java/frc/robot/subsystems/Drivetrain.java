@@ -96,7 +96,7 @@ public class Drivetrain extends SubsystemBase {
   // ***** TELEOP DRIVE METHODS ***** //
 
   /**
-   * Drives the robot without ramp using the Joystick
+   * Drives the robot without ramp using the Joystick.
    * @param pStick The Joystick to get inputs from
    */
   private void JoystickDrive(Joystick pStick) {
@@ -174,7 +174,7 @@ public class Drivetrain extends SubsystemBase {
   // ***** AUTONOMOUS DRIVE METHODS ***** //
 
   /**
-   * Drives without strafe (arcadeDrive, essentially)
+   * Drives without strafe (arcadeDrive, essentially).
    * @param pXSpeed forward speed
    * @param pZSpeed rotational speed
    */
@@ -183,7 +183,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Drives with strafe (cartesianDrive)
+   * Drives with strafe (cartesianDrive).
    * @param pYSpeed strafe speed
    * @param pXSpeed forward speed
    * @param pZSpeed rotational speed
@@ -192,13 +192,14 @@ public class Drivetrain extends SubsystemBase {
     mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
   }
 
-  /** Stops the robot */
+  /** Stops the robot. */
   public void StopDrivetrain() {
     mDrive.driveCartesian(0, 0, 0);
   }
 
   // ***** ENCODER METHODS ***** //
 
+  /** Resets encoder values. */
   public void ResetEncoders(){
     mRearRight.setSelectedSensorPosition(0);
     mRearLeft.setSelectedSensorPosition(0);
@@ -206,6 +207,10 @@ public class Drivetrain extends SubsystemBase {
     mFrontLeft.setSelectedSensorPosition(0);
   }
 
+  /** 
+   * Gets the encoders average.
+   * @return average of encoders
+   */
   public double EncoderAverage(){
     return (Math.abs(mRearRight.getSelectedSensorPosition()) + 
     Math.abs(mRearLeft.getSelectedSensorPosition()) + 
@@ -216,7 +221,7 @@ public class Drivetrain extends SubsystemBase {
   // ***** GYRO METHODS ***** //
 
   /**
-   * Gets gyro X displacement
+   * Gets gyro X displacement.
    * @return The X displacement (distance) of the gyro
    */
   public double GetGyroX() {
@@ -224,7 +229,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Gets gyro Y displacement
+   * Gets gyro Y displacement.
    * @return The Y displacement (distance) of the gyro
    */
   public double GetGyroY() {
@@ -232,19 +237,20 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Gets gyro angle
+   * Gets gyro angle.
    * @return The gyro angle
    */
   public double GetGyroAngle() {
     return mGyro.getAngle();
   }
 
-  /** Zeros the gyro */
+  /** Zeros the gyro. */
   public void ResetGyro() {
     mGyro.reset();
     mGyro.resetDisplacement();
   }
 
+  /** Initializes the drivetrain. */
   public void InitializeDrivetrain(){
     // Sets the Neutral Mode of the motors (what the motors do when their recieved
     // voltage is 0)
@@ -260,7 +266,9 @@ public class Drivetrain extends SubsystemBase {
     mRearLeft.setInverted(true);
   }
 
-  //Converts a double into 1 or -1 depending on if it is positive or negative
+  /**
+   * Converts a double into 1 or -1 depending on if it is positive or negative.
+   */
   private int Normalize(double pNum){
     if(pNum < 0){
       return -1;

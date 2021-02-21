@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 /**
- * Drive Straight Command
+ * Drive Straight Command.
  * 
  * <p>This command uses the Drivetrain subsystem to Drive forward or backward, while correcting for rotation
  * using the gyro.
@@ -29,7 +29,7 @@ public class DriveStraight extends CommandBase {
    /**
    * Drive Straight Constructor.
    * 
-   * <p>Drives the robot straight, using the current gyro angle to correct for rotation
+   * <p>Drives the robot straight, using the current gyro angle to correct for rotation.
    * @param pDrivetrain Drivetrain subsystem
    * @param pXSpeed Forward Speed
    */
@@ -43,7 +43,7 @@ public class DriveStraight extends CommandBase {
   /**
    * Drive Straight Constructor.
    * 
-   * <p>Drives the robot straight, using a specified gyro angle to correct for rotation
+   * <p>Drives the robot straight, using a specified gyro angle to correct for rotation.
    * @param pDrivetrain Drivetrain Subsystem
    * @param pXSpeed Forward Speed
    * @param pGyroTarget The gyro angle to Target

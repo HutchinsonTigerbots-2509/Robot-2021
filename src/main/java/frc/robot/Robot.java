@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Robot extends TimedRobot {
   private static RobotContainer mRobotContainer;
   private Command m_autonomousCommand;
-  public static String Gart = "Dumb";
 
   /**
    * Initialization.

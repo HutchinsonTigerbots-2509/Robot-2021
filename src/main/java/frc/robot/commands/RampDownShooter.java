@@ -5,20 +5,34 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Ramp Down Shooter Command.
+ * 
+ * <p>
+ * Description
+ * 
+ * @version Feburary 21, 2021
+ * @author Cece
+ */
 public class RampDownShooter extends CommandBase {
- private Shooter sShooter;
- private double mRampTime;
- private double mCurrentTime;
- private double mStartTime;
- private double mVoltage;
- private double mStartingVoltage;
- private boolean mFinished;
+  private Shooter sShooter;
+  private double mRampTime;
+  private double mCurrentTime;
+  private double mStartTime;
+  private double mVoltage;
+  private double mStartingVoltage;
+  private boolean mFinished;
 
-  /** Creates a new RampDownShooter. */
+  /**
+   * Creates a new RampDownShooter.
+   * 
+   * @param pShooter  subsystem
+   * @param pRampTime time to ramp
+   */
   public RampDownShooter(Shooter pShooter, double pRampTime) {
     sShooter = pShooter;
     mRampTime = pRampTime;
@@ -41,10 +55,10 @@ public class RampDownShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (mVoltage > 0){
+    if (mVoltage > 0) {
       mVoltage = -(mStartingVoltage / mRampTime) * (mCurrentTime - mStartTime) + mStartingVoltage;
       sShooter.RunShooter(mVoltage);
-    }else{
+    } else {
       mVoltage = 0;
       sShooter.RunShooter(mVoltage);
       mFinished = true;

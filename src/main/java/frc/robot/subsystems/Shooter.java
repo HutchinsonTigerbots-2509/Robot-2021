@@ -14,7 +14,8 @@ import frc.robot.Constants;
 /**
  * Shooter Subsystem.
  * 
- * <p>The Shooter subsystems runs the shooter.
+ * <p>
+ * The Shooter subsystems runs the shooter.
  * 
  * @version February 9, 2021
  * @author Noah Sturges
@@ -28,28 +29,30 @@ public class Shooter extends SubsystemBase {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
   }
 
-  /** periodic method */
+  /** periodic method. */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter RPM", GetRPM());
     SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
-  } 
+  }
 
   /**
-   * Gets the RPM of the shooter motor
-   * @return  RPM
+   * Gets the RPM of the shooter motor.
+   * 
+   * @return RPM
    */
   public double GetRPM() {
     return Math.abs((600 * mShooterMotor.getSelectedSensorVelocity()) / Constants.kShooterTicksPerRevolution);
   }
-  
+
   public double GetMotorOutputPercent() {
     return mShooterMotor.getMotorOutputPercent();
   }
 
   /**
-   * Sets shooter motor speed
+   * Sets shooter motor speed.
+   * 
    * @param pSpeed speed of the motor
    */
   public void RunShooter(double pSpeed) {

@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 /**
- * Strafe Straight Command
+ * Strafe Straight Command.
  * 
- * <p>This commmand uses the Drivetrain and Gyro to strafe while maintaining rotation
+ * <p>This commmand uses the Drivetrain and Gyro to strafe while maintaining rotation.
  * 
  * @version February 9, 2021
  * @author Cece
@@ -23,7 +23,7 @@ public class StrafeStraight extends CommandBase {
 
   /** 
    * Creates a new StrafeStraight.
-   * <p> Strafes while correcting for rotation using the current gyro angle
+   * <p> Strafes while correcting for rotation using the current gyro angle.
    * @param pDrivetrain Drivetrain subsystem
    * @param pYSpeed strafe speed
    */

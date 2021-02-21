@@ -20,7 +20,7 @@ package frc.robot;
  * <p>
  * When declaring constants, they should start with k. (i.e. kLeftMotorID).
  * 
- * @version February 9, 2021
+ * @version February 21, 2021
  * @author First Generated
  * @author Quinton MacMullan
  * @author Noah Sturges
@@ -52,6 +52,7 @@ public final class Constants {
     public static int kIntakeMotorID;
 
     // ***** Vision Constants ***** //
+    // #region Vision Constants
 
     // Network
     public static String kLimelightIP = "10.25.9.11";
@@ -73,7 +74,10 @@ public final class Constants {
     public static String kLimelightTargetVertID = "tvert"; // Vertical sidelength of bounding box (0-320 pixels)
     public static String kLimelightTargetHorID = "thor"; // Horizontal sidelength of bounding box (0-320 pixels)
 
+    // #endregion
+
     // ***** Joysticks ***** //
+    // #region Joysticks
 
     public final static int kOpStickID = 0;
     public final static int kCoOpStickID = 1;
@@ -95,4 +99,6 @@ public final class Constants {
     public final static int kXboxButtonStart = 8;
     public final static int kXboxLeftJoystickButton = 9;
     public final static int kXboxRightJoystickButton = 10;
+
+    // #endregion
 }

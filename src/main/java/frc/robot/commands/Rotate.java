@@ -9,35 +9,40 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
 /**
- * Rotate Command
+ * Rotate Command.
  * 
- * <p>This command uses the Drivetrain and Vision subsystems to rotate the robot around a vision target.
+ * <p>
+ * This command uses the Drivetrain and Vision subsystems to rotate the robot
+ * around a vision target.
  * 
  * @version February 6, 2021
  * @author Cece
  */
 public class Rotate extends CommandBase {
-  //Subsystems
+  // Subsystems
   private Drivetrain sDrivetrain;
   private Vision sVision;
   // Speed variables
   private double mStrafeSpeed;
   private double mForwardSpeed;
   private double mMaxForwardSpeed = 0.6;
-  //Multipliers
+  // Multipliers
   private double mForwardMultiplier = 0.05; // 0.06
-  private double mRotationMultiplier = 0.05; //0.06
-  //Y Target
+  private double mRotationMultiplier = 0.05; // 0.06
+  // Y Target
   private double mYTarget;
 
   /**
-   * The Rotate Constructor
+   * The Rotate Constructor.
    * 
-   * <p> Rotates the robot around a vision target, using a specified speed and Y Target
-   * @param pDrivetrain Drivetrain subsystem
-   * @param pVision Vision subsystem
+   * <p>
+   * Rotates the robot around a vision target, using a specified speed and Y
+   * Target.
+   * 
+   * @param pDrivetrain  Drivetrain subsystem
+   * @param pVision      Vision subsystem
    * @param pStrafeSpeed Strafe speed
-   * @param pYTarget Y Value to Target
+   * @param pYTarget     Y Value to Target
    */
   public Rotate(Drivetrain pDrivetrain, Vision pVision, double pStrafeSpeed, double pYTarget) {
     sDrivetrain = pDrivetrain;
@@ -51,33 +56,35 @@ public class Rotate extends CommandBase {
 
   /** Called when the command is initially scheduled. */
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    //Sets the forward speed based on the Y position of the target
-    if(mYTarget < sVision.getTargetY()){
+    // Sets the forward speed based on the Y position of the target
+    if (mYTarget < sVision.getTargetY()) {
       mForwardSpeed = (Math.abs(mYTarget - sVision.getTargetY())) * mForwardMultiplier;
-    }else if(mYTarget > sVision.getTargetY()){
+    } else if (mYTarget > sVision.getTargetY()) {
       mForwardSpeed = -(Math.abs(mYTarget - sVision.getTargetY())) * mForwardMultiplier;
-    }else{
+    } else {
       mForwardSpeed = 0;
     }
-    //Checks to make sure the speed is less than the max speed
-    if(mForwardSpeed > mMaxForwardSpeed){
+    // Checks to make sure the speed is less than the max speed
+    if (mForwardSpeed > mMaxForwardSpeed) {
       mForwardSpeed = mMaxForwardSpeed;
-    } else if (mForwardSpeed < -mMaxForwardSpeed){
+    } else if (mForwardSpeed < -mMaxForwardSpeed) {
       mForwardSpeed = -mMaxForwardSpeed;
     }
 
-    //Updates the speed of the Drivetrain motors
+    // Updates the speed of the Drivetrain motors
     sDrivetrain.DriveWithStrafe(mStrafeSpeed, mForwardSpeed, sVision.getTargetX() * mRotationMultiplier);
   }
 
   /** Called once the command ends or is interrupted. */
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   /** Returns true when the command should end. */
   @Override

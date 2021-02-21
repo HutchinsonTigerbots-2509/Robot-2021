@@ -49,7 +49,7 @@ public class Vision extends SubsystemBase {
   /**
    * Vision Constructor.
    * 
-   * <p>Contains all information for the Limelight Networktable and it's values
+   * <p>Contains all information for the Limelight Networktable and it's values.
    */
   public Vision() {
     //Sets default values (check Constants variable descriptions for more info)
@@ -59,7 +59,7 @@ public class Vision extends SubsystemBase {
     mLimelightTable.getEntry("pipeline").setNumber(Constants.kLimelightStartingPipeline);
   }
 
-  /** Periodic function */
+  /** Periodic function. */
   @Override
   public void periodic() {
     //Prints Vision values to the SmartDashboard
@@ -76,7 +76,7 @@ public class Vision extends SubsystemBase {
   // ***** VISION VALUE METHODS ***** //
 
   /**
-   * Gets the Target X value
+   * Gets the Target X value.
    * @return The horizontal offset from crosshair to target (+/- 27 degrees)
    */
   public double getTargetX() {
@@ -86,7 +86,7 @@ public class Vision extends SubsystemBase {
   }
 
   /**
-   * Gets the Target Y value
+   * Gets the Target Y value.
    * @return The vertical offset from crosshair to target (+/- 20.5 degrees)
    */
   public double getTargetY() {
@@ -96,7 +96,7 @@ public class Vision extends SubsystemBase {
   }
 
   /**
-   * Gets whether or not a vision target is found
+   * Gets whether or not a vision target is found.
    * @return True is a target is found, false if not
    */
   public boolean GetTargetFound(){
@@ -142,7 +142,7 @@ public class Vision extends SubsystemBase {
   // ***** VISION PIPELINE METHODS ***** //
 
   /**
-   * Switches to a specified pipeline
+   * Switches to a specified pipeline.
    * @param pipeline The pipeline to switch to
    */
   public void SwitchPipeline(int pipeline){
