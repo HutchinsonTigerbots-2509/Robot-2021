@@ -46,6 +46,7 @@ public class Shooter extends SubsystemBase {
     return Math.abs((600 * mShooterMotor.getSelectedSensorVelocity()) / Constants.kShooterTicksPerRevolution);
   }
 
+  
   public double GetMotorOutputPercent() {
     return mShooterMotor.getMotorOutputPercent();
   }

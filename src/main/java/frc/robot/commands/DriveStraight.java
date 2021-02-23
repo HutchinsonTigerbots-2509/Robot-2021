@@ -77,7 +77,7 @@ public class DriveStraight extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     //Stops the robot
-    sDrivetrain.StopDrivetrain();
+    sDrivetrain.DriveWithStrafe(0, 0, 0);
   }
 
   /** Returns true when the command should end. */

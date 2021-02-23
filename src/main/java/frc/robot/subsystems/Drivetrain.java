@@ -76,15 +76,13 @@ public class Drivetrain extends SubsystemBase {
     ResetEncoders();
   }
 
-  /**Periodic function */
+  /** Periodic function */
   @Override
   public void periodic() {
     // Drives the robot using a joystick
     JoystickDrive(RobotContainer.OpStick);
     // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
-    SmartDashboard.putNumber("Gyro X", GetGyroX());
-    SmartDashboard.putNumber("Gyro Y", GetGyroY());
     // Prints the encoder values to the SmartDashboard
     SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("LeftRear", mRearLeft.getSelectedSensorPosition());
@@ -96,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
   // ***** TELEOP DRIVE METHODS ***** //
 
   /**
-   * Drives the robot without ramp using the Joystick.
+   * Drives the robot without ramp using the Joystick
    * @param pStick The Joystick to get inputs from
    */
   private void JoystickDrive(Joystick pStick) {
@@ -124,6 +122,10 @@ public class Drivetrain extends SubsystemBase {
     mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
   }
 
+  /**
+   * Drives the robot with ramp using the Joystick
+   * @param pStick The Joystick to get inputs from
+   */
   private void JoystickDriveRamp(Joystick pStick){
     // Calculates the Y Speed based on the joystick values
     if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
@@ -174,7 +176,7 @@ public class Drivetrain extends SubsystemBase {
   // ***** AUTONOMOUS DRIVE METHODS ***** //
 
   /**
-   * Drives without strafe (arcadeDrive, essentially).
+   * Drives without strafe (arcadeDrive, essentially)
    * @param pXSpeed forward speed
    * @param pZSpeed rotational speed
    */
@@ -183,7 +185,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Drives with strafe (cartesianDrive).
+   * Drives with strafe (cartesianDrive)
    * @param pYSpeed strafe speed
    * @param pXSpeed forward speed
    * @param pZSpeed rotational speed
@@ -192,14 +194,8 @@ public class Drivetrain extends SubsystemBase {
     mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
   }
 
-  /** Stops the robot. */
-  public void StopDrivetrain() {
-    mDrive.driveCartesian(0, 0, 0);
-  }
-
   // ***** ENCODER METHODS ***** //
 
-  /** Resets encoder values. */
   public void ResetEncoders(){
     mRearRight.setSelectedSensorPosition(0);
     mRearLeft.setSelectedSensorPosition(0);
@@ -207,10 +203,6 @@ public class Drivetrain extends SubsystemBase {
     mFrontLeft.setSelectedSensorPosition(0);
   }
 
-  /** 
-   * Gets the encoders average.
-   * @return average of encoders
-   */
   public double EncoderAverage(){
     return (Math.abs(mRearRight.getSelectedSensorPosition()) + 
     Math.abs(mRearLeft.getSelectedSensorPosition()) + 
@@ -221,36 +213,22 @@ public class Drivetrain extends SubsystemBase {
   // ***** GYRO METHODS ***** //
 
   /**
-   * Gets gyro X displacement.
-   * @return The X displacement (distance) of the gyro
-   */
-  public double GetGyroX() {
-    return mGyro.getDisplacementX();
-  }
-
-  /**
-   * Gets gyro Y displacement.
-   * @return The Y displacement (distance) of the gyro
-   */
-  public double GetGyroY() {
-    return mGyro.getDisplacementY();
-  }
-
-  /**
-   * Gets gyro angle.
+   * Gets gyro angle
    * @return The gyro angle
    */
   public double GetGyroAngle() {
     return mGyro.getAngle();
   }
 
-  /** Zeros the gyro. */
+  /** Zeros the gyro */
   public void ResetGyro() {
     mGyro.reset();
     mGyro.resetDisplacement();
   }
 
-  /** Initializes the drivetrain. */
+  // ***** MISC ***** //
+
+  /** Sets up the Drivetrain motors. Called in Robot. */
   public void InitializeDrivetrain(){
     // Sets the Neutral Mode of the motors (what the motors do when their recieved
     // voltage is 0)
@@ -266,9 +244,7 @@ public class Drivetrain extends SubsystemBase {
     mRearLeft.setInverted(true);
   }
 
-  /**
-   * Converts a double into 1 or -1 depending on if it is positive or negative.
-   */
+  /** Converts a double into 1 or -1 depending on if it is positive or negative */
   private int Normalize(double pNum){
     if(pNum < 0){
       return -1;
