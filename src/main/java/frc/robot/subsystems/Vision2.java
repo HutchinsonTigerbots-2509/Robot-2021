@@ -16,13 +16,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * 
  * <p>The Vision subsystems accesses the Limelight Network Table and contains methods to retrieve those values.
  * It is also responsible for any pipeline changes and anything else regarding the Limelight camera.
+ * This subsystem is designed for a second camera.
+ * 
+ * 
  * 
  * @version February 9, 2021
  * @author Cece
  */
-public class Vision extends SubsystemBase {
+public class Vision2 extends SubsystemBase {
   // The Network Table contains all values relevant to working with vision
-  private NetworkTable mLimelightTable = NetworkTableInstance.create().getTable(Constants.kLimelightNetworkID);
+  private NetworkTable mLimelightTable = NetworkTableInstance.create().getTable(Constants.kLimelight2NetworkID);
 
   // Network Table entry variables to hold data in the form of a NetworkTableEntry
   private NetworkTableEntry mTableX = mLimelightTable.getEntry(Constants.kLimelightTargetXID);
@@ -51,12 +54,12 @@ public class Vision extends SubsystemBase {
    * 
    * <p>Contains all information for the Limelight Networktable and it's values
    */
-  public Vision() {
+  public Vision2() {
     //Sets default values (check Constants variable descriptions for more info)
-    mLimelightTable.getEntry("ledMode").setNumber(Constants.kLimelightLED);
-    mLimelightTable.getEntry("camMode").setNumber(Constants.kLimelightMode);
-    mLimelightTable.getEntry("stream").setNumber(Constants.kLimelightStream);
-    mLimelightTable.getEntry("pipeline").setNumber(Constants.kLimelightStartingPipeline);
+    mLimelightTable.getEntry("ledMode").setNumber(Constants.kLimelight2LED);
+    mLimelightTable.getEntry("camMode").setNumber(Constants.kLimelight2Mode);
+    mLimelightTable.getEntry("stream").setNumber(Constants.kLimelight2Stream);
+    mLimelightTable.getEntry("pipeline").setNumber(Constants.kLimelight2StartingPipeline);
   }
 
   /** Periodic function */

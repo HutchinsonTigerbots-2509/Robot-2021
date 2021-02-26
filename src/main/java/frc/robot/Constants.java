@@ -42,6 +42,8 @@ public final class Constants {
 
     // Shooter
     public static int kShooterMotorID = 4;
+    public static int kAimMotorID;
+    public static int kPotentiometerID;
 
     public static double kShooterTicksPerRevolution = 2048;
 
@@ -57,11 +59,19 @@ public final class Constants {
     public static String kLimelightIP = "10.25.9.11";
     public static String kLimelightNetworkID = "limelight";
 
+    public static String kLimelight2IP = "10.25.9.11";
+    public static String kLimelight2NetworkID = "limelight2";
+
     // Settings
     public static int kLimelightLED = 0; // Sets LED. 0 = Set by Pipline, 1 = Force off, 2 = Force blink, 3 = Force on
     public static int kLimelightMode = 0; // Sets camera mode. 0 = Vision processor, 1 = Driver Camera
     public static int kLimelightStream = 0; // Sets streaming mode. 0 = Side-by-Side, 1 = PiP main, 2 = PiP secondary
     public static int kLimelightStartingPipeline = 1; // The default pipeline to stream
+
+    public static int kLimelight2LED = 0; // Sets LED. 0 = Set by Pipline, 1 = Force off, 2 = Force blink, 3 = Force on
+    public static int kLimelight2Mode = 0; // Sets camera mode. 0 = Vision processor, 1 = Driver Camera
+    public static int kLimelight2Stream = 0; // Sets streaming mode. 0 = Side-by-Side, 1 = PiP main, 2 = PiP secondary
+    public static int kLimelight2StartingPipeline = 0; // The default pipeline to stream
 
     // Table IDs (for getting values from the Network Table)
     public static String kLimelightLatencyID = "tl"; // Pipeline latency in milliseconds

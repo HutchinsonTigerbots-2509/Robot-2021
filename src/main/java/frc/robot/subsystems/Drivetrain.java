@@ -70,10 +70,6 @@ public class Drivetrain extends SubsystemBase {
 
     //Defines the mecanumDrive
     mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
-
-    // Zeros the gyro & encoders
-    ResetGyro();
-    ResetEncoders();
   }
 
   /**Periodic function */
@@ -258,6 +254,10 @@ public class Drivetrain extends SubsystemBase {
     mRearRight.setInverted(true);
     mFrontLeft.setInverted(true);
     mRearLeft.setInverted(true);
+
+    // Zeros the gyro & encoders
+    ResetGyro();
+    ResetEncoders();
   }
 
   //Converts a double into 1 or -1 depending on if it is positive or negative

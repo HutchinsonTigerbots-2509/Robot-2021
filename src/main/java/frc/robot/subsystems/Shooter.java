@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -23,6 +25,10 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
   private WPI_TalonFX mShooterMotor = new WPI_TalonFX(Constants.kShooterMotorID);
 
+  private WPI_TalonSRX mAimMotor = new WPI_TalonSRX(Constants.kAimMotorID);
+  private AnalogInput mPotentiometer = new AnalogInput(Constants.kPotentiometerID);
+
+
   /** Creates a new Shooter. */
   public Shooter() {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
@@ -34,6 +40,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter RPM", GetRPM());
     SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
+    SmartDashboard.putNumber("PV", GetPotentiometerVoltage());
   } 
 
   /**
@@ -48,11 +55,19 @@ public class Shooter extends SubsystemBase {
     return mShooterMotor.getMotorOutputPercent();
   }
 
+  public double GetPotentiometerVoltage(){
+    return mPotentiometer.getVoltage();
+  }
+
   /**
    * Sets shooter motor speed
    * @param pSpeed speed of the motor
    */
   public void RunShooter(double pSpeed) {
     mShooterMotor.set(pSpeed);
+  }
+
+  public void RunAimMotor(double pSpeed) {
+    mAimMotor.set(pSpeed);
   }
 }
