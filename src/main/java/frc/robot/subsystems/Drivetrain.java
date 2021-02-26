@@ -85,7 +85,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // Drives the robot using a joystick
-    JoystickDrive(RobotContainer.OpStick);
+    RonDrive(RobotContainer.OpStick);
     // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
     SmartDashboard.putNumber("Gyro X", GetGyroX());
@@ -99,6 +99,78 @@ public class Drivetrain extends SubsystemBase {
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
+
+  double previousX = 0;
+  double previousY = 0;
+  double previousZ = 0;
+  double currentX = 0;
+  double currentY = 0;
+  double currentZ = 0;
+  double gainX = 0.04;
+  double gainY = 0.04;
+  double gainZ = 0.04;
+  double changeX = 0;
+  double changeY = 0;
+  double changeZ = 0;
+  double outputX = 0;
+  double outputY = 0;
+  double outputZ = 0;
+  private void RonDrive(Joystick pStick) {
+    
+    if(Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) &&
+    Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > 0.6) {
+      currentY = pStick.getRawAxis(Constants.kXboxLeftTrigger);
+    } else if(Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) > 0.6) {
+      currentY = -pStick.getRawAxis(Constants.kXboxLeftTrigger);
+    } else {
+      currentY = 0;
+    }
+    
+    if(Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.2) {
+      currentX = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
+    } else {
+      currentX = 0;
+    }
+
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.1) {
+      currentZ = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
+    } else {
+      currentZ = 0;
+    }
+
+    if(currentX == 0) {
+      errorX = 0;
+    } else {
+      errorX = currentX - previousX;
+    }
+
+    // if(Math.abs(previousY) < 0.1) {
+    //   errorY = 0;
+    // } else {
+    //   errorY = currentY - previousY;
+    // }
+
+    // if(Math.abs(currentY - previousY) < 0.1) {
+    //   errorZ = 0;
+    // } else {
+    //   errorZ = currentZ - previousZ;
+    // }
+    
+    //errorY = currentY - previousY;
+    //errorZ = currentZ - previousZ;
+
+    // mDrive.driveCartesian(previousY+(errorY*gainY), 
+    //                      previousX+(errorX*gainX), 
+    //                      previousZ+(errorZ*gainZ));
+
+    previousX = errorX;
+    previousY = errorY;
+    previousZ = errorZ;
+
+    SmartDashboard.putNumber("X", currentX);
+    SmartDashboard.putNumber("Y", previousX);
+    SmartDashboard.putNumber("Z", pStick.getRawAxis(Constants.kXboxRightJoystickX));
+  }
 
   /**
    * Drives the robot without ramp using the Joystick

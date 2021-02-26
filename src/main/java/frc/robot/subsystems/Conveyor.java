@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -20,6 +24,7 @@ public class Conveyor extends SubsystemBase {
 
   //#region Variable Declaration
   private VictorSP ConveyorMotor = new VictorSP(Constants.kConveyorMotorID);
+  private WPI_TalonSRX Agitator = new WPI_TalonSRX(Constants.kAgitatorID);
 
   private AnalogInput topLightSensor = new AnalogInput(Constants.kTopLightSensorID);
   private AnalogInput middleLightSensor = new AnalogInput(Constants.kMiddleLightSensorID);
@@ -43,6 +48,7 @@ public class Conveyor extends SubsystemBase {
     listOfSensors[0] = bottomLightSensor;
     listOfSensors[1] = middleLightSensor;
     listOfSensors[2] = topLightSensor;
+    Agitator.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override
@@ -129,6 +135,13 @@ public class Conveyor extends SubsystemBase {
    */
   public void MoveConveyor (double Speed) {
     ConveyorMotor.set(Speed);
+    if(Speed > 0) {
+      Agitator.set(-0.5);
+    } else if(Speed < 0) {
+      Agitator.set(0.5);
+    } else {
+      Agitator.set(0);
+    }
   }
 
   /**
@@ -168,5 +181,9 @@ public class Conveyor extends SubsystemBase {
       return true;
     }
     return false;
+  }
+
+  public void setAgitator(double Speed) {
+    Agitator.set(Speed);
   }
 }

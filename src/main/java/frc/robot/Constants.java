@@ -47,13 +47,14 @@ public final class Constants {
       
 
     // Conveyor
-    public static int kConveyorMotorID = 8;
+    public static int kConveyorMotorID = 6;
+    public static int kAgitatorID = 7;
     public static int kTopLightSensorID = 0;
     public static int kMiddleLightSensorID = 1;
     public static int kBottomLightSensorID = 2;
 
     // Intake
-    public static int kIntakeMotorID = 9;
+    public static int kIntakeMotorID = 5;
     
 
     // ***** Vision Constants ***** //

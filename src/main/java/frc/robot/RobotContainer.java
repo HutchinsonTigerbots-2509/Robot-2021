@@ -103,37 +103,43 @@ public class RobotContainer {
     bResetEncoders.whenPressed(new InstantCommand(() -> sDrivetrain.ResetEncoders()));
 
     bConveyorDown = new JoystickButton(OpStick, Constants.kXboxButtonX);
-    bConveyorDown.whenPressed(new ConveyorShiftDown(sConveyor));//new InstantCommand(() -> sConveyor.MoveConveyor(-1.0)));
-    //bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
+    //bConveyorDown.whenPressed(new ConveyorShiftDown(sConveyor));
+    bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
+    bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
     
     bConveyorUp = new JoystickButton(OpStick, Constants.kXboxButtonY);
-    bConveyorUp.whenPressed(new ConveyorShiftUp(sConveyor));//(new InstantCommand(() -> sConveyor.MoveConveyor(1.0)));
-    // bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.StopMotors()));
+    //bConveyorUp.whenPressed(new ConveyorShiftUp(sConveyor));
+    bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(0.5)));
+    bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
 
     bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
-    bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.RunIntakeIn(1.0)));
+    bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.RunIntakeIn(0.6)));
     bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
+    //bIntakeIn.whileHeld(new InstantCommand(() -> sConveyor.setAgitator(.75)));
+    //bIntakeIn.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
 
     bIntakeOut = new JoystickButton(OpStick, Constants.kXboxButtonBack);
-    bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.RunIntakeOut(1.0)));
+    bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.RunIntakeOut(0.6)));
     bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
+    //bIntakeOut.whileHeld(new InstantCommand(() -> sConveyor.setAgitator(-0.75)));
+    //bIntakeOut.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
 
     
 
-    bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
+    //bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
     // ***** BOUNCE PATH ***** //
     // Description
-    bAutoCommands.whenPressed(new SequentialCommandGroup(
-      //Resets the gyro and Encoders
-      new InstantCommand(() -> sDrivetrain.ResetGyro()),
-      new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-      //Drives straight until the average encoder count is above 64,000
-      new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
-      //Strafes left until the average encoder count is above 100,000
-      new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-      new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
-    ));
+    // bAutoCommands.whenPressed(new SequentialCommandGroup(
+    //   //Resets the gyro and Encoders
+    //   new InstantCommand(() -> sDrivetrain.ResetGyro()),
+    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+    //   //Drives straight until the average encoder count is above 64,000
+    //   new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
+    //   //Strafes left until the average encoder count is above 100,000
+    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+    //   new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
+    // ));
 
     // ***** BARREL RACING PATH ***** //
     /*
