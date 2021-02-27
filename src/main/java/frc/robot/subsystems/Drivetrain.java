@@ -118,34 +118,26 @@ public class Drivetrain extends SubsystemBase {
       currentZ = 0;
     }
 
-    if(currentX == 0) {
-      errorX = 0;
-    } else {
-      errorX = currentX - previousX;
+    outputX = gainX*(currentZ-previousZ)+previousZ;
+    outputY = gainY*(currentY - previousY)+previousY;
+    outputZ = gainZ*(currentZ - previousZ)+previousZ;
+
+    if(Math.abs(outputX) < 0.1) {
+      outputX=0;
     }
-
-    // if(Math.abs(previousY) < 0.1) {
-    //   errorY = 0;
-    // } else {
-    //   errorY = currentY - previousY;
-    // }
-
-    // if(Math.abs(currentY - previousY) < 0.1) {
-    //   errorZ = 0;
-    // } else {
-    //   errorZ = currentZ - previousZ;
-    // }
+    if(Math.abs(outputY) < 0.1) {
+      outputY=0;
+    }
+    if(Math.abs(outputZ) < 0.1) {
+      outputZ=0;
+    }
     
-    //errorY = currentY - previousY;
-    //errorZ = currentZ - previousZ;
 
-    // mDrive.driveCartesian(previousY+(errorY*gainY), 
-    //                      previousX+(errorX*gainX), 
-    //                      previousZ+(errorZ*gainZ));
+    mDrive.driveCartesian(outputY, outputX, outputZ);
 
-    previousX = errorX;
-    previousY = errorY;
-    previousZ = errorZ;
+    previousX = outputX;
+    previousY = outputY;
+    previousZ = outputZ;
 
     SmartDashboard.putNumber("X", currentX);
     SmartDashboard.putNumber("Y", previousX);
