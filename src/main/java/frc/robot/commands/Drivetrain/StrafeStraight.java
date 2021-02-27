@@ -16,7 +16,7 @@ import frc.robot.subsystems.Drivetrain;
 public class StrafeStraight extends CommandBase {
   private Drivetrain sDrivetrain;
   private double mYSpeed;
-  private double mRotationMultiplier = 0.06;
+  private double mRotationMultiplier = 0.02; //0.06
   private Double mGyroTarget;
 
   /** 
@@ -51,6 +51,7 @@ public class StrafeStraight extends CommandBase {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
+    sDrivetrain.DriveWithStrafe(mYSpeed, 0, (mGyroTarget - sDrivetrain.GetGyroAngle()) * mRotationMultiplier);
   }
 
   /** Called once the command ends or is interrupted. */

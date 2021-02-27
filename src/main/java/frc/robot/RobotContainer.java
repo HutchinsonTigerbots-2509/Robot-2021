@@ -244,7 +244,7 @@ public class RobotContainer {
     new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
     //Drives straight to set up for first marker
     new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    new DriveStraight(sDrivetrain, 0.8).withTimeout(0.6),
+    new DriveStraight(sDrivetrain, 0.8).withTimeout(0.5),
     // new WaitCommand(0.2),
     //Rotates around first marker
     new Rotate(sDrivetrain, sVision, -0.6, -10).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 315), //320
@@ -294,6 +294,53 @@ public class RobotContainer {
     // new StrafeStraight(sDrivetrain, -0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, -0.9).withTimeout(0.75), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(0.75)
   );
 
+  private Command AutoCommand = new SequentialCommandGroup(
+    //Sets the start time for the timer
+    new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
+    //Drives straight to set up for first marker
+    new InstantCommand(() -> sDrivetrain.ResetGyro()),
+    new DriveStraight(sDrivetrain, 0.8).withTimeout(0.5),
+    // new WaitCommand(0.2),
+    //Rotates around first marker
+    new Rotate(sDrivetrain, sVision, -0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 315), //320
+    //Strafes + Drives to set up for second marker
+    new StrafeStraight(sDrivetrain, -1).withTimeout(0.3),
+    new DriveStraight(sDrivetrain, 1).withTimeout(0.6),
+    // new WaitCommand(0.2),
+    //Turns if the robot isn't facing the marker
+    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
+    //Rotates around second marker
+    new Rotate(sDrivetrain, sVision, 0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
+    //Strafes + Drives to set up for third marker
+    new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.4), //0.7 (timeout)
+    new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
+    //Turns if the robot isn't facing the marker
+    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withTimeout(0.2),
+    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
+    //Rotates around third marker
+    new Rotate(sDrivetrain, sVision, 0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
+    //Strafes to the side for final run
+    new StrafeStraight(sDrivetrain, 1).withTimeout(0.2),
+    //Switches pipeline to dual target mode
+    new InstantCommand(() -> sVision.SwitchPipeline(2)),
+    //Drives forward until several requirements have been satisfied
+    new ParallelRaceGroup(
+      new DriveStraight(sDrivetrain, 1, -180),
+      new SequentialCommandGroup(
+        new WaitCommand(0.5),
+        new WaitCommand(1000).withInterrupt(() -> sVision.GetTargetFound()),
+        new WaitCommand(0.5),
+        new WaitCommand(1000).withInterrupt(() -> !sVision.GetTargetFound()),
+        // CHECK THIS WAITCOMMAND BEFORE RUNNING
+        new WaitCommand(0.3)
+      )
+    ),
+    //Switches pipeline back to original pipeline
+    new InstantCommand(() -> sVision.SwitchPipeline(Constants.kLimelightStartingPipeline)),
+    //Prints out the time it took to run the path
+    new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
+  );
+
   //private Command ConveyorTest = new ConveyorShiftUp(sConveyor);
   
   /**
@@ -306,6 +353,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // The Command to run in Autonomous
-    return null;
+    return AutoCommand;
   }
 }
