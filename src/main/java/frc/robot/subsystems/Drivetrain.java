@@ -64,16 +64,16 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     
     // Drives the robot using a joystick
-    RonDrive(RobotContainer.OpStick);
+    JoystickDrive(RobotContainer.OpStick);
     
     // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
     
     // Prints the encoder values to the SmartDashboard
-    SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
-    SmartDashboard.putNumber("LeftRear", mRearLeft.getSelectedSensorPosition());
-    SmartDashboard.putNumber("RightFront", mFrontRight.getSelectedSensorPosition());
-    SmartDashboard.putNumber("RightRear", mRearRight.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("LeftRear", mRearLeft.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("RightFront", mFrontRight.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("RightRear", mRearRight.getSelectedSensorPosition());
     SmartDashboard.putNumber("Average Encoder Ticks", EncoderAverage());
   
   }
@@ -95,12 +95,13 @@ public class Drivetrain extends SubsystemBase {
   double outputX = 0;
   double outputY = 0;
   double outputZ = 0;
+
   private void RonDrive(Joystick pStick) {
     
     if(Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) &&
-    Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > 0.6) {
+    Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > 0.2) {
       currentY = pStick.getRawAxis(Constants.kXboxLeftTrigger);
-    } else if(Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) > 0.6) {
+    } else if(Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) > 0.2) {
       currentY = -pStick.getRawAxis(Constants.kXboxLeftTrigger);
     } else {
       currentY = 0;
@@ -139,9 +140,9 @@ public class Drivetrain extends SubsystemBase {
     previousY = outputY;
     previousZ = outputZ;
 
-    SmartDashboard.putNumber("X", currentX);
-    SmartDashboard.putNumber("Y", previousX);
-    SmartDashboard.putNumber("Z", pStick.getRawAxis(Constants.kXboxRightJoystickX));
+    // SmartDashboard.putNumber("X", currentX);
+    // SmartDashboard.putNumber("Y", previousX);
+    // SmartDashboard.putNumber("Z", pStick.getRawAxis(Constants.kXboxRightJoystickX));
   }
 
   /**
@@ -150,21 +151,21 @@ public class Drivetrain extends SubsystemBase {
    */
   private void JoystickDrive(Joystick pStick) {
     // Calculates the Y Speed based on the joystick values
-    if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
+    if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.2) {
       mYSpeed = pStick.getRawAxis(Constants.kXboxRightTrigger) * mYMultiplier;
-    } else if (pStick.getRawAxis(Constants.kXboxLeftTrigger) > 0.4) {
+    } else if (pStick.getRawAxis(Constants.kXboxLeftTrigger) > 0.2) {
       mYSpeed = -pStick.getRawAxis(Constants.kXboxLeftTrigger) * mYMultiplier;
     } else {
       mYSpeed = 0;
     }
     // Calculates the X Speed based on the joystick values;
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.4) {
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.2) {
       mXSpeed = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
     } else {
       mXSpeed = 0;
     }
     // Calculates the Z Speed based on the joystick values
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.4) {
+    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.05) {
       mZSpeed = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
     } else {
       mZSpeed = 0;
@@ -215,8 +216,8 @@ public class Drivetrain extends SubsystemBase {
     mPreviousXSpeed = mXSpeed;
     mPreviousZSpeed = mZSpeed;
 
-    SmartDashboard.putNumber("Z Speed", mZSpeed);
-    SmartDashboard.putNumber("X Speed", mXSpeed);
+    // SmartDashboard.putNumber("Z Speed", mZSpeed);
+    // SmartDashboard.putNumber("X Speed", mXSpeed);
 
   }
 
@@ -239,7 +240,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void DriveWithStrafe(double pYSpeed, double pXSpeed, double pZSpeed) {
 
-    mDrive.driveCartesian(pYSpeed, 0, pZSpeed);
+    mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
   }
 
   /** Stops the robot */

@@ -40,19 +40,6 @@ public class StrafeStraight extends CommandBase {
     addRequirements(sDrivetrain);
   }
 
-  public void CustomDriveCartesian(double YValue, double XValue, double ZValue){
-    Vector2d input = new Vector2d(YValue, XValue);
-    input.rotate(0);
-
-    double[] wheelSpeeds = new double[4];
-    wheelSpeeds[0] = input.x + input.y + ZValue;
-    wheelSpeeds[1] = -input.x + input.y - ZValue;
-    wheelSpeeds[2] = -input.x + input.y + ZValue;
-    wheelSpeeds[3] = input.x + input.y - ZValue;
-
-    sDrivetrain.StrafeSpeeds(-wheelSpeeds[1], wheelSpeeds[0], -wheelSpeeds[3], wheelSpeeds[2]);
-  }
-
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
@@ -64,7 +51,6 @@ public class StrafeStraight extends CommandBase {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    CustomDriveCartesian(mYSpeed, 0, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mRotationMultiplier);
   }
 
   /** Called once the command ends or is interrupted. */

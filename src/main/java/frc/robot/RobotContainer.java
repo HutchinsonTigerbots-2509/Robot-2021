@@ -21,6 +21,8 @@ import frc.robot.commands.Shooter.RampUpShooter;
 
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.Rotate;
+import frc.robot.commands.Drivetrain.RotateNew;
+import frc.robot.commands.Drivetrain.StrafeCorrection;
 import frc.robot.commands.Drivetrain.StrafeStraight;
 
 import frc.robot.subsystems.Conveyor;
@@ -57,6 +59,7 @@ public class RobotContainer {
   public static Joystick OpStick = new Joystick(Constants.kOpStickID);
   public static Joystick CoOpStick = new Joystick(Constants.kCoOpStickID);
 
+
   // Joystick Buttons
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
@@ -65,6 +68,8 @@ public class RobotContainer {
   private JoystickButton bConveyorDown;
   private JoystickButton bIntakeIn;
   private JoystickButton bIntakeOut;
+  private JoystickButton bAutoCommands;
+  private JoystickButton bStrafeTest;
 
   //Autonomous Commands
   private double AutoStartTime;
@@ -94,40 +99,40 @@ public class RobotContainer {
    * round. 
    */
   private void configureButtonBindings() {
-    bRampUpShooter = new JoystickButton(OpStick, Constants.kXboxButtonA);
-    bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
-    bRampDownShooter = new JoystickButton(OpStick, Constants.kXboxButtonB);
-    bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
+    bStrafeTest = new JoystickButton(OpStick, Constants.kXboxButtonB);
+    bStrafeTest.toggleWhenPressed(new Rotate(sDrivetrain, sVision, 0.7, -10));
+    
+    //bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
+    //bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
-    bResetEncoders = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
-    bResetEncoders.whenPressed(new InstantCommand(() -> sDrivetrain.ResetEncoders()));
+    //bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
+    //bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
 
-    bConveyorDown = new JoystickButton(OpStick, Constants.kXboxButtonX);
+    //bResetEncoders = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
+    //bResetEncoders.whenPressed(new InstantCommand(() -> sDrivetrain.ResetEncoders()));
+
+    bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
     //bConveyorDown.whenPressed(new ConveyorShiftDown(sConveyor));
     bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
     bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
     
-    bConveyorUp = new JoystickButton(OpStick, Constants.kXboxButtonY);
+    bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
     //bConveyorUp.whenPressed(new ConveyorShiftUp(sConveyor));
     bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(0.5)));
     bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
 
-    bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
-    bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.IntakeIn()));
-    bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
-    //bIntakeIn.whileHeld(new InstantCommand(() -> sConveyor.setAgitator(.75)));
-    //bIntakeIn.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
-
-    bIntakeOut = new JoystickButton(OpStick, Constants.kXboxButtonBack);
-    bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.IntakeIn()));
-    bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeOut()));
-    //bIntakeOut.whileHeld(new InstantCommand(() -> sConveyor.setAgitator(-0.75)));
-    //bIntakeOut.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
-
+    //bIntakeIn = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
+    //bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.IntakeIn()));
+    //bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
+    
+    //bIntakeOut = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+    //bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.IntakeIn()));
+    //bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
+    
     
 
-    //bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
+    bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
 
     // ***** BOUNCE PATH ***** //
     // Description
@@ -228,22 +233,21 @@ public class RobotContainer {
       new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(1, 0)).withTimeout(0.7)
       ));
       */
-
-  }
+  //}
 
   
   // ********** AUTONOMOUS COMMANDS ********* //
 
   //Barrel Racing Path
-  private Command cAutoCommands = new SequentialCommandGroup(
+  bAutoCommands.whenPressed(new SequentialCommandGroup(
     //Sets the start time for the timer
     new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
     //Drives straight to set up for first marker
     new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    new DriveStraight(sDrivetrain, 1).withTimeout(0.5),
+    new DriveStraight(sDrivetrain, 0.8).withTimeout(0.6),
     // new WaitCommand(0.2),
     //Rotates around first marker
-    new Rotate(sDrivetrain, sVision, -0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 315), //320
+    new Rotate(sDrivetrain, sVision, -0.6, -10).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 315), //320
     //Strafes + Drives to set up for second marker
     new StrafeStraight(sDrivetrain, -1).withTimeout(0.3),
     new DriveStraight(sDrivetrain, 1).withTimeout(0.6),
@@ -251,14 +255,14 @@ public class RobotContainer {
     //Turns if the robot isn't facing the marker
     new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
     //Rotates around second marker
-    new Rotate(sDrivetrain, sVision, 0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
+    new Rotate(sDrivetrain, sVision, 0.7, -10).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
     //Strafes + Drives to set up for third marker
     new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.7),
     new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
     //Turns if the robot isn't facing the marker
     new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
     //Rotates around third marker
-    new Rotate(sDrivetrain, sVision, 0.7, -25).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
+    new Rotate(sDrivetrain, sVision, 0.7, -10).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
     //Strafes to the side for final run
     new StrafeStraight(sDrivetrain, 1).withTimeout(0.2),
     //Switches pipeline to dual target mode
@@ -272,14 +276,14 @@ public class RobotContainer {
         new WaitCommand(0.5),
         new WaitCommand(1000).withInterrupt(() -> !sVision.GetTargetFound()),
         // CHECK THIS WAITCOMMAND BEFORE RUNNING
-        new WaitCommand(0.3)
+        new WaitCommand(0.2)
       )
     ),
     //Switches pipeline back to original pipeline
     new InstantCommand(() -> sVision.SwitchPipeline(Constants.kLimelightStartingPipeline)),
     //Prints out the time it took to run the path
     new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
-  );
+  ));}
 
   /**
    * Test Strafe Command

@@ -1,6 +1,10 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.commands.Drivetrain;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -22,8 +26,8 @@ public class Rotate extends CommandBase {
   private double mForwardSpeed;
   private double mMaxForwardSpeed = 0.6;
   //Multipliers
-  private double mForwardMultiplier = 0.05; // 0.06
-  private double mRotationMultiplier = 0.05; //0.06
+  private double mForwardMultiplier = 0.05; // 0.05
+  private double mRotationMultiplier = 0.02; //0.02
   //Y Target
   private double mYTarget;
 
@@ -67,6 +71,8 @@ public class Rotate extends CommandBase {
     } else if (mForwardSpeed < -mMaxForwardSpeed){
       mForwardSpeed = -mMaxForwardSpeed;
     }
+
+    SmartDashboard.putNumber("ForwardValue", mForwardSpeed);
 
     //Updates the speed of the Drivetrain motors
     sDrivetrain.DriveWithStrafe(mStrafeSpeed, mForwardSpeed, sVision.getTargetX() * mRotationMultiplier);
