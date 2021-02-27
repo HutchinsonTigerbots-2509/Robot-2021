@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -11,33 +7,53 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-/**
- * Shooter Subsystem.
- * 
- * <p>The Shooter subsystems runs the shooter.
- * 
- * @version February 9, 2021
- * @author Noah Sturges
- * @author Quinton MacMullan
- */
+
+
 public class Shooter extends SubsystemBase {
+  
   private WPI_TalonFX mShooterMotor = new WPI_TalonFX(Constants.kShooterMotorID);
 
-  /** Creates a new Shooter. */
+
+  /**
+   * The color of zones for shooting during Autonomous
+   */
+  enum Zone {
+                         // ROWS
+    GREEN,               // 0 - 3 
+    YELLOW,              // 3 - 5
+    BLUE,                // 5 - 7
+    RED,                 // 7 - 9
+    REINTRODUCTION_ZONE  // 9 - END
+  } 
+
+  private Zone Current = Zone.REINTRODUCTION_ZONE;
+
   public Shooter() {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
   }
 
-  /** periodic method */
-  @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+
+
+
+
+    // PICK ONE
     SmartDashboard.putNumber("Shooter RPM", GetRPM());
-    SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
+    SmartDashboard.putString("Shooter volts", Current.toString());
+    //PICK ONE
+
+
+
+
+
   } 
 
   /**
-   * Gets the RPM of the shooter motor
+   * Gets the raw quadrature encoder units from the TalonFX integrated sensor. It will 
+   * convert the returned value to RPM.
+   * 
    * @return  RPM
    */
   public double GetRPM() {
@@ -49,10 +65,11 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * Sets shooter motor speed
-   * @param pSpeed speed of the motor
+   * Sets the voltage output of the motor from the passed parameter
+   * 
+   * @param Speed range from -1 to 1
    */
-  public void RunShooter(double pSpeed) {
-    mShooterMotor.set(pSpeed);
+  public void RunShooter(double Speed) {
+    mShooterMotor.set(Speed);
   }
 }

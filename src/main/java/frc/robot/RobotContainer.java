@@ -1,54 +1,51 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Vision;
+
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.ConveyorShiftDown;
-import frc.robot.commands.ConveyorShiftUp;
-import frc.robot.commands.DriveStraight;
-import frc.robot.commands.RampDownShooter;
-import frc.robot.commands.RampUpShooter;
-import frc.robot.commands.Rotate;
+
+import frc.robot.commands.Conveyor.ConveyorShiftDown;
+import frc.robot.commands.Conveyor.ConveyorShiftUp;
+
+import frc.robot.commands.Shooter.RampDownShooter;
+import frc.robot.commands.Shooter.RampUpShooter;
+
+import frc.robot.commands.Drivetrain.DriveStraight;
+import frc.robot.commands.Drivetrain.Rotate;
+import frc.robot.commands.Drivetrain.StrafeStraight;
+
+import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Shooter;
-import frc.robot.commands.StrafeStraight;
 
 /**
- * RobotContainer class.
+ * We declare a majority of our robot here. This includes
  * 
  * <p>
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in the {@link Robot} periodic methods (other than the
- * scheduler calls). Instead, the structure of the robot (including subsystems,
- * commands, and button mappings) should be declared here.
+ *  <li> - Button Bindings for TeleOp
+ *  <li> - Joysticks
+ *  <li> - Subsystems
+ *  <li> - Autonomous Commands, as well as selecting the preferred one
+ * </p>
  * 
- * @version February 11, 2021
- * @author Cece
- * @author Noah Sturges
- * @author Quinton MacMullan
- * @author Teagan Young
- * @author Grace Swaja
- * @Cheerleader Cole Rahne
- * @author Cole Gartner
+ * The RobotContainer class is a neat way to store all of the objects concerning your
+ * robot. This is also where the magic of the code happens. It connects the code that
+ * you wrote into how it actually functions with the robot, whether a through a button 
+ * or an autonomous command.
  */
 public class RobotContainer {
+  
   // Subsystems
   public Drivetrain sDrivetrain = new Drivetrain();
   private Vision sVision = new Vision();
@@ -56,12 +53,11 @@ public class RobotContainer {
   private Conveyor sConveyor = new Conveyor();
   private Intake sIntake = new Intake();
 
-  // Joysticks are defined here...
+  // Joysticks
   public static Joystick OpStick = new Joystick(Constants.kOpStickID);
   public static Joystick CoOpStick = new Joystick(Constants.kCoOpStickID);
 
   // Joystick Buttons
-  private JoystickButton bAutoCommands; // A temporary button for running Autonomous Commands
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
   private JoystickButton bResetEncoders;
@@ -70,27 +66,32 @@ public class RobotContainer {
   private JoystickButton bIntakeIn;
   private JoystickButton bIntakeOut;
 
-  //Autonomous
+  //Autonomous Commands
   private double AutoStartTime;
+  
   /**
-   * RobotContainer Constructor.
+   * This constructor calls configureButtonBindings(). When that method runs, 
+   * it will assign commands to buttons on the joystick. 
    * 
    * <p>
-   * The container for the robot. Contains subsystems, OI devices, and commands.
+   * This means you only have to create an instance of RobotContainer in 
+   * Robot.java to make TeleOp work.
    */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Configure Button Bindings.
+   * This method is where you connect the commands you wrote to the buttons on
+   * the joysticks.
    * 
    * <p>
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * OpStick is generally reserved for driving the robot around, and other
+   * rarely used buttons.
+   * 
+   * <p>
+   * CoOpStick is used for all of the commands that are used a lot during the
+   * round. 
    */
   private void configureButtonBindings() {
     bRampUpShooter = new JoystickButton(OpStick, Constants.kXboxButtonA);
@@ -113,14 +114,14 @@ public class RobotContainer {
     bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
 
     bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
-    bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.RunIntakeIn(0.6)));
-    bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
+    bIntakeIn.whileHeld(new InstantCommand(() -> sIntake.IntakeIn()));
+    bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
     //bIntakeIn.whileHeld(new InstantCommand(() -> sConveyor.setAgitator(.75)));
     //bIntakeIn.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
 
     bIntakeOut = new JoystickButton(OpStick, Constants.kXboxButtonBack);
-    bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.RunIntakeOut(0.6)));
-    bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.StopIntake()));
+    bIntakeOut.whileHeld(new InstantCommand(() -> sIntake.IntakeIn()));
+    bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeOut()));
     //bIntakeOut.whileHeld(new InstantCommand(() -> sConveyor.setAgitator(-0.75)));
     //bIntakeOut.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
 
@@ -280,6 +281,9 @@ public class RobotContainer {
     new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
   );
 
+  /**
+   * Test Strafe Command
+   */
   private Command strafeTest = new SequentialCommandGroup(
     new StrafeStraight(sDrivetrain, 0.9).withTimeout(3)
     // new StrafeStraight(sDrivetrain, -0.9).withTimeout(3), new WaitCommand(1), new StrafeStraight(sDrivetrain, 0.9).withTimeout(3)
@@ -298,6 +302,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // The Command to run in Autonomous
-    return strafeTest;
+    return null;
   }
 }

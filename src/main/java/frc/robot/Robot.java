@@ -1,15 +1,8 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.StrafeTest;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -18,21 +11,22 @@ import edu.wpi.first.wpilibj2.command.Command;
  * <p>
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
+ * documentation.
  * 
- * @version February 4, 2021.
- * @author First Generated
- * @author Cole Gartner
+ * <p>
+ * ===== Authors of Robot-2021 =====
+ * @author Cece
+ * @author Gart
+ * @author Grace Swaja
  * @author Noah Sturges
  * @author Quinton MacMullan
- * @author Cece
+ * @author Ron
+ * @author Tegean Young
  */
 public class Robot extends TimedRobot {
+
   private static RobotContainer mRobotContainer;
   private Command m_autonomousCommand;
-  public static String Gart = "Dumb";
 
   /**
    * Initialization.
@@ -41,12 +35,11 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-  @Override
   public void robotInit() {
     // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
+    // and put our autonomous chooser on the dashboard.
     mRobotContainer = new RobotContainer();
+    
     //Sets up the Drivetrain motors
     mRobotContainer.sDrivetrain.InitializeDrivetrain();
   }
@@ -60,26 +53,22 @@ public class Robot extends TimedRobot {
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and SmartDashboard integrated updating.
    */
-  @Override
   public void robotPeriodic() {
+    
     // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
-    // block in order for anything in the Command-based framework to work.
+    // newly-scheduled commands, running already-scheduled commands, removing 
+    // finished or interrupted commands, and running subsystem periodic() 
+    // methods. This must be called from the robot's periodic block in order 
+    // for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("X GYRO: ", mRobotContainer.sDrivetrain.GetGyroX());
+  
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
-  @Override
   public void disabledInit() {
   }
 
   /** This function is called periodically during Disabled mode. */
-  @Override
   public void disabledPeriodic() {
   }
 
@@ -87,7 +76,6 @@ public class Robot extends TimedRobot {
    * This autonomous runs the autonomous command selected by your
    * {@link RobotContainer} class.
    */
-  @Override
   public void autonomousInit() {
     m_autonomousCommand = mRobotContainer.getAutonomousCommand();
     // // schedule the autonomous command (example)
@@ -97,36 +85,31 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  @Override
   public void autonomousPeriodic() {
   }
 
   /** This function is called during the beginning of operator control. */
-  @Override
   public void teleopInit() {
     // // This makes sure that the autonomous stops running when
     // // teleop starts running. If you want the autonomous to
     // // continue until interrupted by another command, remove
     // // this line or comment it out.
-    // if (m_autonomousCommand != null) {
-    // m_autonomousCommand.cancel();
-    // }
+    if (m_autonomousCommand != null) {
+    m_autonomousCommand.cancel();
+    }
   }
 
   /** This function is called periodically during operator control. */
-  @Override
   public void teleopPeriodic() {
   }
 
   /** This function is called at the beginning of test mode */
-  @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
 
   /** This function is called periodically during test mode. */
-  @Override
   public void testPeriodic() {
   }
 }

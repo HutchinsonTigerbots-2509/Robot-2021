@@ -84,18 +84,22 @@ public class Drivetrain extends SubsystemBase {
   /**Periodic function */
   @Override
   public void periodic() {
+    
     // Drives the robot using a joystick
     RonDrive(RobotContainer.OpStick);
+    
     // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
     SmartDashboard.putNumber("Gyro X", GetGyroX());
     SmartDashboard.putNumber("Gyro Y", GetGyroY());
+    
     // Prints the encoder values to the SmartDashboard
     SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("LeftRear", mRearLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("RightFront", mFrontRight.getSelectedSensorPosition());
     SmartDashboard.putNumber("RightRear", mRearRight.getSelectedSensorPosition());
     SmartDashboard.putNumber("Average Encoder Ticks", EncoderAverage());
+  
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
@@ -201,7 +205,7 @@ public class Drivetrain extends SubsystemBase {
     mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
   }
 
-  private void JoystickDriveRamp(Joystick pStick){
+  private void CCDrive(Joystick pStick){
     // Calculates the Y Speed based on the joystick values
     if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
       mYSpeed = pStick.getRawAxis(Constants.kXboxRightTrigger) * mYMultiplier;
