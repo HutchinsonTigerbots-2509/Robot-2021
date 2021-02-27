@@ -1,39 +1,23 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SPI;
 
-/**
- * Drivetrain Subsystem.
- * 
- * <p>
- * The Drivetrain Subsystem is reponsible for the Drivetrain motors and the
- * gyro. Drive methods and getter methods for the gyro values are located here.
- * 
- * @version February 9, 2021
- * @author Cece
- * @author Grace
- */
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
 public class Drivetrain extends SubsystemBase {
-  // Motors
+
   private WPI_TalonFX mFrontLeft;
   private WPI_TalonFX mFrontRight;
   private WPI_TalonFX mRearLeft;
@@ -41,48 +25,42 @@ public class Drivetrain extends SubsystemBase {
 
   private MecanumDrive mDrive;
 
-  // Gyro
   private AHRS mGyro = new AHRS();
-  // private AHRS mGyro = new AHRS(SPI.Port.kMXP);
 
   // Speed Variables
   private double mXSpeed = 0;
   private double mYSpeed = 0;
   private double mZSpeed = 0;
-  //Multipliers <-  10/10 Comment right there
+
+  //Multipliers
   private double mXMultiplier = 1; //0.6
   private double mYMultiplier = 0.8; //0.8
   private double mZMultiplier = 1; //0.6
+
   //Previous Values
   private double mPreviousXSpeed = 0;
   private double mPreviousZSpeed = 0;
+
   //Ramp Down Values
   private double mRampDownX = 0.08;
   private double mRampDownZ = 0.08;
 
-  /**
-   * Drivetrain Constructor.
-   * 
-   * <p>
-   * The Drivetrain of the robots. Contains Drivetrain motors and gyro.
-   */
+
+
   public Drivetrain() {
-    //Defines the Drivetrain motors
+  
     mFrontLeft = new WPI_TalonFX(Constants.kFrontLeftID);
     mFrontRight = new WPI_TalonFX(Constants.kFrontRightID);
     mRearLeft = new WPI_TalonFX(Constants.kRearLeftID);
     mRearRight = new WPI_TalonFX(Constants.kRearRightID);
 
-    //Defines the mecanumDrive
     mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
 
-    // Zeros the gyro & encoders
     ResetGyro();
     ResetEncoders();
   }
 
   /**Periodic function */
-  @Override
   public void periodic() {
     
     // Drives the robot using a joystick
@@ -90,8 +68,6 @@ public class Drivetrain extends SubsystemBase {
     
     // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
-    SmartDashboard.putNumber("Gyro X", GetGyroX());
-    SmartDashboard.putNumber("Gyro Y", GetGyroY());
     
     // Prints the encoder values to the SmartDashboard
     SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
@@ -298,22 +274,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   // ***** GYRO METHODS ***** //
-
-  /**
-   * Gets gyro X displacement
-   * @return The X displacement (distance) of the gyro
-   */
-  public double GetGyroX() {
-    return mGyro.getDisplacementX();
-  }
-
-  /**
-   * Gets gyro Y displacement
-   * @return The Y displacement (distance) of the gyro
-   */
-  public double GetGyroY() {
-    return mGyro.getDisplacementY();
-  }
 
   /**
    * Gets gyro angle
