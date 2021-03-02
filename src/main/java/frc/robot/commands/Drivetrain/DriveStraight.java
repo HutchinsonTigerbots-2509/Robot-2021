@@ -60,7 +60,6 @@ public class DriveStraight extends CommandBase {
     if(mGyroTarget == null){
       mGyroTarget = sDrivetrain.GetGyroAngle();
     }
-    SmartDashboard.putNumber("Gyro Target", mGyroTarget);
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */

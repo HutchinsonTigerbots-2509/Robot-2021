@@ -72,8 +72,6 @@ public class Rotate extends CommandBase {
       mForwardSpeed = -mMaxForwardSpeed;
     }
 
-    SmartDashboard.putNumber("ForwardValue", mForwardSpeed);
-
     //Updates the speed of the Drivetrain motors
     sDrivetrain.DriveWithStrafe(mStrafeSpeed, mForwardSpeed, sVision.getTargetX() * mRotationMultiplier);
   }
