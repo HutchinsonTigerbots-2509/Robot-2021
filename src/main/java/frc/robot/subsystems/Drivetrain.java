@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -64,7 +64,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     
     // Drives the robot using a joystick
-    JoystickDrive(RobotContainer.OpStick);
+    RonDrive(RobotContainer.OpStick);
     
     // Prints the gyro values to the SmartDashboard
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
@@ -80,69 +80,14 @@ public class Drivetrain extends SubsystemBase {
 
   // ***** TELEOP DRIVE METHODS ***** //
 
-  double previousX = 0;
-  double previousY = 0;
-  double previousZ = 0;
-  double currentX = 0;
-  double currentY = 0;
-  double currentZ = 0;
-  double gainX = 0.04;
-  double gainY = 0.04;
-  double gainZ = 0.04;
-  double changeX = 0;
-  double changeY = 0;
-  double changeZ = 0;
-  double outputX = 0;
-  double outputY = 0;
-  double outputZ = 0;
+  private static AxisAccel forwardbackwardaxis = new AxisAccel(0.04, 0.04);
+  private static AxisAccel strafeaxis = new AxisAccel(0.06, 0.06);
+  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.7);
 
   private void RonDrive(Joystick pStick) {
-    
-    if(Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) &&
-    Math.abs(pStick.getRawAxis(Constants.kXboxRightTrigger)) > 0.2) {
-      currentY = pStick.getRawAxis(Constants.kXboxLeftTrigger);
-    } else if(Math.abs(pStick.getRawAxis(Constants.kXboxLeftTrigger)) > 0.2) {
-      currentY = -pStick.getRawAxis(Constants.kXboxLeftTrigger);
-    } else {
-      currentY = 0;
-    }
-    
-    if(Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.2) {
-      currentX = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
-    } else {
-      currentX = 0;
-    }
-
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.1) {
-      currentZ = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
-    } else {
-      currentZ = 0;
-    }
-
-    outputX = gainX*(currentZ-previousZ)+previousZ;
-    outputY = gainY*(currentY - previousY)+previousY;
-    outputZ = gainZ*(currentZ - previousZ)+previousZ;
-
-    if(Math.abs(outputX) < 0.1) {
-      outputX=0;
-    }
-    if(Math.abs(outputY) < 0.1) {
-      outputY=0;
-    }
-    if(Math.abs(outputZ) < 0.1) {
-      outputZ=0;
-    }
-    
-
-    mDrive.driveCartesian(outputY, outputX, outputZ);
-
-    previousX = outputX;
-    previousY = outputY;
-    previousZ = outputZ;
-
-    // SmartDashboard.putNumber("X", currentX);
-    // SmartDashboard.putNumber("Y", previousX);
-    // SmartDashboard.putNumber("Z", pStick.getRawAxis(Constants.kXboxRightJoystickX));
+    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(1)),
+                          forwardbackwardaxis.periodic(pStick.getRawAxis(4)),
+                          turnaxis.periodic(pStick.getRawAxis(0)));
   }
 
   /**
