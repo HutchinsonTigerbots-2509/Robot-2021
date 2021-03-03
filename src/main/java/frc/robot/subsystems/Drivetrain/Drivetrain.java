@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Drivetrain;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -23,7 +23,7 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonFX mRearLeft;
   private WPI_TalonFX mRearRight;
 
-  private MecanumDrive mDrive;
+  public MecanumDrive mDrive;
 
   private AHRS mGyro = new AHRS();
 
@@ -90,82 +90,6 @@ public class Drivetrain extends SubsystemBase {
                           turnaxis.periodic(pStick.getRawAxis(0)));
   }
 
-  /**
-   * Drives the robot without ramp using the Joystick
-   * @param pStick The Joystick to get inputs from
-   */
-  private void JoystickDrive(Joystick pStick) {
-    // Calculates the Y Speed based on the joystick values
-    if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.2) {
-      mYSpeed = pStick.getRawAxis(Constants.kXboxRightTrigger) * mYMultiplier;
-    } else if (pStick.getRawAxis(Constants.kXboxLeftTrigger) > 0.2) {
-      mYSpeed = -pStick.getRawAxis(Constants.kXboxLeftTrigger) * mYMultiplier;
-    } else {
-      mYSpeed = 0;
-    }
-    // Calculates the X Speed based on the joystick values;
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.2) {
-      mXSpeed = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
-    } else {
-      mXSpeed = 0;
-    }
-    // Calculates the Z Speed based on the joystick values
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.05) {
-      mZSpeed = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
-    } else {
-      mZSpeed = 0;
-    }
-    //Sets the motors to the speed
-    mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
-  }
-
-  private void CCDrive(Joystick pStick){
-    // Calculates the Y Speed based on the joystick values
-    if (pStick.getRawAxis(Constants.kXboxRightTrigger) > 0.4) {
-      mYSpeed = pStick.getRawAxis(Constants.kXboxRightTrigger) * mYMultiplier;
-    } else if (pStick.getRawAxis(Constants.kXboxLeftTrigger) > 0.4) {
-      mYSpeed = -pStick.getRawAxis(Constants.kXboxLeftTrigger) * mYMultiplier;
-    } else {
-      mYSpeed = 0;
-    }
-
-    // Calculates the X Target Speed based on the joystick values;
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxLeftJoystickY)) > 0.4) {
-      mXSpeed = -pStick.getRawAxis(Constants.kXboxLeftJoystickY) * mXMultiplier;
-    } else {
-      mXSpeed = 0;
-    }
-    // Calculates the Z Target Speed based on the joystick values
-    if (Math.abs(pStick.getRawAxis(Constants.kXboxRightJoystickX)) > 0.4) {
-      mZSpeed = pStick.getRawAxis(Constants.kXboxRightJoystickX) * mZMultiplier;
-    } else {
-      mZSpeed = 0;
-    }
-
-    if(Math.abs(mXSpeed) < Math.abs(mPreviousXSpeed)){
-      mXSpeed = mPreviousXSpeed - mRampDownX * Normalize(mPreviousXSpeed);
-    }
-    if(Math.abs(mZSpeed ) < Math.abs(mPreviousZSpeed)){
-      mZSpeed = mPreviousZSpeed - mRampDownZ * Normalize(mPreviousZSpeed);
-    }
-
-    if(Math.abs(mXSpeed) < 0.4){
-      mXSpeed = 0;
-    }
-    if(Math.abs(mZSpeed) < 0.4){
-      mZSpeed = 0;
-    }
-
-    mDrive.driveCartesian(mYSpeed, mXSpeed, mZSpeed);
-
-    mPreviousXSpeed = mXSpeed;
-    mPreviousZSpeed = mZSpeed;
-
-    // SmartDashboard.putNumber("Z Speed", mZSpeed);
-    // SmartDashboard.putNumber("X Speed", mXSpeed);
-
-  }
-
   // ***** AUTONOMOUS DRIVE METHODS ***** //
 
   /**
@@ -206,9 +130,9 @@ public class Drivetrain extends SubsystemBase {
   /** Gets the average encoder count from 3 of the drivetrain motors */
   public double EncoderAverage(){
     return (Math.abs(mRearRight.getSelectedSensorPosition()) + 
-    Math.abs(mRearLeft.getSelectedSensorPosition()) + 
-    // Math.abs(mFrontRight.getSelectedSensorPosition()) + 
-    Math.abs(mFrontLeft.getSelectedSensorPosition())) / 3;
+            Math.abs(mRearLeft.getSelectedSensorPosition()) + 
+            // Math.abs(mFrontRight.getSelectedSensorPosition()) + 
+            Math.abs(mFrontLeft.getSelectedSensorPosition())) / 3;
   }
 
   // ***** GYRO METHODS ***** //
@@ -242,18 +166,7 @@ public class Drivetrain extends SubsystemBase {
     mFrontLeft.setInverted(true);
     mRearLeft.setInverted(true);
   }
-
-  /** Converts a double into 1 or -1 depending on if it is positive or negative */
-  private int Normalize(double pNum){
-    if(pNum < 0){
-      return -1;
-    } else if (pNum > 0){
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
+  
   public void StrafeSpeeds(double RightFrontSpeed, double LeftFrontSpeed, double RightRearSpeed, double LeftRearSpeed){
     mFrontLeft.set(LeftFrontSpeed);
     mFrontRight.set(RightFrontSpeed);

@@ -3,7 +3,7 @@ package frc.robot.commands.Conveyor;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Conveyor.Conveyor;
 
 /**
  * This command will power the conveyor for a set duration.

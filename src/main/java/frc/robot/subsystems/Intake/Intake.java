@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
@@ -13,12 +13,9 @@ public class Intake extends SubsystemBase {
   private VictorSP IntakeMotor = new VictorSP(Constants.kIntakeMotorID);
   private DoubleSolenoid mExtender = new DoubleSolenoid(1, 0);
 
-  public Intake(){
+  public Intake(){}
 
-  }
-
-  public void periodic() {
-  }
+  public void periodic() {}
 
   public void IntakeIn() {
     IntakeMotor.set(1);

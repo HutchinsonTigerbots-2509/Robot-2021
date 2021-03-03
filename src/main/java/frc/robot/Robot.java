@@ -57,23 +57,19 @@ public class Robot extends TimedRobot {
    * and SmartDashboard integrated updating.
    */
   public void robotPeriodic() {
-    
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing 
     // finished or interrupted commands, and running subsystem periodic() 
     // methods. This must be called from the robot's periodic block in order 
     // for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-  
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
   /** This function is called periodically during Disabled mode. */
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   /**
    * This autonomous runs the autonomous command selected by your
@@ -88,8 +84,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
   /** This function is called during the beginning of operator control. */
   public void teleopInit() {
@@ -103,8 +98,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during operator control. */
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   /** This function is called at the beginning of test mode */
   public void testInit() {
@@ -113,6 +107,5 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during test mode. */
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 }

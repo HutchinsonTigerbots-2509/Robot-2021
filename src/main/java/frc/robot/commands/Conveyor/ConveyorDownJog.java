@@ -2,7 +2,7 @@ package frc.robot.commands.Conveyor;
 
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Conveyor.Conveyor;
 
 /**
  * Will run the conveyor down then back up using the ConveyorJog Command

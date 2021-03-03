@@ -1,33 +1,6 @@
 package frc.robot;
 
 /**
- * Constants class.
- * 
- * <p>
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean constants. This class should not be used for any other
- * purpose. All constants should be declared globally (i.e. public static). Do
- * not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the constants are needed, to reduce verbosity.
- * 
- * <p>
- * When declaring constants, they should start with k. (i.e. kLeftMotorID).
- * 
- * @version February 9, 2021
- * @author First Generated
- * @author Quinton MacMullan
- * @author Noah Sturges
- * @author Teagan Young
- * @author Cole Gartner
- */
-
-
-
- 
-/**
  * To use this class, first import this class and then reference the public variables 
  * like this: 'Constants.kVariableName'
  * 
@@ -39,47 +12,44 @@ package frc.robot;
  * <p>
  * Variables will start with a 'k' for naming convention.
  */
-public class Constants { // NOTE WHY I GOT RID OF final class https://programming.guide/java/when-to-create-a-final-class.html
-    
+public class Constants { 
 
-    
     // ***** Motor IDs ***** //
     
     // Drivetrain
-    public final static int kFrontLeftID = 2;           // TalonFX - CAN ID
-    public final static int kFrontRightID = 1;          // TalonFX - CAN ID
-    public final static int kRearLeftID = 3;            // TalonFX - CAN ID
-    public final static int kRearRightID = 0;           // TalonFX - CAN ID
+    public final static int kFrontLeftID = 2;                // TalonFX - CAN ID
+    public final static int kFrontRightID = 1;               // TalonFX - CAN ID
+    public final static int kRearLeftID = 3;                 // TalonFX - CAN ID
+    public final static int kRearRightID = 0;                // TalonFX - CAN ID
 
     // Shooter
-    public final static int kShooterMotorID = 4;        // TalonSRX - CAN ID
+    public final static int kShooterMotorID = 4;             // TalonFX - CAN ID
+    public final static int kFlapperMotorID = 10378913;      // TalonSRX - CAN ID 
 
     // Intake
-    public final static int kIntakeMotorID = 5;          // VictorSP - RIO PWM Port
+    public final static int kIntakeMotorID = 5;              // VictorSP - RIO PWM Port
 
     // Conveyor
-    public final static int kConveyorMotorID = 6;        // VictorSP - RIO PWM Port
-    public final static int kAgitatorID = 7;             // TalonSRX - CAN ID 
+    public final static int kConveyorMotorID = 6;            // VictorSP - RIO PWM Port
+    public final static int kAgitatorID = 7;                 // TalonSRX - CAN ID 
 
 
     
     // ***** Subsystem Costants ***** //
 
     // Drivetrain
-    public static double kDrivetrainMinVoltage = 0.4;
-    public static int kDrivetrainTicksPerRev = 2048;
-    public static double kDrivetrainWheelDiameter = 6.0;
+    public final static double kDrivetrainMinVoltage = 0.4;
+    public final static int kDrivetrainTicksPerRev = 2048;
+    public final static double kDrivetrainWheelDiameter = 6.0;
 
     // Shooter
-    public static double kShooterTicksPerRevolution = 2048;
+    public final static double kShooterTicksPerRevolution = 2048;
       
 
     // Conveyor
-    public static int kTopLightSensorID = 0;        // Analog Input - RIO Analog Port
-    public static int kMiddleLightSensorID = 1;     // Analog Input - RIO Analog Port
-    public static int kBottomLightSensorID = 2;     // Analog Input - RIO Analog Port
-
-    // Intake
+    public final static int kTopLightSensorID = 0;           // Analog Input - RIO Analog Port
+    public final static int kMiddleLightSensorID = 1;        // Analog Input - RIO Analog Port
+    public final static int kBottomLightSensorID = 2;        // Analog Input - RIO Analog Port
     
 
 
@@ -109,7 +79,7 @@ public class Constants { // NOTE WHY I GOT RID OF final class https://programmin
 
     // ***** Joysticks ***** //
 
-    // Joystick IDs
+    // Joystick IDs - set with Driverstation
     public final static int kOpStickID = 0;
     public final static int kCoOpStickID = 1;
 
@@ -136,7 +106,4 @@ public class Constants { // NOTE WHY I GOT RID OF final class https://programmin
     
     public final static int kXboxLeftJoystickButton = 9;
     public final static int kXboxRightJoystickButton = 10;
-
-
-
 }

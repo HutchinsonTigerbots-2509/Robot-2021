@@ -6,8 +6,8 @@ package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
+import frc.robot.subsystems.Vision.LimelightVision;
 
 /**
  * Rotate Command
@@ -20,7 +20,7 @@ import frc.robot.subsystems.Vision;
 public class Rotate extends CommandBase {
   //Subsystems
   private Drivetrain sDrivetrain;
-  private Vision sVision;
+  private LimelightVision sVision;
   // Speed variables
   private double mStrafeSpeed;
   private double mForwardSpeed;
@@ -40,7 +40,7 @@ public class Rotate extends CommandBase {
    * @param pStrafeSpeed Strafe speed
    * @param pYTarget Y Value to Target
    */
-  public Rotate(Drivetrain pDrivetrain, Vision pVision, double pStrafeSpeed, double pYTarget) {
+  public Rotate(Drivetrain pDrivetrain, LimelightVision pVision, double pStrafeSpeed, double pYTarget) {
     sDrivetrain = pDrivetrain;
     sVision = pVision;
     mStrafeSpeed = pStrafeSpeed;

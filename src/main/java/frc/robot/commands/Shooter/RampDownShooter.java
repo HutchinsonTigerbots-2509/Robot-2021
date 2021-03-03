@@ -3,7 +3,7 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.Shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RampDownShooter extends CommandBase {

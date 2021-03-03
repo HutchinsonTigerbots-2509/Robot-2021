@@ -4,18 +4,10 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.Shooter;
 
-/**
- * RampUpShooter Command
- * 
- * <p>This command uses the Shooter subsystem to ramp the shooter up to the target Voltage.
- * 
- * @version February 9, 2021
- * @author Noah Sturges
- * @author Quinton MacMullan
- */
 public class RampUpShooter extends CommandBase {
+  
   private Shooter sShooter;
 
   private double mStartTime;
@@ -38,16 +30,13 @@ public class RampUpShooter extends CommandBase {
   }
 
   /** Called when the command is initially scheduled. */
-  @Override
   public void initialize() {
     mStartTime = Timer.getFPGATimestamp();
     mCurrentTime = mStartTime;
     mVoltage = 0;
-    SmartDashboard.putNumber("Im here", 1);
   }
   
   /** Called every time the scheduler runs while the command is scheduled. */
-  @Override
   public void execute() {
     if(mVoltage < mTargetVoltage){
       mVoltage = (mTargetVoltage / mRampTime) * (mCurrentTime - mStartTime);
@@ -63,13 +52,11 @@ public class RampUpShooter extends CommandBase {
   }
 
   /** Called once the command ends or is interrupted. */
-  @Override
   public void end(boolean interrupted) {
     
   }
 
   /** Returns true when the command should end. */
-  @Override
   public boolean isFinished() {
     return false;
   }

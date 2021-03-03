@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Conveyor;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -118,7 +118,7 @@ public class Conveyor extends SubsystemBase {
   }
 
   /**
-   * Sets the voltage output of conveyor from the passed parameter
+   * Sets the voltage output of conveyor and agitator from the passed parameter
    * 
    * @param Speed range -1 to 1
    */
