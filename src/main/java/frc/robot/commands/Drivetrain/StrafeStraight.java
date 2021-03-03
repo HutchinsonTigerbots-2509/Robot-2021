@@ -1,11 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+package frc.robot.commands.Drivetrain;
 
-package frc.robot.commands;
-
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
+
 
 /**
  * Strafe Straight Command
@@ -18,8 +16,8 @@ import frc.robot.subsystems.Drivetrain;
 public class StrafeStraight extends CommandBase {
   private Drivetrain sDrivetrain;
   private double mYSpeed;
-  private double mRotationMultiplier = 0.06;
-  private double mGyroTarget;
+  private double mRotationMultiplier = 0.02; //0.06
+  private Double mGyroTarget;
 
   /** 
    * Creates a new StrafeStraight.
@@ -34,16 +32,26 @@ public class StrafeStraight extends CommandBase {
     addRequirements(sDrivetrain);
   }
 
+  public StrafeStraight(Drivetrain pDrivetrain, double pYSpeed, double pGyroTarget){
+    sDrivetrain = pDrivetrain;
+    mYSpeed = pYSpeed;
+    mGyroTarget = pGyroTarget;
+    // Use addRequirements() here to delcare subsystem dependencies
+    addRequirements(sDrivetrain);
+  }
+
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
-    mGyroTarget = sDrivetrain.GetGyroAngle();
+    if(mGyroTarget == null){
+      mGyroTarget = sDrivetrain.GetGyroAngle();
+    }
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    sDrivetrain.DriveWithStrafe(mYSpeed, 0, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mRotationMultiplier);
+    sDrivetrain.DriveWithStrafe(mYSpeed, 0, (mGyroTarget - sDrivetrain.GetGyroAngle()) * mRotationMultiplier);
   }
 
   /** Called once the command ends or is interrupted. */
@@ -57,4 +65,6 @@ public class StrafeStraight extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+
 }

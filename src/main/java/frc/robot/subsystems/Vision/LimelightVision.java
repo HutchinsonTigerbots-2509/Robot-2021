@@ -1,8 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package frc.robot.subsystems;
+package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @version February 9, 2021
  * @author Cece
  */
-public class Vision extends SubsystemBase {
+public class LimelightVision extends SubsystemBase {
   // The Network Table contains all values relevant to working with vision
   private NetworkTable mLimelightTable = NetworkTableInstance.getDefault().getTable(Constants.kLimelightNetworkID);
 
@@ -51,7 +47,7 @@ public class Vision extends SubsystemBase {
    * 
    * <p>Contains all information for the Limelight Networktable and it's values
    */
-  public Vision() {
+  public LimelightVision() {
     //Sets default values (check Constants variable descriptions for more info)
     mLimelightTable.getEntry("ledMode").setNumber(Constants.kLimelightLED);
     mLimelightTable.getEntry("camMode").setNumber(Constants.kLimelightMode);
@@ -111,7 +107,7 @@ public class Vision extends SubsystemBase {
 
   // ***** UNUSED VISION VALUE METHODS ***** //
 
-  // Returns target area (0-100 % of image)
+  // // Returns target area (0-100 % of image)
   // public double getTargetArea() {
   //   mTableArea = mLimelightTable.getEntry(Constants.kLimelightTargetAreaID);
   //   mTargetArea = mTableArea.getDouble(0.0);

@@ -1,12 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+package frc.robot.commands.Drivetrain;
 
-package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
 
 /**
  * Drive Straight Command
@@ -63,7 +60,6 @@ public class DriveStraight extends CommandBase {
     if(mGyroTarget == null){
       mGyroTarget = sDrivetrain.GetGyroAngle();
     }
-    SmartDashboard.putNumber("Gyro Target", mGyroTarget);
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
@@ -85,4 +81,6 @@ public class DriveStraight extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+  
 }
