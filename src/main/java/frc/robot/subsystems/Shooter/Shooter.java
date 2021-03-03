@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,7 +15,9 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
   
   private WPI_TalonFX mShooterMotor = new WPI_TalonFX(Constants.kShooterMotorID);
-  private WPI_TalonSRX ShooterFlapMotor = new WPI_TalonSRX(Constants.kFlapperMotorID);
+  private WPI_TalonSRX Slider = new WPI_TalonSRX(8);
+
+  private AnalogInput Potentiometer = new AnalogInput(3);
 
   private Zones SelectedZone = Zones.REINTRODUCTION_ZONE;
 
@@ -23,12 +26,11 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
-    ShooterFlapMotor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.Analog, 0, 0);
 
-    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN, 0); // <- Make those right
-    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 0);
-    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE, 0);
-    ZonesList[3] = new ZoneAnalogPosition(Zones.RED, 0);
+    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN, 2.85); // <- Make those right
+    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3);
+    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE, 3.6);
+    ZonesList[3] = new ZoneAnalogPosition(Zones.RED, 3.7);
   }
 
   public void periodic() {
@@ -41,7 +43,8 @@ public class Shooter extends SubsystemBase {
     }
     
     // SmartDashboard.putNumber("Shooter RPM", GetRPM());
-    SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
+    // SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
+    SmartDashboard.putNumber("Potent", Potentiometer.getVoltage());
   } 
 
   /**
@@ -74,12 +77,12 @@ public class Shooter extends SubsystemBase {
    * @param zone
    */
   public void MoveFlapTo(ZoneAnalogPosition zone) {
-    if(ShooterFlapMotor.getSelectedSensorPosition() > zone.AnalogTarget) {
-      ShooterFlapMotor.set(0.5);
-    } else if(ShooterFlapMotor.getSelectedSensorPosition() > zone.AnalogTarget) {
-      ShooterFlapMotor.set(-0.5);
+    if(Slider.getSelectedSensorPosition() > zone.AnalogTarget) {
+      Slider.set(0.5);
+    } else if(Slider.getSelectedSensorPosition() < zone.AnalogTarget) {
+      Slider.set(-0.5);
     } else {
-      ShooterFlapMotor.set(0);
+      Slider.set(0);
     }
   }
 
@@ -97,5 +100,9 @@ public class Shooter extends SubsystemBase {
 
   public void setFlapToRed() {
     SelectedZone = Zones.RED;
+  }
+
+  public void setSlider(double speed) {
+    Slider.set(speed);
   }
 }
