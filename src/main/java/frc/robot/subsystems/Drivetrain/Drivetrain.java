@@ -64,8 +64,8 @@ public class Drivetrain extends SubsystemBase {
   private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.7);
 
   private void RonDrive(Joystick pStick) {
-    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(1)),
-                          forwardbackwardaxis.periodic(pStick.getRawAxis(4)),
+    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
+                          forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           turnaxis.periodic(pStick.getRawAxis(0)));
   }
 

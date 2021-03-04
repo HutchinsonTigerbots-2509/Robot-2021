@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 
-  private Zones SelectedZone = Zones.REINTRODUCTION_ZONE;
+  private static Zones SelectedZone = Zones.REINTRODUCTION_ZONE;
 
   private ZoneAnalogPosition[] ZonesList = new ZoneAnalogPosition[4];
 
@@ -38,16 +38,20 @@ public class Shooter extends SubsystemBase {
 
     switch(SelectedZone) {
     
-      case GREEN:  MoveFlapTo(ZonesList[0]);
-
-      case YELLOW: MoveFlapTo(ZonesList[1]);
-      
-      case BLUE:   MoveFlapTo(ZonesList[2]);
-      
-      case RED:    MoveFlapTo(ZonesList[3]);
-      
-      default:     Slider.set(0);
-    
+      case GREEN: 
+          MoveFlapTo(ZonesList[0]);
+          break;
+      case YELLOW:
+          MoveFlapTo(ZonesList[1]);
+          break;
+      case BLUE:
+          MoveFlapTo(ZonesList[2]);
+          break;
+      case RED:
+          MoveFlapTo(ZonesList[3]);
+          break;
+      default:
+          MoveFlapTo(ZonesList[2]);
     }
     
     // SmartDashboard.putNumber("Shooter RPM", GetRPM());
@@ -86,21 +90,28 @@ public class Shooter extends SubsystemBase {
    * @param zone
    */
   private void MoveFlapTo(ZoneAnalogPosition zone) {
+    // if (Potentiometer.getVoltage() < zone.AnalogTarget+0.05 && Potentiometer.getVoltage() > zone.AnalogTarget-0.05) {
+    //   Slider.set(0);
+    // }
     // If Flap is too far forward,                        then go backward
-    if(Potentiometer.getVoltage() > zone.AnalogTarget) {  Slider.set(0.5);  } 
+    if(Potentiometer.getVoltage() > zone.AnalogTarget+0.02) {  Slider.set(0.5);  } 
 
     //   If Flap is too far backward                           then go forward
-    else if(Potentiometer.getVoltage() < zone.AnalogTarget) {  Slider.set(-0.5);  }
+    else if(Potentiometer.getVoltage() < zone.AnalogTarget-0.02) {  Slider.set(-0.5);  }
 
-    // Otherwise Stop
+    // Otherwise Step
     else {  Slider.set(0);  }
+
+    SmartDashboard.putString("state", zone.toString());
+    SmartDashboard.putString("select state", SelectedZone.toString());
   }
 
-  public void setFlapToGreen()    {   SelectedZone = Zones.GREEN;  }
+  public void setFlapToGreen()    {   this.SelectedZone = Zones.GREEN;  }
 
-  public void setFlapToYellow()   {   SelectedZone = Zones.YELLOW; }
+  public void setFlapToYellow()   {   this.SelectedZone = Zones.YELLOW; }
 
-  public void setFlapToBlue()     {   SelectedZone = Zones.BLUE;   }
+  public void setFlapToBlue()     {   this.SelectedZone = Zones.BLUE;   }
 
-  public void setFlapToRed()      {   SelectedZone = Zones.RED;    }
+  public void setFlapToRed()      {   this.SelectedZone = Zones.RED;    }
+
 }

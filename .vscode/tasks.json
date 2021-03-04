@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "gradle",
+			"id": "c:\\Users\\Tigerbots\\workspace\\Robot-2021deployRobot-2021",
+			"script": "deploy",
+			"description": "Deploy all artifacts on all targets",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"project": "Robot-2021",
+			"buildFile": "C:\\Users\\Tigerbots\\workspace\\Robot-2021\\build.gradle",
+			"rootProject": "Robot-2021",
+			"projectFolder": "c:\\Users\\Tigerbots\\workspace\\Robot-2021",
+			"workspaceFolder": "c:\\Users\\Tigerbots\\workspace\\Robot-2021",
+			"args": "",
+			"javaDebug": false,
+			"problemMatcher": [
+				"$gradle"
+			],
+			"label": "gradle: deploy"
+		}
+	]
+}

@@ -13,12 +13,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-import frc.robot.commands.Conveyor.ConveyorShiftDown;
-import frc.robot.commands.Conveyor.ConveyorShiftUp;
 
 import frc.robot.commands.Shooter.RampDownShooter;
 import frc.robot.commands.Shooter.RampUpShooter;
-
+import frc.robot.commands.Conveyor.ConveyorUp;
+import frc.robot.commands.Conveyor.ConeyorDown;
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.Rotate;
 import frc.robot.commands.Drivetrain.StrafeStraight;
@@ -62,11 +61,13 @@ public class RobotContainer {
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
   private JoystickButton bResetEncoders;
+  private JoystickButton RUNCONVEYoR;
+  private JoystickButton RUNCONVEYoR2;
   private JoystickButton bConveyorUp;
   private JoystickButton bConveyorDown;
   private JoystickButton bIntakeIn;
   private JoystickButton bIntakeOut;
-  private JoystickButton bAutoCommands;
+  // private JoystickButton bAutoCommands;
   private JoystickButton bExtendIntake;
   private JoystickButton bRetractIntake;
 
@@ -78,16 +79,6 @@ public class RobotContainer {
 
   //Autonomous Commands
   private double AutoStartTime;
-
-  // Button Layout Enum (select one and it will switch to that one)
-  enum JoystickLayout {
-    FULL_MANUAL,
-    CONVEYOR_AUTOMATED,
-    SHOOTER_AUTOMATED,
-    TEST
-  }
-
-  private JoystickLayout Selected_Layout = JoystickLayout.TEST;
   
   /**
    * This constructor calls configureButtonBindings(). When that method runs, 
@@ -111,9 +102,6 @@ public class RobotContainer {
    * round. 
    */
   private void configureButtonBindings() {
-
-    if (Selected_Layout == JoystickLayout.FULL_MANUAL) {
-
       /* OpStick Buttons */
       bExtendIntake = new JoystickButton(OpStick, Constants.kXboxButtonA);
       bExtendIntake.whenPressed(new InstantCommand(() -> sIntake.Extend()));
@@ -122,118 +110,53 @@ public class RobotContainer {
       bRetractIntake.whenPressed(new InstantCommand(() -> sIntake.Retract()));
 
       /* CoOpStick Buttons */
-      // Intake
-      bIntakeIn = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
+      //Intake
+      bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
       bIntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
       bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
       
-      bIntakeOut = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
+      bIntakeOut = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
       bIntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
       bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
       
       // Shooter
       bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
-
-      bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
-
-      // Conveyor
-      bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
-      bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
-      bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
-      
-      bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
-      bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(0.5)));
-      bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
-    } 
-    
-    
-    else if (Selected_Layout == JoystickLayout.CONVEYOR_AUTOMATED) {
-      /* OpStick Buttons */
-      bExtendIntake = new JoystickButton(OpStick, Constants.kXboxButtonA);
-      bExtendIntake.whenPressed(new InstantCommand(() -> sIntake.Extend()));
-
-      bRetractIntake = new JoystickButton(OpStick, Constants.kXboxButtonX);
-      bRetractIntake.whenPressed(new InstantCommand(() -> sIntake.Retract()));
-
-      /* CoOpStick Buttons */
-      // Intake
-      bIntakeIn = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bIntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
-      bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
-      
-      bIntakeOut = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bIntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
-      bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
-      
-      // Shooter
-      bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
-
-      bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
-
-      // Conveyor
-      bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
-      bConveyorDown.whenPressed(new ConveyorShiftDown(sConveyor));
-      bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
-      
-      bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
-      bConveyorUp.whenPressed(new ConveyorShiftUp(sConveyor));
-      bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
-    }
-
-    else if(Selected_Layout == JoystickLayout.SHOOTER_AUTOMATED) {
-      /* OpStick Buttons */
-      bExtendIntake = new JoystickButton(OpStick, Constants.kXboxButtonA);
-      bExtendIntake.whenPressed(new InstantCommand(() -> sIntake.Extend()));
-
-      bRetractIntake = new JoystickButton(OpStick, Constants.kXboxButtonX);
-      bRetractIntake.whenPressed(new InstantCommand(() -> sIntake.Retract()));
-
-      /* CoOpStick Buttons */
-      // Intake
-      bIntakeIn = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bIntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
-      bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
-      
-      bIntakeOut = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bIntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
-      bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
-      
-      // Shooter
-      bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
+      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 1, 2.2));
 
       bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
       bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
 
       // Zone Switchers
-      bSliderBlue = new JoystickButton(OpStick, Constants.kXboxButtonX);
+      bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
       bSliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
 
-      bSliderYellow = new JoystickButton(OpStick, Constants.kXboxButtonY);
+      bSliderYellow = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
       bSliderYellow.whenPressed(new InstantCommand(() -> sShooter.setFlapToYellow()));
 
-      bSliderGreen = new JoystickButton(OpStick, Constants.kXboxButtonA);
+      bSliderGreen = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
       bSliderGreen.whenPressed(new InstantCommand(() -> sShooter.setFlapToGreen()));
 
-      bSliderRed = new JoystickButton(OpStick, Constants.kXboxButtonB);
+      bSliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
       bSliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
 
       // Conveyor
-      bConveyorDown = new JoystickButton(OpStick, Constants.kXboxButtonStart);
-      bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
-      bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
+      bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonStart);
+      bConveyorDown.whenPressed(new ConeyorDown(sConveyor));
+      // bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
+      // bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
       
-      bConveyorUp = new JoystickButton(OpStick, Constants.kXboxButtonBack);
-      bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(0.5)));
-      bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
+      bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
+      bConveyorUp.whenPressed(new ConveyorUp(sConveyor));
+      // bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(0.5)));
+      // bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
+      RUNCONVEYoR = new JoystickButton(CoOpStick, 9);
+      RUNCONVEYoR.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1)));
+      RUNCONVEYoR.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
-    } else if(Selected_Layout == JoystickLayout.TEST) {
-      bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
-    }
+      RUNCONVEYoR2 = new JoystickButton(CoOpStick, 10);
+      RUNCONVEYoR2.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
+      RUNCONVEYoR2.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
+
     
     // ***** BOUNCE PATH ***** //
     // Description

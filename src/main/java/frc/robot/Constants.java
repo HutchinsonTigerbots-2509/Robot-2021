@@ -47,9 +47,8 @@ public class Constants {
       
 
     // Conveyor
-    public final static int kTopLightSensorID = 0;           // Analog Input - RIO Analog Port
-    public final static int kMiddleLightSensorID = 1;        // Analog Input - RIO Analog Port
-    public final static int kBottomLightSensorID = 2;        // Analog Input - RIO Analog Port
+    public final static int kTopLightSensorID = 1;           // Analog Input - RIO Analog Port
+    public final static int kBottomLightSensorID = 0;        // Analog Input - RIO Analog Port
     
 
 

@@ -13,4 +13,8 @@ public class ZoneAnalogPosition {
     public boolean isEqualTo(Zones p_zone) {
         return (zone == p_zone);
     }
+
+    public String toString() {
+        return "" + zone + " : " + AnalogTarget; 
+    }
 }
