@@ -2,6 +2,7 @@ package frc.robot.commands.Drivetrain;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain.AxisAccel;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
 
 /**
@@ -19,6 +20,8 @@ public class DriveStraight extends CommandBase {
   //Speed variables
   private double mXSpeed;
   private double mZMultiplier = 0.04;
+  private AxisAccel mDriveAxis = new AxisAccel(0.04, 0.04);
+  private boolean mAccel;
   //Gyro
   private Double mGyroTarget;
   
@@ -28,10 +31,12 @@ public class DriveStraight extends CommandBase {
    * <p>Drives the robot straight, using the current gyro angle to correct for rotation
    * @param pDrivetrain Drivetrain subsystem
    * @param pXSpeed Forward Speed
+   * @param pAccel Whether or not to accelerate into the move
    */
-  public DriveStraight(Drivetrain pDrivetrain, double pXSpeed) {
+  public DriveStraight(Drivetrain pDrivetrain, double pXSpeed, boolean pAccel) {
     sDrivetrain = pDrivetrain;
     mXSpeed = pXSpeed;
+    mAccel = pAccel;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
@@ -43,11 +48,13 @@ public class DriveStraight extends CommandBase {
    * @param pDrivetrain Drivetrain Subsystem
    * @param pXSpeed Forward Speed
    * @param pGyroTarget The gyro angle to Target
+   * @param pAccel Whether or not to accelerate into the move
    */
-  public DriveStraight(Drivetrain pDrivetrain, double pXSpeed, double pGyroTarget){
+  public DriveStraight(Drivetrain pDrivetrain, double pXSpeed, double pGyroTarget, boolean pAccel){
     sDrivetrain = pDrivetrain;
     mXSpeed = pXSpeed;
     mGyroTarget = pGyroTarget;
+    mAccel = pAccel;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sDrivetrain);
   }
@@ -65,7 +72,11 @@ public class DriveStraight extends CommandBase {
   @Override
   public void execute() {
     //Sends the voltage to the Drivetrain motors
-    sDrivetrain.DriveWithoutStrafe(mXSpeed, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mZMultiplier);
+    if(mAccel){
+      sDrivetrain.DriveWithoutStrafe(mDriveAxis.periodic(mXSpeed), -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mZMultiplier);
+    } else {
+      sDrivetrain.DriveWithoutStrafe(mXSpeed, -(sDrivetrain.GetGyroAngle() - mGyroTarget) * mZMultiplier);
+    }
   }
 
   /** Called once the command ends or is interrupted. */

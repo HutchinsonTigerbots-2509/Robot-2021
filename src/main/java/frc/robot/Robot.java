@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
 
   private static RobotContainer mRobotContainer;
   private Command m_autonomousCommand;
-  private Compressor mCompressor = new Compressor();
+  public static Compressor mCompressor = new Compressor();
 
 
   /**

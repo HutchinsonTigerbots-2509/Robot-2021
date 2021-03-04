@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void periodic() {
-
+    /*
     switch(SelectedZone) {
     
       case GREEN: 
@@ -53,6 +53,7 @@ public class Shooter extends SubsystemBase {
       default:
           MoveFlapTo(ZonesList[2]);
     }
+    */
     
     // SmartDashboard.putNumber("Shooter RPM", GetRPM());
     SmartDashboard.putNumber("Potent", Potentiometer.getVoltage());

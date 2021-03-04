@@ -67,7 +67,7 @@ public class RobotContainer {
   private JoystickButton bConveyorDown;
   private JoystickButton bIntakeIn;
   private JoystickButton bIntakeOut;
-  // private JoystickButton bAutoCommands;
+  private JoystickButton bAutoCommands;
   private JoystickButton bExtendIntake;
   private JoystickButton bRetractIntake;
 
@@ -111,6 +111,7 @@ public class RobotContainer {
 
       /* CoOpStick Buttons */
       //Intake
+      /*
       bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
       bIntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
       bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
@@ -118,15 +119,17 @@ public class RobotContainer {
       bIntakeOut = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
       bIntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
       bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
+      */
       
       // Shooter
-      bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 1, 2.2));
+      // bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
+      // bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 1, 2.2));
 
-      bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
+      // bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
+      // bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
 
       // Zone Switchers
+      /*
       bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
       bSliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
 
@@ -138,8 +141,10 @@ public class RobotContainer {
 
       bSliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
       bSliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
+      */
 
       // Conveyor
+      /*
       bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonStart);
       bConveyorDown.whenPressed(new ConeyorDown(sConveyor));
       // bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
@@ -156,27 +161,36 @@ public class RobotContainer {
       RUNCONVEYoR2 = new JoystickButton(CoOpStick, 10);
       RUNCONVEYoR2.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
       RUNCONVEYoR2.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
+      */
 
-    
+    bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
     // ***** BOUNCE PATH ***** //
-    // Description
-    // bAutoCommands.whenPressed(new SequentialCommandGroup(
-    //   //Resets the gyro and Encoders
-    //   new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    //   //Drives straight until the average encoder count is above 64,000
-    //   new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
-    //   //Strafes left until the average encoder count is above 100,000
-    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    //   new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
-    // ));
+    bAutoCommands.whenPressed(new SequentialCommandGroup(
+      //Resets the gyro and stops compressor
+      new InstantCommand(() -> sDrivetrain.ResetGyro()),
+      new InstantCommand(() -> Robot.mCompressor.stop()),
+      // Strafes right until it sees the first marker
+      new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() < 22 && sVision.getTargetY() > 2),
+      // Knocks over the first marker
+      new DriveStraight(sDrivetrain, 1, 0, false).withInterrupt(() -> !sVision.GetTargetFound()),
+      // Backs up (encoders)
+      new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+      new DriveStraight(sDrivetrain, -1, 0, true).withInterrupt(() -> sDrivetrain.EncoderAverage() > 69000),
+      // Strafes right until it finds the marker
+      new StrafeStraight(sDrivetrain, 1, 0, false).withTimeout(0.2),
+      new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(()-> sVision.getTargetX() < 15 && sVision.getTargetX() > 11 && sVision.GetTargetFound()),
+      // Drives backward
+      new DriveStraight(sDrivetrain, -1, 0, true).withInterrupt(()-> sVision.getTargetY() > 15),
+      // Strafes right until it sees the second marker
+      new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() > 25)
+    ));
   }
 
   // ***** BARREL RACING PATH ***** //
   // FULLY FUNCTIONAL. ~16.3 SECONDS WITH NEW BATTERY.
   // Markers with Vision tape are B2, D2, D5, B8, and D10
   // Markers without vision tape are B1 and D2
-  
+  /*
   private Command AutoCommand = new SequentialCommandGroup(
     //Sets the start time for the timer
     new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
@@ -223,6 +237,7 @@ public class RobotContainer {
     //Prints out the time it took to run the path
     new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
   );
+  */
   
 
   // ***** SLALOM PATH
@@ -275,6 +290,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // The Command to run in Autonomous
-    return AutoCommand;
+    return null;
   }
 }
