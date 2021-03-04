@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Shooter;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -23,29 +22,37 @@ public class Shooter extends SubsystemBase {
 
   private ZoneAnalogPosition[] ZonesList = new ZoneAnalogPosition[4];
 
-
   public Shooter() {
+    
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
 
-    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN, 2.85); // <- Make those right
-    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3);
-    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE, 3.6);
-    ZonesList[3] = new ZoneAnalogPosition(Zones.RED, 3.7);
+    //                                    Zone          Analog Value
+    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.85);
+    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3.00);
+    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.60);
+    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.70);
+
   }
 
   public void periodic() {
 
     switch(SelectedZone) {
+    
       case GREEN:  MoveFlapTo(ZonesList[0]);
+
       case YELLOW: MoveFlapTo(ZonesList[1]);
-      case BLUE:   MoveFlapTo(ZonesList[3]);
+      
+      case BLUE:   MoveFlapTo(ZonesList[2]);
+      
       case RED:    MoveFlapTo(ZonesList[3]);
+      
+      default:     Slider.set(0);
+    
     }
     
     // SmartDashboard.putNumber("Shooter RPM", GetRPM());
-    // SmartDashboard.putNumber("Shooter volts", GetMotorOutputPercent());
     SmartDashboard.putNumber("Potent", Potentiometer.getVoltage());
-  } 
+  }
 
   /**
    * Gets the raw quadrature encoder units from the TalonFX integrated sensor. It will 
@@ -55,10 +62,6 @@ public class Shooter extends SubsystemBase {
    */
   public double GetRPM() {
     return Math.abs((600 * mShooterMotor.getSelectedSensorVelocity()) / Constants.kShooterTicksPerRevolution);
-  }
-  
-  public double GetMotorOutputPercent() {
-    return mShooterMotor.getMotorOutputPercent();
   }
 
   /**
@@ -71,38 +74,33 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * We need to implement this. Moves shooter towards an analog input until
-   * it hits that analog input.
+   * 
+   * @return
+   */
+  public double GetMotorOutputPercent() {
+    return mShooterMotor.getMotorOutputVoltage();
+  }
+
+  /**
    * 
    * @param zone
    */
-  public void MoveFlapTo(ZoneAnalogPosition zone) {
-    if(Slider.getSelectedSensorPosition() > zone.AnalogTarget) {
-      Slider.set(0.5);
-    } else if(Slider.getSelectedSensorPosition() < zone.AnalogTarget) {
-      Slider.set(-0.5);
-    } else {
-      Slider.set(0);
-    }
+  private void MoveFlapTo(ZoneAnalogPosition zone) {
+    // If Flap is too far forward,                        then go backward
+    if(Potentiometer.getVoltage() > zone.AnalogTarget) {  Slider.set(0.5);  } 
+
+    //   If Flap is too far backward                           then go forward
+    else if(Potentiometer.getVoltage() < zone.AnalogTarget) {  Slider.set(-0.5);  }
+
+    // Otherwise Stop
+    else {  Slider.set(0);  }
   }
 
-  public void setFlapToGreen() {
-    SelectedZone = Zones.GREEN;
-  }
+  public void setFlapToGreen()    {   SelectedZone = Zones.GREEN;  }
 
-  public void setFlapToYellow() {
-    SelectedZone = Zones.YELLOW;
-  }
+  public void setFlapToYellow()   {   SelectedZone = Zones.YELLOW; }
 
-  public void setFlapToBlue() {
-    SelectedZone = Zones.BLUE;
-  }
+  public void setFlapToBlue()     {   SelectedZone = Zones.BLUE;   }
 
-  public void setFlapToRed() {
-    SelectedZone = Zones.RED;
-  }
-
-  public void setSlider(double speed) {
-    Slider.set(speed);
-  }
+  public void setFlapToRed()      {   SelectedZone = Zones.RED;    }
 }

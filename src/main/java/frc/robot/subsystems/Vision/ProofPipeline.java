@@ -1,22 +1,10 @@
 package frc.robot.subsystems.Vision;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.HashMap;
-
-import edu.wpi.first.wpilibj.vision.VisionPipeline;
 
 import org.opencv.core.*;
-import org.opencv.core.Core.*;
-import org.opencv.features2d.FeatureDetector;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
-import org.opencv.objdetect.*;
 
 /**
 * ContourGripPipeline class.
@@ -25,7 +13,7 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class ProofPipeline implements VisionPipeline {
+public class ProofPipeline  {
 
 	//Outputs
 	public Mat cvFlipOutput = new Mat();
@@ -43,7 +31,7 @@ public class ProofPipeline implements VisionPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	@Override	public void process(Mat source0) {
+	public void process(Mat source0) {
 		// Step CV_flip0:
 		Mat cvFlipSrc = source0;
 		FlipCode cvFlipFlipcode = FlipCode.BOTH_AXES;

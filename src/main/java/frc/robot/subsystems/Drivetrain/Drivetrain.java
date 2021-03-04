@@ -7,10 +7,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -26,25 +24,6 @@ public class Drivetrain extends SubsystemBase {
   public MecanumDrive mDrive;
 
   private AHRS mGyro = new AHRS();
-
-  // Speed Variables
-  private double mXSpeed = 0;
-  private double mYSpeed = 0;
-  private double mZSpeed = 0;
-
-  //Multipliers
-  private double mXMultiplier = 1; //0.6
-  private double mYMultiplier = 0.8; //0.8
-  private double mZMultiplier = 1; //0.6
-
-  //Previous Values
-  private double mPreviousXSpeed = 0;
-  private double mPreviousZSpeed = 0;
-
-  //Ramp Down Values
-  private double mRampDownX = 0.08;
-  private double mRampDownZ = 0.08;
-
 
 
   public Drivetrain() {
