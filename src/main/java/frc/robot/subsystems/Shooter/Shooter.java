@@ -27,9 +27,9 @@ public class Shooter extends SubsystemBase {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
 
     //                                    Zone          Analog Value
-    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.85);
-    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3.00);
-    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.60);
+    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.90); // 2.85
+    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 2.95);
+    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67);
     ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.70);
 
   }

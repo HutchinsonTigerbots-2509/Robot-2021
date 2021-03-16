@@ -121,10 +121,10 @@ public class RobotContainer {
       
       // Shooter
       bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 1, 2.2));
+      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
       bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
+      bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 1.5));
 
       // Zone Switchers
       bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
