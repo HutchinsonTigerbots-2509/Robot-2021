@@ -61,8 +61,8 @@ public class RobotContainer {
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
   private JoystickButton bResetEncoders;
-  private JoystickButton RUNCONVEYoR;
-  private JoystickButton RUNCONVEYoR2;
+  private JoystickButton ManualConveyorUp;
+  private JoystickButton ManualConveyorDown;
   private JoystickButton bConveyorUp;
   private JoystickButton bConveyorDown;
   private JoystickButton bIntakeIn;
@@ -126,7 +126,7 @@ public class RobotContainer {
       bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
       bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 1.5));
 
-      // Zone Switchers
+      // Slider
       bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
       bSliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
 
@@ -142,20 +142,17 @@ public class RobotContainer {
       // Conveyor
       bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonStart);
       bConveyorDown.whenPressed(new ConeyorDown(sConveyor));
-      // bConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(-0.5)));
-      // bConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
-      
+
       bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
       bConveyorUp.whenPressed(new ConveyorUp(sConveyor));
-      // bConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.MoveConveyor(0.5)));
-      // bConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.MoveConveyor(0)));
-      RUNCONVEYoR = new JoystickButton(CoOpStick, 9);
-      RUNCONVEYoR.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1)));
-      RUNCONVEYoR.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
-      RUNCONVEYoR2 = new JoystickButton(CoOpStick, 10);
-      RUNCONVEYoR2.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
-      RUNCONVEYoR2.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
+      ManualConveyorUp = new JoystickButton(CoOpStick, 9);
+      ManualConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1)));
+      ManualConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
+
+      ManualConveyorDown = new JoystickButton(CoOpStick, 10);
+      ManualConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
+      ManualConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
     
     // ***** BOUNCE PATH ***** //

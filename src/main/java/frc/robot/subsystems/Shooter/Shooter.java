@@ -41,17 +41,22 @@ public class Shooter extends SubsystemBase {
       case GREEN: 
           MoveFlapTo(ZonesList[0]);
           break;
+          
       case YELLOW:
           MoveFlapTo(ZonesList[1]);
           break;
+
       case BLUE:
           MoveFlapTo(ZonesList[2]);
           break;
+
       case RED:
           MoveFlapTo(ZonesList[3]);
           break;
+
       default:
           MoveFlapTo(ZonesList[2]);
+
     }
     
     // SmartDashboard.putNumber("Shooter RPM", GetRPM());
@@ -90,9 +95,6 @@ public class Shooter extends SubsystemBase {
    * @param zone
    */
   private void MoveFlapTo(ZoneAnalogPosition zone) {
-    // if (Potentiometer.getVoltage() < zone.AnalogTarget+0.05 && Potentiometer.getVoltage() > zone.AnalogTarget-0.05) {
-    //   Slider.set(0);
-    // }
     // If Flap is too far forward,                        then go backward
     if(Potentiometer.getVoltage() > zone.AnalogTarget+0.02) {  Slider.set(0.5);  } 
 
@@ -106,12 +108,12 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putString("select state", SelectedZone.toString());
   }
 
-  public void setFlapToGreen()    {   this.SelectedZone = Zones.GREEN;  }
+  public void setFlapToGreen()    {   SelectedZone = Zones.GREEN;  }
 
-  public void setFlapToYellow()   {   this.SelectedZone = Zones.YELLOW; }
+  public void setFlapToYellow()   {   SelectedZone = Zones.YELLOW; }
 
-  public void setFlapToBlue()     {   this.SelectedZone = Zones.BLUE;   }
+  public void setFlapToBlue()     {   SelectedZone = Zones.BLUE;   }
 
-  public void setFlapToRed()      {   this.SelectedZone = Zones.RED;    }
+  public void setFlapToRed()      {   SelectedZone = Zones.RED;    }
 
 }

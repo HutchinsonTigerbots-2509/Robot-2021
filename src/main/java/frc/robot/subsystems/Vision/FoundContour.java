@@ -1,6 +1,10 @@
 package frc.robot.subsystems.Vision;
 
 
+/**
+ * Custom Class that keeps track of the features of the contours
+ * found by the programs.
+ */
 public class FoundContour {
     public double CenterX;
     public double CenterY;
