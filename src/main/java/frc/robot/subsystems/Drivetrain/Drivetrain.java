@@ -49,10 +49,6 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
     
     // Prints the encoder values to the SmartDashboard
-    // SmartDashboard.putNumber("LeftFront", mFrontLeft.getSelectedSensorPosition());
-    // SmartDashboard.putNumber("LeftRear", mRearLeft.getSelectedSensorPosition());
-    // SmartDashboard.putNumber("RightFront", mFrontRight.getSelectedSensorPosition());
-    // SmartDashboard.putNumber("RightRear", mRearRight.getSelectedSensorPosition());
     SmartDashboard.putNumber("Average Encoder Ticks", EncoderAverage());
   
   }
