@@ -57,13 +57,13 @@ public class AxisAccel {
         // joystick is too small, the output will be set to zero. If it is
         // within 0.2 of the passed min, the program will set the target to
         // the minimum + 0.2.
-        if (Math.abs(targ) < min + 0.2) {
+        if (Math.abs(targ) < min + 0.1) {
             if (Math.abs(targ) < min) {
                 curr = 0;
             } else if (targ < curr) {
-                curr = -min - 0.2;
+                curr = -min - 0.1;
             } else if (targ > curr) {
-                curr = min + 0.2;
+                curr = min + 0.1;
             }
         } else if (targ < curr) {
             curr += negativemulti*(error); // porportional gain
