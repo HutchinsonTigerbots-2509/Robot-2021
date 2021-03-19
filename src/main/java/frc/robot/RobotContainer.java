@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 import frc.robot.commands.Shooter.RampDownShooter;
+import frc.robot.commands.Shooter.RampDownShooterWithProfile;
 import frc.robot.commands.Shooter.RampUpShooter;
+import frc.robot.commands.Shooter.RampUpShooterWithProfile;
 import frc.robot.commands.Conveyor.ConveyorUp;
 import frc.robot.commands.Conveyor.ConeyorDown;
 import frc.robot.commands.Drivetrain.DriveStraight;
@@ -26,6 +28,7 @@ import frc.robot.subsystems.Conveyor.Conveyor;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Vision.LimelightVision;
+import frc.robot.subsystems.Vision.USBVision2;
 import frc.robot.subsystems.Shooter.Shooter;
 
 /**
@@ -51,6 +54,7 @@ public class RobotContainer {
   private Shooter sShooter = new Shooter();
   private Conveyor sConveyor = new Conveyor();
   private Intake sIntake = new Intake();
+  private USBVision2 USBV = new USBVision2();
 
   // Joysticks
   public static Joystick OpStick = new Joystick(Constants.kOpStickID);
@@ -121,10 +125,14 @@ public class RobotContainer {
       
       // Shooter
       bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
+      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 1, 2.2)); // 0.7 FOR RED
+      //bRampUpShooter.whenPressed(new RampUpShooterWithProfile(sShooter, 0.7, 2.2));
+
 
       bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
       bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 1.5));
+      // bRampDownShooter.whenPressed(new RampDownShooterWithProfile(sShooter, 1.5));
+      
 
       // Slider
       bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
@@ -146,8 +154,9 @@ public class RobotContainer {
       bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
       bConveyorUp.whenPressed(new ConveyorUp(sConveyor));
 
+      // backwards
       ManualConveyorUp = new JoystickButton(CoOpStick, 9);
-      ManualConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1)));
+      ManualConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-0.7)));
       ManualConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
       ManualConveyorDown = new JoystickButton(CoOpStick, 10);

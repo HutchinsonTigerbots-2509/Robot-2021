@@ -30,13 +30,15 @@ public class RampDownShooter extends CommandBase {
    * 
    */
   public void initialize() {
+    
     mStartingVoltage = sShooter.GetMotorOutputPercent();
     mStartTime = Timer.getFPGATimestamp();
+    
     mVoltage = mStartingVoltage;
     mCurrentTime = mStartTime;
+
     mFinished = false;
 
-    SmartDashboard.putNumber("Ramp Start V", mStartingVoltage);
   }
 
   /**
