@@ -18,6 +18,7 @@ import frc.robot.commands.Shooter.RampDownShooter;
 import frc.robot.commands.Shooter.RampUpShooter;
 import frc.robot.commands.Conveyor.ConveyorUp;
 import frc.robot.commands.Conveyor.ConeyorDown;
+import frc.robot.commands.Drivetrain.DriveBackwardAutonomous;
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.Rotate;
 import frc.robot.commands.Drivetrain.StrafeStraight;
@@ -165,50 +166,75 @@ public class RobotContainer {
       RUNCONVEYoR2.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
       RUNCONVEYoR2.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
       */
-
-    bAutoCommands = new JoystickButton(OpStick, Constants.kXboxButtonStart);
-    // ***** BOUNCE PATH ***** //
-    bAutoCommands.whenPressed(new SequentialCommandGroup(
-      //Resets the gyro and stops compressor
-      new InstantCommand(() -> sDrivetrain.ResetGyro()),
-      new InstantCommand(() -> Robot.mCompressor.stop()),
-      new InstantCommand(() -> sVision.SwitchPipeline(1)),
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 1)),
-      // Strafes right until it sees the first marker
-      new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() < 18 && sVision.getTargetY() > 2), //TargetX 22
-      // Knocks over the first marker
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 2)),
-      new DriveStraight(sDrivetrain, 0.8, 0, false).withInterrupt(() -> !sVision.GetTargetFound()),
-      // Backs up (encoders)
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 3)),
-      new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-      new DriveStraight(sDrivetrain, -1, 0, true).withInterrupt(() -> sDrivetrain.EncoderAverage() > 57000),
-      // Strafes right until it finds the marker
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 4)),
-      new StrafeStraight(sDrivetrain, 1, 0, false).withTimeout(0.2),
-      new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(()-> sVision.getTargetX() < 15 && sVision.getTargetX() > 11 && sVision.GetTargetFound()),
-      // Drives backward
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 5)),
-      new DriveStraight(sDrivetrain, -1, 0, true).withInterrupt(()-> sVision.getTargetY() > 16.5),
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Y", sVision.getTargetY())),
-      // Strafes right until it sees the second marker
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 6)),
-      new InstantCommand(() -> sVision.SwitchPipeline(5)),
-      new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() > 5 && sVision.getTargetX() < 10&& sVision.getTargetY() > 5),
-      new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(() -> sVision.getTargetX() < 1),
-      // Knocks over the second marker
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 7)),
-      new DriveStraight(sDrivetrain, 0.8, 0, true).withInterrupt(() -> !sVision.GetTargetFound()),
-      // Drives backwards
-      new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 8)),
-      new InstantCommand(() -> sVision.SwitchPipeline(6)),
-      new DriveStraight(sDrivetrain, -0.8, 0, true).withInterrupt(() -> sVision.getTargetY() > 14 && sVision.getTargetX() > 5),
-      // Strafes right until it sees the final marker
-      // new InstantCommand(() -> sVision.SwitchPipeline(5)),
-      new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(() -> sVision.getTargetY() > 20)
-      // new InstantCommand(() -> sVision.SwitchPipeline(1))
-    ));
   }
+
+  // ***** BOUNCE PATH ***** //
+  // LIL SKETCHY, BUT MOSTLY WORKS. ~14.2 SECONDS, REGARDLESS OF BATTERY CHARGE
+  // Red Markers on A3, A6, and A9
+  // Markers with vision tape are B4, B7, B8, B10, D5, D7, & D8
+  // Markers without vision tape are B1, B2, B5, & B11
+  // Markers that don't matter are D1, D2, D3, D10, D11, & E3
+  private Command AutoCommand = new SequentialCommandGroup(
+    //Sets the start time for the timer
+    new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
+    //Resets the gyro and stops compressor
+    new InstantCommand(() -> sDrivetrain.ResetGyro()),
+    new InstantCommand(() -> Robot.mCompressor.stop()),
+    new InstantCommand(() -> sVision.SwitchPipeline(1)), // Targets largest
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 1)),
+    // Strafes right until it sees the first marker
+    new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(() -> sVision.getTargetX() < 18 && sVision.getTargetY() > 2), //TargetX 18, true
+    // Knocks over the first marker
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 2)),
+    new DriveStraight(sDrivetrain, 0.7, 0, false).withInterrupt(() -> !sVision.GetTargetFound()),
+    new WaitCommand(0.1),
+    // Backs up (encoders)
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 3)),
+    new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+    // new DriveStraight(sDrivetrain, -0.7, 0, true).withInterrupt(() -> sDrivetrain.EncoderAverage() > 59000),
+    new DriveBackwardAutonomous(sDrivetrain, -0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 55000), //59000
+    // Strafes right until it finds the marker
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 4)),
+    new StrafeStraight(sDrivetrain, 1, 0, false).withTimeout(0.2), //true?
+    new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(()-> sVision.getTargetX() < 15 && sVision.getTargetX() > 11 && sVision.GetTargetFound()),
+    // Drives backward
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 5)),
+    new DriveStraight(sDrivetrain, -1, 0, true).withInterrupt(()-> sVision.getTargetY() > 16.5),
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Y", sVision.getTargetY())),
+    // Strafes right until it sees the second marker
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 6)),
+    new InstantCommand(() -> sVision.SwitchPipeline(5)), // Targets highest
+    new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() > 5 && sVision.getTargetX() < 10&& sVision.getTargetY() > 5),
+    new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(() -> sVision.getTargetX() < 1),
+    // Knocks over the second marker
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 7)),
+    new DriveStraight(sDrivetrain, 0.8, 0, true).withInterrupt(() -> !sVision.GetTargetFound()),
+    // Drives backwards
+    new InstantCommand(() -> sVision.SwitchPipeline(7)), // Targets Rightmost
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 8)),
+    new DriveStraight(sDrivetrain, -0.8, 0, true).withInterrupt(() -> sVision.getTargetY() > 14 && sVision.getTargetX() > 5),
+    // Strafes right until it sees the final marker
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 9)),
+    new InstantCommand(() -> sVision.SwitchPipeline(6)), // Tri target
+    new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() < 5 && sVision.GetTargetFound()),
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 10)),
+    new InstantCommand(() -> sVision.SwitchPipeline(5)), // Targest highest
+    new StrafeStraight(sDrivetrain, 1, 0, false).withInterrupt(() -> sVision.getTargetX() < 7 && sVision.GetTargetFound()),
+    // Knocks over third marker
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 11)),
+    new DriveStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> !sVision.GetTargetFound()),
+    // Drives backward
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 12)),
+    new WaitCommand(0.1),
+    new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+    new DriveBackwardAutonomous(sDrivetrain, -0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 71000), // 70000
+    // Strafes right
+    new InstantCommand(() -> SmartDashboard.putNumber("Auto Sequence", 13)),
+    new InstantCommand(() -> sVision.SwitchPipeline(1)),
+    new StrafeStraight(sDrivetrain, 1, 0, true).withInterrupt(() -> sVision.getTargetX() < -24 && sVision.getTargetY() < 5),
+    //Prints out the time it took to run the path
+    new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime)
+  ));
 
   // ***** BARREL RACING PATH ***** //
   // FULLY FUNCTIONAL. ~16.3 SECONDS WITH NEW BATTERY.
@@ -314,6 +340,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // The Command to run in Autonomous
-    return null;
+    return AutoCommand;
   }
 }

@@ -152,4 +152,8 @@ public class Drivetrain extends SubsystemBase {
     mRearLeft.set(LeftRearSpeed);
     mRearRight.set(RightRearSpeed);
   }
+
+  public void FieldOrientedDrive(double pYSpeed, double pXSpeed, double pZpeed, double pGyroAngle){
+    mDrive.driveCartesian(pYSpeed, pXSpeed, pZpeed, pGyroAngle);
+  }
 }
