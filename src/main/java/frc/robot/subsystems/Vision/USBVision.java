@@ -63,7 +63,7 @@ public class USBVision extends SubsystemBase {
 
     // DEBUGGING: Will show the processed image up to the
     // blur step
-    // proof_pipeline.process(source);
+    proof_pipeline.process(source);
     // outputStream.putFrame(proof_pipeline.blurOutput());
 
 

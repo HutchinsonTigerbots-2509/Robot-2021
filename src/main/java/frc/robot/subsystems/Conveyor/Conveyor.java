@@ -22,7 +22,7 @@ public class Conveyor extends SubsystemBase {
   public boolean BottomSensorValue = false;
   
   public Conveyor() {
-    Agitator.setNeutralMode(NeutralMode.Coast);
+    Agitator.setNeutralMode(NeutralMode.Brake);
   }
 
   /**
@@ -32,8 +32,8 @@ public class Conveyor extends SubsystemBase {
   public void periodic() {
     UpdateTopSensorValue();
     UpdateBottomSensorValue();
-    SmartDashboard.putNumber("Sensor", topLightSensor.getVoltage());
-    SmartDashboard.putNumber("Sensor2", bottomLightSensor.getVoltage());
+    SmartDashboard.putNumber("Top Sensor", topLightSensor.getVoltage());
+    SmartDashboard.putNumber("Bottom Sensor", bottomLightSensor.getVoltage());
 
   }
 
