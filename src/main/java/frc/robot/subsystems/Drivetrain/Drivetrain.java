@@ -25,6 +25,8 @@ public class Drivetrain extends SubsystemBase {
 
   private AHRS mGyro = new AHRS();
 
+  private DrivetrainMode CurrentMode = DrivetrainMode.FULL;
+
 
   public Drivetrain() {
   
@@ -41,16 +43,17 @@ public class Drivetrain extends SubsystemBase {
 
   /**Periodic function */
   public void periodic() {
-    
-    // Drives the robot using a joystick
-    RonDrive(RobotContainer.OpStick);
-    
-    // Prints the gyro values to the SmartDashboard
-    SmartDashboard.putNumber("Gyro Angle", GetGyroAngle());
-    
-    // Prints the encoder values to the SmartDashboard
-    SmartDashboard.putNumber("Average Encoder Ticks", EncoderAverage());
-  
+
+    switch(CurrentMode) {
+      case CREEP:
+        CreepDrive(RobotContainer.OpStick);
+        break;
+      default:
+        RonDrive(RobotContainer.OpStick);
+        break;
+    }
+
+    SmartDashboard.putString("Drivetrain Mode", CurrentMode.toString());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
@@ -63,6 +66,27 @@ public class Drivetrain extends SubsystemBase {
     mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
                           forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           turnaxis.periodic(pStick.getRawAxis(0)));
+  }
+
+  private static double RotationInput;
+
+  private void CreepDrive(Joystick pStick) {
+    if(pStick.getRawAxis(0) > 0.2) {
+      RotationInput = 0.2;
+    } else if(pStick.getRawAxis(0) < -0.2) {
+      RotationInput = -0.2;
+    } else {
+      RotationInput = 0;
+    }
+    mDrive.driveCartesian(0, 0, RotationInput);
+  }
+
+  private void SwitchMode() {
+    if (CurrentMode == DrivetrainMode.CREEP) {
+      CurrentMode = DrivetrainMode.FULL;
+    } else {
+      CurrentMode = DrivetrainMode.CREEP;
+    }
   }
 
   // ***** AUTONOMOUS DRIVE METHODS ***** //
@@ -83,7 +107,6 @@ public class Drivetrain extends SubsystemBase {
    * @param pZSpeed rotational speed
    */
   public void DriveWithStrafe(double pYSpeed, double pXSpeed, double pZSpeed) {
-
     mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
   }
 

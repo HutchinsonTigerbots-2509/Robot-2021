@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
-import frc.robot.commands.Shooter.RampDownShooter;
 import frc.robot.commands.Shooter.RampUpShooter;
 import frc.robot.commands.Conveyor.ConveyorUp;
 import frc.robot.commands.Conveyor.ConeyorDown;
@@ -124,7 +123,7 @@ public class RobotContainer {
       bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.8, 2.2));
 
       bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 1.5));
+      bRampDownShooter.whenPressed(new InstantCommand(() -> sShooter.RunShooter(0)));
 
       // Slider
       bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
