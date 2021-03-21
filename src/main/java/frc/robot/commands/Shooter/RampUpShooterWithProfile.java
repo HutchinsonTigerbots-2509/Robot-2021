@@ -35,7 +35,7 @@ public class RampUpShooterWithProfile extends CommandBase {
 
   /** Called when the command is initially scheduled. */
   public void initialize() {
-    LRP = new LinearRampProfile(sShooter.GetMotorOutputPercent(), 
+    LRP = new LinearRampProfile(0.8, 
                                 Timer.getFPGATimestamp(), 
                                 mTargetVoltage, 
                                 mRampTime + Timer.getFPGATimestamp());

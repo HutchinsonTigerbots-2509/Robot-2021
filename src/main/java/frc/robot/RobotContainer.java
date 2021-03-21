@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
-
+import frc.robot.commands.Shooter.RampDownShooter;
 import frc.robot.commands.Shooter.RampUpShooter;
 import frc.robot.commands.Shooter.RampUpShooterWithProfile;
 import frc.robot.commands.Conveyor.ConveyorUp;
@@ -60,6 +59,7 @@ public class RobotContainer {
 
 
   // Joystick Buttons
+  private JoystickButton SwitchMode;
   private JoystickButton bRampUpShooter;
   private JoystickButton bRampDownShooter;
   private JoystickButton bResetEncoders;
@@ -89,6 +89,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
+    // sShooter.setTargetVoltage(0.7);
+    // sIntake.Extend();
   }
 
   /**
@@ -111,52 +113,72 @@ public class RobotContainer {
       bRetractIntake = new JoystickButton(OpStick, Constants.kXboxButtonX);
       bRetractIntake.whenPressed(new InstantCommand(() -> sIntake.Retract()));
 
+      JoystickButton agitator1 = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
+      agitator1.whenPressed(new InstantCommand(() -> sConveyor.setAgitator(0.5)));
+      agitator1.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
+
+      JoystickButton agitator2 = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+      agitator2.whenPressed(new InstantCommand(() -> sConveyor.setAgitator(-0.5)));
+      agitator2.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
+
+
+      SwitchMode = new JoystickButton(OpStick, 9);
+      SwitchMode.whenPressed(new InstantCommand(() -> sDrivetrain.SwitchMode()));
+
       /* CoOpStick Buttons */
       //Intake
-      bIntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
+      bIntakeIn = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
       bIntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
       bIntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
       
-      bIntakeOut = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
+      bIntakeOut = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
       bIntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
       bIntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
       
       // Shooter
-      bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
-      bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 1, 2.2)); // 0.7 FOR RED
-      //bRampUpShooter.whenPressed(new RampUpShooterWithProfile(sShooter, 0.7, 2.2));
+      bRampUpShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonStart);
+      // bRampUpShooter.whenPressed(new RampUpShooter(sShooter, 0.7, 5)); // 0.7 FOR RED
+      bRampUpShooter.whenPressed(new InstantCommand(() -> sShooter.setTargetVoltage(0.7)));
 
-
-      bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
-      bRampDownShooter.whenPressed(new InstantCommand(() -> sShooter.RunShooter(0)));
+      // bRampDownShooter = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
+      // // bRampDownShooter.whenPressed(new RampDownShooter(sShooter, 2.2));
+      // bRampDownShooter.whenPressed(new InstantCommand(() -> sShooter.setTargetVoltage(0)));
+      
 
       // Slider
-      bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
-      bSliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
+      // bSliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
+      // bSliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
 
-      bSliderYellow = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
-      bSliderYellow.whenPressed(new InstantCommand(() -> sShooter.setFlapToYellow()));
+      // bSliderYellow = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
+      // bSliderYellow.whenPressed(new InstantCommand(() -> sShooter.setFlapToYellow()));
 
-      bSliderGreen = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
-      bSliderGreen.whenPressed(new InstantCommand(() -> sShooter.setFlapToGreen()));
+      // bSliderGreen = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
+      // bSliderGreen.whenPressed(new InstantCommand(() -> sShooter.setFlapToGreen()));
 
-      bSliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
-      bSliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
+      // bSliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+      // bSliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
+
+      JoystickButton partybutton = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
+      partybutton.whenPressed(new InstantCommand(() -> sShooter.PARTYTIME()));
+
+      // JoystickButton powerup = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
+      // powerup.whenPressed(new InstantCommand(() -> sShooter.setToPowerYellow()));
+
 
       // Conveyor
-      bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonStart);
-      bConveyorDown.whenPressed(new ConeyorDown(sConveyor));
+      // bConveyorDown = new JoystickButton(CoOpStick, Constants.kXboxButtonStart);
+      // bConveyorDown.whenPressed(new ConeyorDown(sConveyor));
 
-      bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
-      bConveyorUp.whenPressed(new ConveyorUp(sConveyor));
+      // bConveyorUp = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
+      // bConveyorUp.whenPressed(new ConveyorUp(sConveyor));
 
       // backwards
       ManualConveyorUp = new JoystickButton(CoOpStick, 9);
-      ManualConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-0.7)));
+      ManualConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1))); // .70
       ManualConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
       ManualConveyorDown = new JoystickButton(CoOpStick, 10);
-      ManualConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
+      ManualConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(1)));
       ManualConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
     

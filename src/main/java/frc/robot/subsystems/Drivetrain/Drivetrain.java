@@ -49,6 +49,7 @@ public class Drivetrain extends SubsystemBase {
         CreepDrive(RobotContainer.OpStick);
         break;
       default:
+        // ModifiedRonDrive(RobotContainer.OpStick); 
         RonDrive(RobotContainer.OpStick);
         break;
     }
@@ -68,20 +69,58 @@ public class Drivetrain extends SubsystemBase {
                           turnaxis.periodic(pStick.getRawAxis(0)));
   }
 
-  private static double RotationInput;
-
-  private void CreepDrive(Joystick pStick) {
-    if(pStick.getRawAxis(0) > 0.2) {
-      RotationInput = 0.2;
-    } else if(pStick.getRawAxis(0) < -0.2) {
-      RotationInput = -0.2;
-    } else {
-      RotationInput = 0;
-    }
-    mDrive.driveCartesian(0, 0, RotationInput);
+  private void ModifiedRonDrive(Joystick pStick) {
+    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
+                          forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
+                          0);
   }
 
-  private void SwitchMode() {
+  private static double StrafeInput;
+  private static double ForwardInput;
+  private static boolean skip = false;
+
+  private void CreepDrive(Joystick pStick) {
+    if (pStick.getRawAxis(0) > 0.2) {
+      mRearLeft.set(-0.2);
+      mRearRight.set(-0.2);
+      skip = true;
+    } else if (pStick.getRawAxis(0) < -0.2) {
+      mRearLeft.set(0.2);
+      mRearRight.set(0.2);
+      skip = true;
+    } else {
+      mRearLeft.set(0);
+      mRearRight.set(0);
+      skip = false;
+    }
+
+    if (pStick.getRawAxis(4) > 0.2 && !skip) {
+      StrafeInput = 0.2;
+    } else if (pStick.getRawAxis(4) < -0.2 && !skip) {
+      StrafeInput = -0.2;
+    } else {
+      StrafeInput = 0;
+    }
+
+    // Needs to be reversed
+    if (pStick.getRawAxis(1) > 0.2 && !skip) {
+      ForwardInput = -0.2;
+    } else if (pStick.getRawAxis(1) < -0.2 && !skip) {
+      ForwardInput = 0.2;
+    } else {
+      ForwardInput = 0;
+    }
+
+    if (!skip) {
+      mDrive.driveCartesian(StrafeInput, ForwardInput, 0);
+    } else {
+      // mDrive.driveCartesian(0, 0, 0);
+      mFrontLeft.set(0);
+      mFrontRight.set(0);
+    }
+  }
+
+  public void SwitchMode() {
     if (CurrentMode == DrivetrainMode.CREEP) {
       CurrentMode = DrivetrainMode.FULL;
     } else {

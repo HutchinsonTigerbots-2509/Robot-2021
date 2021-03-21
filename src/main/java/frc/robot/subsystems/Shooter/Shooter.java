@@ -18,19 +18,28 @@ public class Shooter extends SubsystemBase {
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 
-  private static Zones SelectedZone = Zones.REINTRODUCTION_ZONE;
+  private static Zones SelectedZone = Zones.POWER_YELLOW; // Green for nomral
 
-  private ZoneAnalogPosition[] ZonesList = new ZoneAnalogPosition[4];
+  private static double TargetVoltage = 0;
+  private static double CurrentVoltage = 0;
+  private static double CurrentProfileTime = 0;
+  private static double IdealTime = 5;
+  private static double MaxSpeed = 1;
+  private static double ProfileSlope = MaxSpeed / IdealTime;
+
+  private ZoneAnalogPosition[] ZonesList = new ZoneAnalogPosition[6];
 
   public Shooter() {
     
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
 
     // What the values stand for ->       Zone          Analog Value   Motor Volts
-    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.90,          1.00); // 2.85
-    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 2.95,          0.80);
+    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  3.02,          0.50); // 1
+    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3.10,          0.92);
     ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67,          0.80);
-    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.70,          0.70);
+    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.68);
+    ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
+    ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.10, 0.95);
 
   }
 
@@ -54,13 +63,35 @@ public class Shooter extends SubsystemBase {
           MoveFlapTo(ZonesList[3]);
           break;
 
+      case PARTY:
+          MoveFlapTo(ZonesList[4]);
+          break;
+
+      case POWER_YELLOW:
+          MoveFlapTo(ZonesList[5]);
+          break;
       default:
           MoveFlapTo(ZonesList[2]);
-
     }
+
+    if (TargetVoltage == CurrentVoltage) {
+      CurrentVoltage = TargetVoltage;
+    } else if (TargetVoltage < CurrentVoltage) {
+      CurrentProfileTime = CurrentVoltage / ProfileSlope;
+      CurrentVoltage = ProfileSlope * (CurrentProfileTime - 0.02);
+    } else if (TargetVoltage > CurrentVoltage) {
+      CurrentProfileTime = CurrentVoltage / ProfileSlope;
+      CurrentVoltage = ProfileSlope * (CurrentProfileTime + 0.02);
+    }
+
+    mShooterMotor.set(CurrentVoltage);
     
-    // SmartDashboard.putNumber("Shooter RPM", GetRPM());
-    SmartDashboard.putNumber("Potent", Potentiometer.getVoltage());
+    SmartDashboard.putNumber("Shooter Amps", getShooterAmps());
+    SmartDashboard.putNumber("Shooter RPM", GetRPM());
+  }
+
+  public void setTargetVoltage(double target) {
+    TargetVoltage = target;
   }
 
   /**
@@ -70,7 +101,8 @@ public class Shooter extends SubsystemBase {
    * @return  RPM
    */
   public double GetRPM() {
-    return Math.abs((600 * mShooterMotor.getSelectedSensorVelocity()) / Constants.kShooterTicksPerRevolution);
+    //               600
+    return Math.abs((1 * mShooterMotor.getSelectedSensorVelocity()) / 1);//Constants.kShooterTicksPerRevolution);
   }
 
   /**
@@ -90,22 +122,27 @@ public class Shooter extends SubsystemBase {
     return mShooterMotor.getMotorOutputVoltage();
   }
 
+  public double getShooterAmps() {
+    return mShooterMotor.getSupplyCurrent();
+  }
+
   /**
    * 
    * @param zone
    */
   private void MoveFlapTo(ZoneAnalogPosition zone) {
     // If Flap is too far forward,                        then go backward
-    if(Potentiometer.getVoltage() > zone.AnalogTarget+0.02) {  Slider.set(0.5);  } 
+    if(Potentiometer.getVoltage() > zone.AnalogTarget+0.01) {  Slider.set(0.5);  } 
 
     //   If Flap is too far backward                           then go forward
-    else if(Potentiometer.getVoltage() < zone.AnalogTarget-0.02) {  Slider.set(-0.5);  }
+    else if(Potentiometer.getVoltage() < zone.AnalogTarget-0.01) {  Slider.set(-0.5);  }
 
     // Otherwise Step
     else {  Slider.set(0);  }
 
-    SmartDashboard.putString("state", zone.toString());
-    SmartDashboard.putString("select state", SelectedZone.toString());
+    if (TargetVoltage != 0) {
+      TargetVoltage = zone.voltage;
+    }
   }
 
   public void setFlapToGreen()    {   SelectedZone = Zones.GREEN;  }
@@ -116,4 +153,7 @@ public class Shooter extends SubsystemBase {
 
   public void setFlapToRed()      {   SelectedZone = Zones.RED;    }
 
+  public void PARTYTIME()         {   SelectedZone = Zones.PARTY;  }
+
+  public void setToPowerYellow()   {   SelectedZone = Zones.POWER_YELLOW;   }
 }
