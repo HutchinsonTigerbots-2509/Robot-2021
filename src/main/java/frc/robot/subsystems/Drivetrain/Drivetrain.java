@@ -27,6 +27,8 @@ public class Drivetrain extends SubsystemBase {
 
   private DrivetrainMode CurrentMode = DrivetrainMode.FULL;
 
+  private boolean enableRonDriveModified = false;
+
 
   public Drivetrain() {
   
@@ -49,8 +51,11 @@ public class Drivetrain extends SubsystemBase {
         CreepDrive(RobotContainer.OpStick);
         break;
       default:
-        // ModifiedRonDrive(RobotContainer.OpStick); 
-        RonDrive(RobotContainer.OpStick);
+        if (enableRonDriveModified) {
+          ModifiedRonDrive(RobotContainer.OpStick);
+        } else {
+          RonDrive(RobotContainer.OpStick);
+        }
         break;
     }
 

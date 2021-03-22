@@ -23,6 +23,7 @@ public class Shooter extends SubsystemBase {
   private static double TargetVoltage = 0;
   private static double CurrentVoltage = 0;
   private static double CurrentProfileTime = 0;
+
   private static double IdealTime = 5;
   private static double MaxSpeed = 1;
   private static double ProfileSlope = MaxSpeed / IdealTime;
@@ -39,6 +40,7 @@ public class Shooter extends SubsystemBase {
     ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67,          0.80);
     ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.68);
     ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
+    
     ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.10, 0.95);
 
   }
@@ -49,29 +51,38 @@ public class Shooter extends SubsystemBase {
     
       case GREEN: 
           MoveFlapTo(ZonesList[0]);
+          UpdateTargetVoltage(ZonesList[0]);
           break;
           
       case YELLOW:
           MoveFlapTo(ZonesList[1]);
+          UpdateTargetVoltage(ZonesList[1]);
           break;
 
       case BLUE:
           MoveFlapTo(ZonesList[2]);
+          UpdateTargetVoltage(ZonesList[2]);
           break;
 
       case RED:
           MoveFlapTo(ZonesList[3]);
+          UpdateTargetVoltage(ZonesList[3]);
           break;
 
       case PARTY:
           MoveFlapTo(ZonesList[4]);
+          UpdateTargetVoltage(ZonesList[4]);
           break;
 
       case POWER_YELLOW:
           MoveFlapTo(ZonesList[5]);
+          UpdateTargetVoltage(ZonesList[5]);
           break;
+      
       default:
+          UpdateTargetVoltage(ZonesList[2]);
           MoveFlapTo(ZonesList[2]);
+    
     }
 
     if (TargetVoltage == CurrentVoltage) {
@@ -131,6 +142,7 @@ public class Shooter extends SubsystemBase {
    * @param zone
    */
   private void MoveFlapTo(ZoneAnalogPosition zone) {
+    
     // If Flap is too far forward,                        then go backward
     if(Potentiometer.getVoltage() > zone.AnalogTarget+0.01) {  Slider.set(0.5);  } 
 
@@ -140,6 +152,13 @@ public class Shooter extends SubsystemBase {
     // Otherwise Step
     else {  Slider.set(0);  }
 
+  }
+
+  /**
+   * 
+   * @param zone
+   */
+  private void UpdateTargetVoltage(ZoneAnalogPosition zone) {
     if (TargetVoltage != 0) {
       TargetVoltage = zone.voltage;
     }

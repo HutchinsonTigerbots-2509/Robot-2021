@@ -2,7 +2,6 @@ package frc.robot.commands.Shooter;
 
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter.Shooter;
 
@@ -12,10 +11,8 @@ public class RampUpShooterWithProfile extends CommandBase {
 
   private LinearRampProfile LRP;
 
-  private double mStartTime;
   private double mRampTime;
   private double mCurrentTime;
-  private double mVoltage;
   private double mTargetVoltage;
 
   /**

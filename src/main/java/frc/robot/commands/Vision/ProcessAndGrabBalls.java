@@ -1,6 +1,5 @@
 package frc.robot.commands.Vision;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
 import frc.robot.subsystems.Vision.FoundContour;
