@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 
-  private static Zones SelectedZone = Zones.POWER_YELLOW; // Green for nomral
+  private static Zones SelectedZone = Zones.PARTY; // Green for nomral
 
   private static double TargetVoltage = 0;
   private static double CurrentVoltage = 0;
@@ -35,15 +35,17 @@ public class Shooter extends SubsystemBase {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
 
     // What the values stand for ->       Zone          Analog Value   Motor Volts
-    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  3.02,          0.50); // 1
+    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.80,          1); // 3.02 .5
     ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3.10,          0.92);
-    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67,          0.80);
-    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.68);
+    ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67,          0.8);
+    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.68); 
     ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
     
     ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.10, 0.95);
 
   }
+
+  private double outputvoltage = 0;
 
   public void periodic() {
 
@@ -95,14 +97,39 @@ public class Shooter extends SubsystemBase {
       CurrentVoltage = ProfileSlope * (CurrentProfileTime + 0.02);
     }
 
-    mShooterMotor.set(CurrentVoltage);
+    if(CurrentVoltage >= 100) {
+      outputvoltage = CurrentVoltage + convertToVolts(pController(getError(convertToTicks(CurrentVoltage)), 0.001));
+    } else {
+      outputvoltage = CurrentVoltage;
+    }
+
+    mShooterMotor.set(outputvoltage);
     
-    SmartDashboard.putNumber("Shooter Amps", getShooterAmps());
+    // SmartDashboard.putNumber("Shooter Amps", getShooterAmps());
     SmartDashboard.putNumber("Shooter RPM", GetRPM());
+    // SmartDashboard.putNumber("REEEE", convertToVolts(pController(0.000, getError(convertToTicks(CurrentVoltage)))));
+    // SmartDashboard.putNumber("REEEE2", outputvoltage);
+    // SmartDashboard.putString("State", SelectedZone.toString());
   }
 
   public void setTargetVoltage(double target) {
     TargetVoltage = target;
+  }
+
+  private double convertToTicks(double volts) {
+    return (volts * 19640);
+  }
+
+  private double convertToVolts(double ticks) {
+    return (ticks / 19640);
+  }
+
+  private double getError(double target) {
+    return -(GetRPM() - convertToTicks(target));
+  }
+
+  private double pController(double kP, double error) {
+    return kP * error;
   }
 
   /**

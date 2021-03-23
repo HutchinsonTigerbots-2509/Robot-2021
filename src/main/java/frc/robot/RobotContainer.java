@@ -63,6 +63,7 @@ public class RobotContainer {
   private JoystickButton AgitatorTrigger;
   private JoystickButton ExtendIntake;
   private JoystickButton RetractIntake;
+  private JoystickButton AgitatorTrigger2;
 
   private JoystickButton SliderGreen;
   private JoystickButton SliderYellow;
@@ -101,11 +102,11 @@ public class RobotContainer {
       SwitchMode = new JoystickButton(OpStick, 9);
       SwitchMode.whenPressed(new InstantCommand(() -> sDrivetrain.SwitchMode()));
 
-      IntakeIn = new JoystickButton(CoOpStick, Constants.kXboxRightBumper);
+      IntakeIn = new JoystickButton(OpStick, Constants.kXboxRightBumper);
       IntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
       IntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
       
-      IntakeOut = new JoystickButton(CoOpStick, Constants.kXboxLeftBumper);
+      IntakeOut = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
       IntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
       IntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
 
@@ -114,6 +115,14 @@ public class RobotContainer {
 
       RetractIntake = new JoystickButton(OpStick, Constants.kXboxButtonX);
       RetractIntake.whenPressed(new InstantCommand(() -> sIntake.Retract()));
+
+      AgitatorTrigger = new JoystickButton(OpStick, Constants.kXboxButtonY);
+      AgitatorTrigger.whenPressed(new InstantCommand(() -> sConveyor.setAgitator(-0.5)));
+      AgitatorTrigger.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
+
+      AgitatorTrigger2 = new JoystickButton(OpStick, Constants.kXboxButtonB);
+      AgitatorTrigger2.whenPressed(new InstantCommand(() -> sConveyor.setAgitator(0.5)));
+      AgitatorTrigger2.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
       
       /* CoOpStick Buttons */
       // Shooter
@@ -145,16 +154,12 @@ public class RobotContainer {
 
       // Conveyor
       ConveyorUp = new JoystickButton(CoOpStick, 10);
-      ConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(1)));
+      ConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
       ConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
       ConveyorDown = new JoystickButton(CoOpStick, 9);
-      ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1))); // .70
+      ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-0.7))); // .70
       ConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
-
-      AgitatorTrigger = new JoystickButton(CoOpStick, Constants.kXboxButtonBack);
-      AgitatorTrigger.whenPressed(new InstantCommand(() -> sConveyor.setAgitator(-0.5)));
-      AgitatorTrigger.whenReleased(new InstantCommand(() -> sConveyor.setAgitator(0)));
 
     // ***** BOUNCE PATH ***** //
     // Description
