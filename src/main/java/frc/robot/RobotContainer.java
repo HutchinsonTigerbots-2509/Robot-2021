@@ -174,6 +174,7 @@ public class RobotContainer {
   // Markers with vision tape are B4, B7, B8, B10, D5, D7, & D8
   // Markers without vision tape are B1, B2, B5, & B11
   // Markers that don't matter are D1, D2, D3, D10, D11, & E3
+  /*
   private Command AutoCommand = new SequentialCommandGroup(
     //Sets the start time for the timer
     new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
@@ -235,24 +236,26 @@ public class RobotContainer {
     //Prints out the time it took to run the path
     new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime)
   ));
+  */
 
   // ***** BARREL RACING PATH ***** //
   // FULLY FUNCTIONAL. ~16.3 SECONDS WITH NEW BATTERY.
   // Markers with Vision tape are B2, D2, D5, B8, and D10
   // Markers without vision tape are B1 and D2
-  /*
+  
   private Command AutoCommand = new SequentialCommandGroup(
     //Sets the start time for the timer
     new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
     //Drives straight to set up for first marker
     new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    new DriveStraight(sDrivetrain, 0.8).withTimeout(0.5),
+    new InstantCommand(() -> sVision.SwitchPipeline(1)),
+    new DriveStraight(sDrivetrain, 0.8, true).withTimeout(0.5),
     // new WaitCommand(0.2),
     //Rotates around first marker
     new Rotate(sDrivetrain, sVision, -0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 350), //315
     //Strafes + Drives to set up for second marker
-    new StrafeStraight(sDrivetrain, -1).withTimeout(0.3),
-    new DriveStraight(sDrivetrain, 1).withTimeout(0.4), //0.6
+    new StrafeStraight(sDrivetrain, -1, false).withTimeout(0.3),
+    new DriveStraight(sDrivetrain, 1, false).withTimeout(0.4), //0.6
     // new WaitCommand(0.2),
     //Turns if the robot isn't facing the marker or is facing the wrong marker
     new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.getTargetX() <= 0),
@@ -260,19 +263,19 @@ public class RobotContainer {
     new Rotate(sDrivetrain, sVision, 0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
     //Strafes + Drives to set up for third marker
     new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.4), //0.7 (timeout)
-    new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
+    new DriveStraight(sDrivetrain, 1, false).withTimeout(0.4),
     //Turns if the robot isn't facing the marker
     new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withTimeout(0.2),
     new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
     //Rotates around third marker
     new Rotate(sDrivetrain, sVision, 0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
     //Strafes to the side for final run
-    new StrafeStraight(sDrivetrain, 1).withTimeout(0.2),
+    new StrafeStraight(sDrivetrain, 1, false).withTimeout(0.2),
     //Switches pipeline to dual target mode
     new InstantCommand(() -> sVision.SwitchPipeline(2)),
     //Drives forward until several requirements have been satisfied
     new ParallelRaceGroup(
-      new DriveStraight(sDrivetrain, 1, -180),
+      new DriveStraight(sDrivetrain, 1, -180, false),
       new SequentialCommandGroup(
         new WaitCommand(0.5),
         new WaitCommand(1000).withInterrupt(() -> sVision.GetTargetFound()),
@@ -287,7 +290,7 @@ public class RobotContainer {
     //Prints out the time it took to run the path
     new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
   );
-  */
+  
   
 
   // ***** SLALOM PATH
