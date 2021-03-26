@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 
-  private static Zones SelectedZone = Zones.PARTY; // Green for nomral
+  private static Zones SelectedZone = Zones.GREEN; // Green for nomral
 
   private static double TargetVoltage = 0;
   private static double CurrentVoltage = 0;
@@ -35,10 +35,10 @@ public class Shooter extends SubsystemBase {
     mShooterMotor.setNeutralMode(NeutralMode.Coast);
 
     // What the values stand for ->       Zone          Analog Value   Motor Volts
-    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.80,          1); // 3.02 .5
-    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3.10,          0.92);
+    ZonesList[0] = new ZoneAnalogPosition(Zones.GREEN,  2.7,          .43); // 3.02 
+    ZonesList[1] = new ZoneAnalogPosition(Zones.YELLOW, 3.115,          0.92);
     ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67,          0.8);
-    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.68); 
+    ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.8); 
     ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
     
     ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.10, 0.95);
