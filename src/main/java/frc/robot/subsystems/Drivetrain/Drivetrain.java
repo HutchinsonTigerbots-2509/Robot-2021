@@ -27,7 +27,7 @@ public class Drivetrain extends SubsystemBase {
 
   private DrivetrainMode CurrentMode = DrivetrainMode.FULL;
 
-  private boolean enableRonDriveModified = false;
+  private boolean enableRonDriveModified = true;
 
 
   public Drivetrain() {
@@ -66,7 +66,7 @@ public class Drivetrain extends SubsystemBase {
 
   private static AxisAccel forwardbackwardaxis = new AxisAccel(0.04, 0.04);
   private static AxisAccel strafeaxis = new AxisAccel(0.06, 0.06);
-  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.7);
+  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.4);
 
   private void RonDrive(Joystick pStick) {
     mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
@@ -75,9 +75,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private void ModifiedRonDrive(Joystick pStick) {
-    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
+    if (pStick.getRawAxis(0) > 0.2) {
+      mRearLeft.set(-0.2);
+      mRearRight.set(-0.2);
+      skip = true;
+    } else if (pStick.getRawAxis(0) < -0.2) {
+      mRearLeft.set(0.2);
+      mRearRight.set(0.2);
+      skip = true;
+    } else {
+      mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
                           forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           0);
+    }
   }
 
   private static double StrafeInput;

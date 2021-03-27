@@ -134,8 +134,8 @@ public class RobotContainer {
       
 
       // Slider
-      SliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
-      SliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
+      // SliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
+      // SliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
 
       SliderYellow = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
       SliderYellow.whenPressed(new InstantCommand(() -> sShooter.setFlapToYellow()));
@@ -143,22 +143,19 @@ public class RobotContainer {
       SliderGreen = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
       SliderGreen.whenPressed(new InstantCommand(() -> sShooter.setFlapToGreen()));
 
-      SliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
-      SliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
-
-      // JoystickButton powerup = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
-      // powerup.whenPressed(new InstantCommand(() -> sShooter.setToPowerYellow()));
+      // SliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+      // SliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
 
       // JoystickButton partybutton = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
       // partybutton.whenPressed(new InstantCommand(() -> sShooter.PARTYTIME()));
 
       // Conveyor
       ConveyorUp = new JoystickButton(CoOpStick, 10);
-      ConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
+      ConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(1)));
       ConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
       ConveyorDown = new JoystickButton(CoOpStick, 9);
-      ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-0.7))); // .70
+      ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1))); // .70
       ConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
     // ***** BOUNCE PATH ***** //

@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
   private static double CurrentVoltage = 0;
   private static double CurrentProfileTime = 0;
 
-  private static double IdealTime = 5;
+  private static double IdealTime = 0.9;
   private static double MaxSpeed = 1;
   private static double ProfileSlope = MaxSpeed / IdealTime;
 
@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.8); 
     ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
     
-    ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.10, 0.95);
+    ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.14, 1);
 
   }
 
