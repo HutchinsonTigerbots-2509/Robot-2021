@@ -2,25 +2,14 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-
-import frc.robot.commands.Drivetrain.DriveStraight;
-import frc.robot.commands.Drivetrain.Rotate;
-import frc.robot.commands.Drivetrain.StrafeStraight;
 
 import frc.robot.subsystems.Conveyor.Conveyor;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Vision.LimelightVision;
 import frc.robot.subsystems.Shooter.Shooter;
 
 /**
@@ -42,7 +31,6 @@ public class RobotContainer {
   
   // Subsystems
   public Drivetrain sDrivetrain = new Drivetrain();
-  private LimelightVision sVision = new LimelightVision();
   private Shooter sShooter = new Shooter();
   private Conveyor sConveyor = new Conveyor();
   private Intake sIntake = new Intake();
@@ -69,10 +57,6 @@ public class RobotContainer {
   private JoystickButton SliderYellow;
   private JoystickButton SliderBlue;
   private JoystickButton SliderRed;
-
-
-  //Autonomous Commands
-  private double AutoStartTime;
   
   /**
    * This constructor calls configureButtonBindings(). When that method runs, 
@@ -81,8 +65,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
-    // sShooter.setTargetVoltage(0.7);
-    // sIntake.Extend();
   }
 
   /**
@@ -134,8 +116,8 @@ public class RobotContainer {
       
 
       // Slider
-      SliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
-      SliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
+      // SliderBlue = new JoystickButton(CoOpStick, Constants.kXboxButtonX);
+      // SliderBlue.whenPressed(new InstantCommand(() -> sShooter.setFlapToBlue()));
 
       SliderYellow = new JoystickButton(CoOpStick, Constants.kXboxButtonY);
       SliderYellow.whenPressed(new InstantCommand(() -> sShooter.setFlapToYellow()));
@@ -143,141 +125,19 @@ public class RobotContainer {
       SliderGreen = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
       SliderGreen.whenPressed(new InstantCommand(() -> sShooter.setFlapToGreen()));
 
-      SliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
-      SliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
-
-      // JoystickButton powerup = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
-      // powerup.whenPressed(new InstantCommand(() -> sShooter.setToPowerYellow()));
+      // SliderRed = new JoystickButton(CoOpStick, Constants.kXboxButtonB);
+      // SliderRed.whenPressed(new InstantCommand(() -> sShooter.setFlapToRed()));
 
       // JoystickButton partybutton = new JoystickButton(CoOpStick, Constants.kXboxButtonA);
       // partybutton.whenPressed(new InstantCommand(() -> sShooter.PARTYTIME()));
 
       // Conveyor
       ConveyorUp = new JoystickButton(CoOpStick, 10);
-      ConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(0.7)));
+      ConveyorUp.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(1)));
       ConveyorUp.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
 
       ConveyorDown = new JoystickButton(CoOpStick, 9);
-      ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-0.7))); // .70
+      ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1))); // .70
       ConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
-
-    // ***** BOUNCE PATH ***** //
-    // Description
-    // bAutoCommands.whenPressed(new SequentialCommandGroup(
-    //   //Resets the gyro and Encoders
-    //   new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    //   //Drives straight until the average encoder count is above 64,000
-    //   new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
-    //   //Strafes left until the average encoder count is above 100,000
-    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    //   new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
-    // ));
-  }
-
-  // ***** BARREL RACING PATH ***** //
-  // FULLY FUNCTIONAL. ~16.3 SECONDS WITH NEW BATTERY.
-  // Markers with Vision tape are B2, D2, D5, B8, and D10
-  // Markers without vision tape are B1 and D2
-  
-  private Command AutoCommand = new SequentialCommandGroup(
-    //Sets the start time for the timer
-    new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
-    //Drives straight to set up for first marker
-    new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    new DriveStraight(sDrivetrain, 0.8).withTimeout(0.5),
-    // new WaitCommand(0.2),
-    //Rotates around first marker
-    new Rotate(sDrivetrain, sVision, -0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() > 350), //315
-    //Strafes + Drives to set up for second marker
-    new StrafeStraight(sDrivetrain, -1).withTimeout(0.3),
-    new DriveStraight(sDrivetrain, 1).withTimeout(0.4), //0.6
-    // new WaitCommand(0.2),
-    //Turns if the robot isn't facing the marker or is facing the wrong marker
-    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.getTargetX() <= 0),
-    //Rotates around second marker
-    new Rotate(sDrivetrain, sVision, 0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() < 55),
-    //Strafes + Drives to set up for third marker
-    new RunCommand(() -> sDrivetrain.DriveWithStrafe(0.9, 0.3, 0)).withTimeout(0.4), //0.7 (timeout)
-    new DriveStraight(sDrivetrain, 1).withTimeout(0.4),
-    //Turns if the robot isn't facing the marker
-    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withTimeout(0.2),
-    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, -0.5)).withInterrupt(() -> sVision.GetTargetFound()),
-    //Rotates around third marker
-    new Rotate(sDrivetrain, sVision, 0.6, -13.5).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
-    //Strafes to the side for final run
-    new StrafeStraight(sDrivetrain, 1).withTimeout(0.2),
-    //Switches pipeline to dual target mode
-    new InstantCommand(() -> sVision.SwitchPipeline(2)),
-    //Drives forward until several requirements have been satisfied
-    new ParallelRaceGroup(
-      new DriveStraight(sDrivetrain, 1, -180),
-      new SequentialCommandGroup(
-        new WaitCommand(0.5),
-        new WaitCommand(1000).withInterrupt(() -> sVision.GetTargetFound()),
-        new WaitCommand(0.5),
-        new WaitCommand(1000).withInterrupt(() -> !sVision.GetTargetFound()),
-        // CHECK THIS WAITCOMMAND BEFORE RUNNING
-        new WaitCommand(0.2)
-      )
-    ),
-    //Switches pipeline back to original pipeline
-    new InstantCommand(() -> sVision.SwitchPipeline(Constants.kLimelightStartingPipeline)),
-    //Prints out the time it took to run the path
-    new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
-  );
-  
-
-  // ***** SLALOM PATH
-  // Mostly functional. ~14.0 seconds with a new battery
-  // Markers with vision tape are D2, D4, D5, D6, D7, D8, and D10
-  // Markers without vision tape are B1, B2, and D1
-  /*
-  private Command AutoCommand = new SequentialCommandGroup(
-    //Sets the start time for the timer
-    new InstantCommand(() -> AutoStartTime = Timer.getFPGATimestamp()),
-    // Zeros the gyro and encoders
-    new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    // Drives forward (encoder based)
-    new DriveStraight(sDrivetrain, 1).withInterrupt(() -> sDrivetrain.EncoderAverage() > 41500),
-    // Strafes to the left
-    new StrafeStraight(sDrivetrain, -1, 0).withInterrupt(() -> sVision.getTargetX() > 24 && sVision.getTargetY() > 0),
-    // Drives until no more vision targets are found
-    new DriveStraight(sDrivetrain, 1, 0).withInterrupt(() -> !sVision.GetTargetFound()),
-    // Turns until the robot sees the final marker
-    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
-    // Rotates around the final marker
-    new Rotate(sDrivetrain, sVision, 0.6, -20).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -20),
-    new Rotate(sDrivetrain, sVision, 0.6, -14).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -170),
-    // Strafes to the right & drives forward
-    new StrafeStraight(sDrivetrain, 1, -180).withTimeout(0.3),
-    new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    new DriveStraight(sDrivetrain, 1, -180).withInterrupt(() -> sDrivetrain.EncoderAverage() > 65000),
-    // Strafes to the left
-    new StrafeStraight(sDrivetrain, -1, -180).withInterrupt(() -> sVision.getTargetX() > 8 && sVision.getTargetY() > -5),
-    new DriveStraight(sDrivetrain, 1, -180).withInterrupt(() -> !sVision.GetTargetFound()),
-    // Turns until the robot sees the marker
-    new RunCommand(() -> sDrivetrain.DriveWithoutStrafe(0, 0.5)).withInterrupt(() -> sVision.GetTargetFound()),
-    // Rotate around the marker
-    new Rotate(sDrivetrain, sVision, 0.6, -16).withInterrupt(() -> sDrivetrain.GetGyroAngle() < -260),
-    // Strafe into the end zone
-    new StrafeStraight(sDrivetrain, 1, -270).withTimeout(0.3),
-    //Prints out the time it took to run the path
-    new InstantCommand(() -> SmartDashboard.putNumber("AutoTime", Timer.getFPGATimestamp() - AutoStartTime))
-  );
-  */
-
-  /**
-   * Get Auto Command.
-   * 
-   * <p>
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // The Command to run in Autonomous
-    return AutoCommand;
   }
 }

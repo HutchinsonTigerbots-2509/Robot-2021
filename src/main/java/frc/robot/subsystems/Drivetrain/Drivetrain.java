@@ -4,8 +4,6 @@ package frc.robot.subsystems.Drivetrain;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
@@ -23,11 +21,9 @@ public class Drivetrain extends SubsystemBase {
 
   public MecanumDrive mDrive;
 
-  private AHRS mGyro = new AHRS();
-
   private DrivetrainMode CurrentMode = DrivetrainMode.FULL;
 
-  private boolean enableRonDriveModified = false;
+  private boolean enableRonDriveModified = true;
 
 
   public Drivetrain() {
@@ -38,9 +34,6 @@ public class Drivetrain extends SubsystemBase {
     mRearRight = new WPI_TalonFX(Constants.kRearRightID);
 
     mDrive = new MecanumDrive(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
-
-    ResetGyro();
-    ResetEncoders();
   }
 
   /**Periodic function */
@@ -66,7 +59,7 @@ public class Drivetrain extends SubsystemBase {
 
   private static AxisAccel forwardbackwardaxis = new AxisAccel(0.04, 0.04);
   private static AxisAccel strafeaxis = new AxisAccel(0.06, 0.06);
-  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.7);
+  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.4);
 
   private void RonDrive(Joystick pStick) {
     mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
@@ -75,9 +68,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private void ModifiedRonDrive(Joystick pStick) {
-    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
+    if (pStick.getRawAxis(0) > 0.2) {
+      mRearLeft.set(-0.2);
+      mRearRight.set(-0.2);
+      skip = true;
+    } else if (pStick.getRawAxis(0) < -0.2) {
+      mRearLeft.set(0.2);
+      mRearRight.set(0.2);
+      skip = true;
+    } else {
+      mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
                           forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           0);
+    }
   }
 
   private static double StrafeInput;
@@ -133,86 +136,22 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  // ***** AUTONOMOUS DRIVE METHODS ***** //
-
-  /**
-   * Drives without strafe (arcadeDrive, essentially)
-   * @param pXSpeed forward speed
-   * @param pZSpeed rotational speed
-   */
-  public void DriveWithoutStrafe(double pXSpeed, double pZSpeed) {
-    mDrive.driveCartesian(0, pXSpeed, pZSpeed);
-  }
-
-  /**
-   * Drives with strafe (cartesianDrive)
-   * @param pYSpeed strafe speed
-   * @param pXSpeed forward speed
-   * @param pZSpeed rotational speed
-   */
-  public void DriveWithStrafe(double pYSpeed, double pXSpeed, double pZSpeed) {
-    mDrive.driveCartesian(pYSpeed, pXSpeed, pZSpeed);
-  }
-
-  /** Stops the robot */
-  public void StopDrivetrain() {
-    mDrive.driveCartesian(0, 0, 0);
-  }
-
-  // ***** ENCODER METHODS ***** //
-
-  /** Zeroes the encoders */
-  public void ResetEncoders(){
-    mRearRight.setSelectedSensorPosition(0);
-    mRearLeft.setSelectedSensorPosition(0);
-    mFrontRight.setSelectedSensorPosition(0);
-    mFrontLeft.setSelectedSensorPosition(0);
-  }
-
-  /** Gets the average encoder count from 3 of the drivetrain motors */
-  public double EncoderAverage(){
-    return (Math.abs(mRearRight.getSelectedSensorPosition()) + 
-            Math.abs(mRearLeft.getSelectedSensorPosition()) + 
-            // Math.abs(mFrontRight.getSelectedSensorPosition()) + 
-            Math.abs(mFrontLeft.getSelectedSensorPosition())) / 3;
-  }
-
-  // ***** GYRO METHODS ***** //
-
-  /**
-   * Gets gyro angle
-   * @return The gyro angle
-   */
-  public double GetGyroAngle() {
-    return mGyro.getAngle();
-  }
-
-  /** Zeros the gyro */
-  public void ResetGyro() {
-    mGyro.reset();
-    mGyro.resetDisplacement();
-  }
-
   /** Initializes the drivetrain motors. Called in Robot */
   public void InitializeDrivetrain(){
-    // Sets the Neutral Mode of the motors (what the motors do when their recieved
-    // voltage is 0)
+    // This means when the motors are set to 0, the motors will
+    // automatically stop. NeutralMode.Coast will cause the
+    // motors to continue spinning.
     mFrontRight.setNeutralMode(NeutralMode.Brake);
     mRearRight.setNeutralMode(NeutralMode.Brake);
     mFrontLeft.setNeutralMode(NeutralMode.Brake);
     mRearLeft.setNeutralMode(NeutralMode.Brake);
 
-    // Sets whether or not the motors are inverted
+    // Sets the motors to flip inputs (forwards for the motors is backwards
+    // for the program now)
     mFrontRight.setInverted(true);
     mRearRight.setInverted(true);
     mFrontLeft.setInverted(true);
     mRearLeft.setInverted(true);
   }
-  
-  public void StrafeSpeeds(double RightFrontSpeed, double LeftFrontSpeed, double RightRearSpeed, double LeftRearSpeed){
-    mFrontLeft.set(LeftFrontSpeed);
-    mFrontRight.set(RightFrontSpeed);
-    mRearLeft.set(LeftRearSpeed);
-    mRearRight.set(RightRearSpeed);
-  }
+
 }

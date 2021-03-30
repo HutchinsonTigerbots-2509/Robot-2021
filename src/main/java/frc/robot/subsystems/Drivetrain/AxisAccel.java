@@ -39,7 +39,7 @@ public class AxisAccel {
         positvemulti = pmulti;
         negativemulti = nmulti;
         min = 0.1;
-        max = 0.9;
+        max = 1; // 0.9
     }
 
     /**

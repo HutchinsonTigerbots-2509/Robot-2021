@@ -6,7 +6,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * Robot class.
@@ -29,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Robot extends TimedRobot {
 
   private static RobotContainer mRobotContainer;
-  private Command m_autonomousCommand;
   private Compressor mCompressor = new Compressor();
 
 
@@ -50,25 +48,6 @@ public class Robot extends TimedRobot {
     mRobotContainer.sDrivetrain.InitializeDrivetrain();
     
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    // new Thread(() -> {
-    //   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    //   camera.setResolution(640, 480);
-      
-
-    //   CvSink cvSink = CameraServer.getInstance().getVideo();
-    //   CvSource outputStream = CameraServer.getInstance().putVideo("CustomCrosshair", 640, 480);
-
-    //   Mat source = new Mat();
-    //   Mat output = new Mat();
-
-    //   while(!Thread.interrupted()) {
-    //     if (cvSink.grabFrame(source) == 0) {
-    //       continue;
-    //     }
-    //     Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-    //     outputStream.putFrame(output);
-    //   }
-    // }).start();
   }
 
   /**
@@ -100,26 +79,13 @@ public class Robot extends TimedRobot {
    * {@link RobotContainer} class.
    */
   public void autonomousInit() {
-    m_autonomousCommand = mRobotContainer.getAutonomousCommand();
-    // // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-    m_autonomousCommand.schedule();
-    }
   }
 
   /** This function is called periodically during autonomous. */
   public void autonomousPeriodic() {}
 
   /** This function is called during the beginning of operator control. */
-  public void teleopInit() {
-    // // This makes sure that the autonomous stops running when
-    // // teleop starts running. If you want the autonomous to
-    // // continue until interrupted by another command, remove
-    // // this line or comment it out.
-    if (m_autonomousCommand != null) {
-    m_autonomousCommand.cancel();
-    }
-  }
+  public void teleopInit() {}
 
   /** This function is called periodically during operator control. */
   public void teleopPeriodic() {}
