@@ -76,12 +76,12 @@ public class Drivetrain extends SubsystemBase {
 
   private void ModifiedRonDrive(Joystick pStick) {
     if (pStick.getRawAxis(0) > 0.2) {
-      mRearLeft.set(-0.2);
-      mRearRight.set(-0.2);
+      mRearLeft.set(-1);
+      mRearRight.set(-1);
       skip = true;
     } else if (pStick.getRawAxis(0) < -0.2) {
-      mRearLeft.set(0.2);
-      mRearRight.set(0.2);
+      mRearLeft.set(1);
+      mRearRight.set(1);
       skip = true;
     } else {
       mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
