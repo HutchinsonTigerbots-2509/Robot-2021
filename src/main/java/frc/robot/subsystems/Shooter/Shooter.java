@@ -14,7 +14,7 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
   
   private WPI_TalonFX mShooterMotor = new WPI_TalonFX(Constants.kShooterMotorID);
-  private WPI_TalonSRX Slider = new WPI_TalonSRX(Constants.kSliderMotorID);
+  private WPI_TalonSRX Slider = new WPI_TalonSRX(8);
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 

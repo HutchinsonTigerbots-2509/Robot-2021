@@ -42,9 +42,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     mRobotContainer = new RobotContainer();
-    //mCompressor.stop();
     
-    //Sets up the Drivetrain motors
+    
     mRobotContainer.sDrivetrain.InitializeDrivetrain();
     
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -68,26 +67,13 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
-  /** This function is called once each time the robot enters Disabled mode. */
   public void disabledInit() {}
-
-  /** This function is called periodically during Disabled mode. */
   public void disabledPeriodic() {}
 
-  /**
-   * This autonomous runs the autonomous command selected by your
-   * {@link RobotContainer} class.
-   */
-  public void autonomousInit() {
-  }
-
-  /** This function is called periodically during autonomous. */
+  public void autonomousInit() {}
   public void autonomousPeriodic() {}
 
-  /** This function is called during the beginning of operator control. */
   public void teleopInit() {}
-
-  /** This function is called periodically during operator control. */
   public void teleopPeriodic() {}
 
   /** This function is called at the beginning of test mode */

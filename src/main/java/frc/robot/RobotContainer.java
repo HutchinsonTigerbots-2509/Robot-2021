@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Conveyor.Conveyor;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Vision.LimelightVision;
 import frc.robot.subsystems.Shooter.Shooter;
 
 /**
@@ -31,6 +32,7 @@ public class RobotContainer {
   
   // Subsystems
   public Drivetrain sDrivetrain = new Drivetrain();
+  private LimelightVision sVision = new LimelightVision();
   private Shooter sShooter = new Shooter();
   private Conveyor sConveyor = new Conveyor();
   private Intake sIntake = new Intake();
@@ -57,6 +59,10 @@ public class RobotContainer {
   private JoystickButton SliderYellow;
   private JoystickButton SliderBlue;
   private JoystickButton SliderRed;
+
+
+  //Autonomous Commands
+  private double AutoStartTime;
   
   /**
    * This constructor calls configureButtonBindings(). When that method runs, 
@@ -65,6 +71,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
+    // sShooter.setTargetVoltage(0.7);
+    // sIntake.Extend();
   }
 
   /**
@@ -139,5 +147,18 @@ public class RobotContainer {
       ConveyorDown = new JoystickButton(CoOpStick, 9);
       ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1))); // .70
       ConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
+
+    // ***** BOUNCE PATH ***** //
+    // Description
+    // bAutoCommands.whenPressed(new SequentialCommandGroup(
+    //   //Resets the gyro and Encoders
+    //   new InstantCommand(() -> sDrivetrain.ResetGyro()),
+    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+    //   //Drives straight until the average encoder count is above 64,000
+    //   new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
+    //   //Strafes left until the average encoder count is above 100,000
+    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
+    //   new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
+    // ));
   }
 }
