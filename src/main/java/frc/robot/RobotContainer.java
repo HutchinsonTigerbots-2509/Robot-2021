@@ -60,9 +60,6 @@ public class RobotContainer {
   private JoystickButton SliderBlue;
   private JoystickButton SliderRed;
 
-
-  //Autonomous Commands
-  private double AutoStartTime;
   
   /**
    * This constructor calls configureButtonBindings(). When that method runs, 
@@ -71,8 +68,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
-    // sShooter.setTargetVoltage(0.7);
-    // sIntake.Extend();
   }
 
   /**
@@ -147,18 +142,5 @@ public class RobotContainer {
       ConveyorDown = new JoystickButton(CoOpStick, 9);
       ConveyorDown.whenPressed(new InstantCommand(() -> sConveyor.setConveyor(-1))); // .70
       ConveyorDown.whenReleased(new InstantCommand(() -> sConveyor.setConveyor(0)));
-
-    // ***** BOUNCE PATH ***** //
-    // Description
-    // bAutoCommands.whenPressed(new SequentialCommandGroup(
-    //   //Resets the gyro and Encoders
-    //   new InstantCommand(() -> sDrivetrain.ResetGyro()),
-    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    //   //Drives straight until the average encoder count is above 64,000
-    //   new DriveStraight(sDrivetrain, 0.7).withInterrupt(() -> sDrivetrain.EncoderAverage() > 64000),
-    //   //Strafes left until the average encoder count is above 100,000
-    //   new InstantCommand(() -> sDrivetrain.ResetEncoders()),
-    //   new StrafeStraight(sDrivetrain, -0.8, 0).withInterrupt(() -> sDrivetrain.EncoderAverage() > 100000)
-    // ));
   }
 }

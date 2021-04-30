@@ -6,15 +6,32 @@ package frc.robot.subsystems.Vision;
  * found by the programs.
  */
 public class FoundContour {
-    public double CenterX;
-    public double CenterY;
-    public double Area;
-    public boolean IsTargeted;
+    public int CenterX;
+    public int CenterY;
 
-    public FoundContour(double pCenterX, double pCenterY, double pArea, boolean pIsTargeted) {
+    public FoundContour(int pCenterX, int pCenterY) {
         CenterX = pCenterX;
         CenterY = pCenterY;
-        Area = pArea;
-        IsTargeted = pIsTargeted;
+    } 
+    
+    public FoundContour() {
+        CenterX = -1;
+        CenterY = -1;
     }   
+
+    public void setX(int x) {
+        CenterX = x;
+    }
+
+    public void setY(int y) {
+        CenterY = y;
+    }
+
+    public int getX() {
+        return CenterX;
+    }
+
+    public int getY() {
+        return CenterY;
+    }
 }
