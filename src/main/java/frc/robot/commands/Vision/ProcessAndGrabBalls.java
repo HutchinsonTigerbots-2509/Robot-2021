@@ -29,7 +29,7 @@ public class ProcessAndGrabBalls extends CommandBase {
   public void execute() {
 
     // Updates contours list and runs pipeline
-    contours = sUsbVision.getContours();
+    //contours = sUsbVision.getContours();
 
     // Selects the ball that we are going to track: the furthest away and
     // the leftmost ball

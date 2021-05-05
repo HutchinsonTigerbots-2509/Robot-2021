@@ -48,8 +48,10 @@ public class Robot extends TimedRobot {
     
     //Sets up the Drivetrain motors
     mRobotContainer.sDrivetrain.InitializeDrivetrain();
+    mRobotContainer.sVision.LimelightInit();
     
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    //UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();    //Uncomment?
+
     // new Thread(() -> {
     //   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
     //   camera.setResolution(640, 480);

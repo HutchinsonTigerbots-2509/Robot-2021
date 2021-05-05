@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 
-  private static Zones SelectedZone = Zones.GREEN; // Green for nomral
+  private static Zones SelectedZone = Zones.GREEN_FLAT; // Green for normal
 
   private static double TargetVoltage = 0;
   private static double CurrentVoltage = 0;
@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
   private static double MaxSpeed = 1;
   private static double ProfileSlope = MaxSpeed / IdealTime;
 
-  private ZoneAnalogPosition[] ZonesList = new ZoneAnalogPosition[6];
+  private ZoneAnalogPosition[] ZonesList = new ZoneAnalogPosition[11];
 
   public Shooter() {
     
@@ -40,8 +40,14 @@ public class Shooter extends SubsystemBase {
     ZonesList[2] = new ZoneAnalogPosition(Zones.BLUE,   3.67,          0.8);
     ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.8); 
     ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
+
+    ZonesList[5] = new ZoneAnalogPosition(Zones.GREEN_FLAT,   2.71,     0.48);
+    ZonesList[6] = new ZoneAnalogPosition(Zones.YELLOW_FLAT,  3.084,   0.91);
+    ZonesList[7] = new ZoneAnalogPosition(Zones.BLUE_FLAT,    3.54,    0.85);
+    ZonesList[8] = new ZoneAnalogPosition(Zones.RED_FLAT,     3.73,    0.8);
     
-    ZonesList[5] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.14, 1);
+    ZonesList[9] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.14, 1);
+    ZonesList[10] = new ZoneAnalogPosition(Zones.SNOWBALL_THROWER, 3.74, 1);
 
   }
 
@@ -76,9 +82,34 @@ public class Shooter extends SubsystemBase {
           UpdateTargetVoltage(ZonesList[4]);
           break;
 
-      case POWER_YELLOW:
+      case GREEN_FLAT: 
           MoveFlapTo(ZonesList[5]);
           UpdateTargetVoltage(ZonesList[5]);
+          break;
+
+      case YELLOW_FLAT: 
+          MoveFlapTo(ZonesList[6]);
+          UpdateTargetVoltage(ZonesList[6]);
+          break;
+
+      case BLUE_FLAT: 
+          MoveFlapTo(ZonesList[7]);
+          UpdateTargetVoltage(ZonesList[7]);
+          break;
+
+      case RED_FLAT: 
+          MoveFlapTo(ZonesList[8]);
+          UpdateTargetVoltage(ZonesList[8]);
+          break;
+
+      case POWER_YELLOW:
+          MoveFlapTo(ZonesList[9]);
+          UpdateTargetVoltage(ZonesList[9]);
+          break;
+
+      case SNOWBALL_THROWER:
+          MoveFlapTo(ZonesList[10]);
+          UpdateTargetVoltage(ZonesList[10]);
           break;
       
       default:
@@ -191,13 +222,13 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public void setFlapToGreen()    {   SelectedZone = Zones.GREEN;  }
+  public void setFlapToGreen()    {   SelectedZone = Zones.GREEN_FLAT;  }
 
-  public void setFlapToYellow()   {   SelectedZone = Zones.YELLOW; }
+  public void setFlapToYellow()   {   SelectedZone = Zones.YELLOW_FLAT; }
 
-  public void setFlapToBlue()     {   SelectedZone = Zones.BLUE;   }
+  public void setFlapToBlue()     {   SelectedZone = Zones.BLUE_FLAT;   }
 
-  public void setFlapToRed()      {   SelectedZone = Zones.RED;    }
+  public void setFlapToRed()      {   SelectedZone = Zones.RED_FLAT;    }
 
   public void PARTYTIME()         {   SelectedZone = Zones.PARTY;  }
 

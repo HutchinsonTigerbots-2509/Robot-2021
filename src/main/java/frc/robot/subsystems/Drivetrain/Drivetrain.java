@@ -54,19 +54,21 @@ public class Drivetrain extends SubsystemBase {
         if (enableRonDriveModified) {
           ModifiedRonDrive(RobotContainer.OpStick);
         } else {
-          RonDrive(RobotContainer.OpStick);
+          //RonDrive(RobotContainer.OpStick);
+          FieldOrientedDrive(RobotContainer.OpStick);
         }
         break;
     }
 
-    SmartDashboard.putString("Drivetrain Mode", CurrentMode.toString());
+    // SmartDashboard.putString("Drivetrain Mode", CurrentMode.toString());
+    SmartDashboard.putNumber("Gyro", GetGyroAngle());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //
 
   private static AxisAccel forwardbackwardaxis = new AxisAccel(0.04, 0.04);
   private static AxisAccel strafeaxis = new AxisAccel(0.06, 0.06);
-  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.4);
+  private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.4); // 1
 
   private void RonDrive(Joystick pStick) {
     mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
@@ -224,5 +226,43 @@ public class Drivetrain extends SubsystemBase {
     mFrontRight.set(RightFrontSpeed);
     mRearLeft.set(LeftRearSpeed);
     mRearRight.set(RightRearSpeed);
+  }
+
+  private double forward = 0;
+  private double strafe = 0;
+  private double theta = 0;
+  private double YSpeed = 0;
+  private double XSpeed = 0;
+  private double ZSpeed = 0;
+  private double GyroTarget = GetGyroAngle();
+
+  public void FieldOrientedDrive(Joystick stick){
+    forward = stick.getRawAxis(1);
+    strafe = stick.getRawAxis(0);
+    theta = Math.toRadians(GetGyroAngle());
+
+    XSpeed = -((forward * Math.cos(theta)) - (strafe * Math.sin(theta)));
+    YSpeed = -((forward * Math.sin(theta)) - (strafe * Math.cos(theta)));
+
+    /*
+    if(Math.abs(stick.getRawAxis(4)) > 0.1){
+      ZSpeed = turnaxis.periodic(stick.getRawAxis(4));
+      GyroTarget = GetGyroAngle();
+    } else if(Math.abs(YSpeed) + Math.abs(XSpeed) > 0.3){
+      turnaxis.periodic(stick.getRawAxis(4));
+      //ZSpeed = -0.02 * (GetGyroAngle() - GyroTarget);
+    } else {
+      turnaxis.periodic(stick.getRawAxis(4));
+      ZSpeed = 0;
+    } */
+
+    SmartDashboard.putNumber("Y", YSpeed);
+    SmartDashboard.putNumber("X", XSpeed);
+    SmartDashboard.putNumber("Z", ZSpeed);
+
+    mDrive.driveCartesian(
+      strafeaxis.periodic(YSpeed), 
+      forwardbackwardaxis.periodic(XSpeed),
+      turnaxis.periodic(stick.getRawAxis(4)));
   }
 }

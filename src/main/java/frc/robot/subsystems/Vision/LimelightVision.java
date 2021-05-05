@@ -48,11 +48,6 @@ public class LimelightVision extends SubsystemBase {
    * <p>Contains all information for the Limelight Networktable and it's values
    */
   public LimelightVision() {
-    //Sets default values (check Constants variable descriptions for more info)
-    mLimelightTable.getEntry("ledMode").setNumber(Constants.kLimelightLED);
-    mLimelightTable.getEntry("camMode").setNumber(Constants.kLimelightMode);
-    mLimelightTable.getEntry("stream").setNumber(Constants.kLimelightStream);
-    mLimelightTable.getEntry("pipeline").setNumber(Constants.kLimelightStartingPipeline);
   }
 
   /** Periodic function */
@@ -143,5 +138,13 @@ public class LimelightVision extends SubsystemBase {
    */
   public void SwitchPipeline(int pipeline){
     mLimelightTable.getEntry("pipeline").setNumber(pipeline);
+  }
+
+  public void LimelightInit(){
+    //Sets default values (check Constants variable descriptions for more info)
+    mLimelightTable.getEntry("ledMode").setNumber(Constants.kLimelightLED);
+    mLimelightTable.getEntry("camMode").setNumber(Constants.kLimelightMode);
+    mLimelightTable.getEntry("stream").setNumber(Constants.kLimelightStream);
+    mLimelightTable.getEntry("pipeline").setNumber(Constants.kLimelightStartingPipeline);
   }
 }
