@@ -242,27 +242,43 @@ public class Drivetrain extends SubsystemBase {
     theta = Math.toRadians(GetGyroAngle());
 
     XSpeed = -((forward * Math.cos(theta)) - (strafe * Math.sin(theta)));
-    YSpeed = -((forward * Math.sin(theta)) - (strafe * Math.cos(theta)));
-
-    /*
-    if(Math.abs(stick.getRawAxis(4)) > 0.1){
-      ZSpeed = turnaxis.periodic(stick.getRawAxis(4));
-      GyroTarget = GetGyroAngle();
-    } else if(Math.abs(YSpeed) + Math.abs(XSpeed) > 0.3){
-      turnaxis.periodic(stick.getRawAxis(4));
-      //ZSpeed = -0.02 * (GetGyroAngle() - GyroTarget);
-    } else {
-      turnaxis.periodic(stick.getRawAxis(4));
-      ZSpeed = 0;
-    } */
+    YSpeed = ((forward * Math.sin(theta)) - (strafe * -Math.cos(theta)));
 
     SmartDashboard.putNumber("Y", YSpeed);
     SmartDashboard.putNumber("X", XSpeed);
-    SmartDashboard.putNumber("Z", ZSpeed);
 
     mDrive.driveCartesian(
       strafeaxis.periodic(YSpeed), 
       forwardbackwardaxis.periodic(XSpeed),
       turnaxis.periodic(stick.getRawAxis(4)));
+  }
+
+
+  private void FieldOrientedDriveRotation(Joystick stick){
+    forward = stick.getRawAxis(1);
+    strafe = stick.getRawAxis(0);
+    theta = Math.toRadians(GetGyroAngle());
+
+    XSpeed = -((forward * Math.cos(theta)) - (strafe * Math.sin(theta)));
+    YSpeed = ((forward * Math.sin(theta)) - (strafe * -Math.cos(theta)));
+    ZSpeed = turnaxis.periodic(stick.getRawAxis(4));
+    
+    if(Math.abs(ZSpeed) > 0.05){
+      GyroTarget = GetGyroAngle();
+    } else if(Math.abs(YSpeed) + Math.abs(XSpeed) > 0.3){
+      ZSpeed = -0.02 * (GetGyroAngle() - GyroTarget);
+    } else {
+      ZSpeed = 0;
+    } 
+
+    SmartDashboard.putNumber("Y", YSpeed);
+    SmartDashboard.putNumber("X", XSpeed);
+    SmartDashboard.putNumber("Z", ZSpeed);
+    SmartDashboard.putNumber("Z targ", GyroTarget);
+
+    mDrive.driveCartesian(
+      strafeaxis.periodic(YSpeed), 
+      forwardbackwardaxis.periodic(XSpeed),
+      ZSpeed);
   }
 }

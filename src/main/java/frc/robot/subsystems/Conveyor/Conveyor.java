@@ -32,8 +32,8 @@ public class Conveyor extends SubsystemBase {
   public void periodic() {
     UpdateTopSensorValue();
     UpdateBottomSensorValue();
-    SmartDashboard.putNumber("Top Sensor", topLightSensor.getVoltage());
-    SmartDashboard.putNumber("Bottom Sensor", bottomLightSensor.getVoltage());
+    // SmartDashboard.putNumber("Top Sensor", topLightSensor.getVoltage());
+    // SmartDashboard.putNumber("Bottom Sensor", bottomLightSensor.getVoltage());
 
   }
 

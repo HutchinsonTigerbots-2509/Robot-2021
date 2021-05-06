@@ -41,10 +41,10 @@ public class Shooter extends SubsystemBase {
     ZonesList[3] = new ZoneAnalogPosition(Zones.RED,    3.74,          0.8); 
     ZonesList[4] = new ZoneAnalogPosition(Zones.PARTY,  3.80,          1.00);
 
-    ZonesList[5] = new ZoneAnalogPosition(Zones.GREEN_FLAT,   2.71,     0.48);
-    ZonesList[6] = new ZoneAnalogPosition(Zones.YELLOW_FLAT,  3.084,   0.91);
-    ZonesList[7] = new ZoneAnalogPosition(Zones.BLUE_FLAT,    3.54,    0.85);
-    ZonesList[8] = new ZoneAnalogPosition(Zones.RED_FLAT,     3.73,    0.8);
+    ZonesList[5] = new ZoneAnalogPosition(Zones.GREEN_FLAT,   2.71,     0.44);
+    ZonesList[6] = new ZoneAnalogPosition(Zones.YELLOW_FLAT,  3.11,   1);
+    ZonesList[7] = new ZoneAnalogPosition(Zones.BLUE_FLAT,    3.66,    0.8);
+    ZonesList[8] = new ZoneAnalogPosition(Zones.RED_FLAT,     3.75,    0.8);
     
     ZonesList[9] = new ZoneAnalogPosition(Zones.POWER_YELLOW, 3.14, 1);
     ZonesList[10] = new ZoneAnalogPosition(Zones.SNOWBALL_THROWER, 3.74, 1);
