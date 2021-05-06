@@ -27,7 +27,8 @@ public class Drivetrain extends SubsystemBase {
 
   private DrivetrainMode CurrentMode = DrivetrainMode.FULL;
 
-  private boolean enableRonDriveModified = true;
+  private boolean enableRonDriveModified = false;
+  private boolean fieldOrientateWithRotation = false;
 
 
   public Drivetrain() {
@@ -54,8 +55,11 @@ public class Drivetrain extends SubsystemBase {
         if (enableRonDriveModified) {
           ModifiedRonDrive(RobotContainer.OpStick);
         } else {
-          //RonDrive(RobotContainer.OpStick);
-          FieldOrientedDrive(RobotContainer.OpStick);
+          if(fieldOrientateWithRotation){
+            FieldOrientedDriveRotation(RobotContainer.OpStick);
+          } else {
+            FieldOrientedDrive(RobotContainer.OpStick);
+          }
         }
         break;
     }
@@ -266,7 +270,7 @@ public class Drivetrain extends SubsystemBase {
     if(Math.abs(ZSpeed) > 0.05){
       GyroTarget = GetGyroAngle();
     } else if(Math.abs(YSpeed) + Math.abs(XSpeed) > 0.3){
-      ZSpeed = -0.02 * (GetGyroAngle() - GyroTarget);
+      ZSpeed = -0.015 * (GetGyroAngle() - GyroTarget); //-0.02
     } else {
       ZSpeed = 0;
     } 
