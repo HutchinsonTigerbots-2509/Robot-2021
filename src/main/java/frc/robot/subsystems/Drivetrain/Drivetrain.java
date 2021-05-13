@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,7 +54,8 @@ public class Drivetrain extends SubsystemBase {
         break;
       default:
         if (enableRonDriveModified) {
-          ModifiedRonDrive(RobotContainer.OpStick);
+          // ModifiedRonDrive(RobotContainer.OpStick);
+          RonDrive(RobotContainer.OpStick);
         } else {
           if(fieldOrientateWithRotation){
             FieldOrientedDriveRotation(RobotContainer.OpStick);
@@ -75,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
   private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.4); // 1
 
   private void RonDrive(Joystick pStick) {
-    mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
+    mDrive.driveCartesian(strafeaxis.periodic(-pStick.getRawAxis(4)),
                           forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           turnaxis.periodic(pStick.getRawAxis(0)));
   }
@@ -238,6 +240,9 @@ public class Drivetrain extends SubsystemBase {
   private double YSpeed = 0;
   private double XSpeed = 0;
   private double ZSpeed = 0;
+  private double ZMultiplier;
+  private double ZMultiplierSmall = -0.025;
+  private double ZMultiplierBig = -0.05;
   private double GyroTarget = GetGyroAngle();
 
   public void FieldOrientedDrive(Joystick stick){
@@ -270,10 +275,16 @@ public class Drivetrain extends SubsystemBase {
     if(Math.abs(ZSpeed) > 0.05){
       GyroTarget = GetGyroAngle();
     } else if(Math.abs(YSpeed) + Math.abs(XSpeed) > 0.3){
-      ZSpeed = -0.015 * (GetGyroAngle() - GyroTarget); //-0.02
+      if(Math.abs(GetGyroAngle() - GyroTarget) > 10){
+        ZMultiplier = ZMultiplierBig;
+      } else {
+        ZMultiplier = ZMultiplierSmall;
+      }
+      ZSpeed = ZMultiplier * (GetGyroAngle() - GyroTarget);
     } else {
       ZSpeed = 0;
     } 
+
 
     SmartDashboard.putNumber("Y", YSpeed);
     SmartDashboard.putNumber("X", XSpeed);

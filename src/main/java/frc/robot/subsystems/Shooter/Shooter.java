@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
 
   private AnalogInput Potentiometer = new AnalogInput(3);
 
-  private static Zones SelectedZone = Zones.GREEN_FLAT; // Green for normal
+  private static Zones SelectedZone = Zones.RED; // Green for normal
 
   private static double TargetVoltage = 0;
   private static double CurrentVoltage = 0;
