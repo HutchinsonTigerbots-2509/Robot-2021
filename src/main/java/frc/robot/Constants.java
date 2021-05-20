@@ -60,8 +60,8 @@ public class Constants {
 
     // Settings
     public static int kLimelightLED = 0;                     // Sets LED. 0 = Set by Pipline, 1 = Force off, 2 = Force blink, 3 = Force on
-    public static int kLimelightMode = 1;                    // Sets camera mode. 0 = Vision processor, 1 = Driver Camera
-    public static int kLimelightStream = 2;                  // Sets streaming mode. 0 = Side-by-Side, 1 = PiP main, 2 = PiP secondary
+    public static int kLimelightMode = 0;                    // Sets camera mode. 0 = Vision processor, 1 = Driver Camera
+    public static int kLimelightStream = 0;                  // Sets streaming mode. 0 = Side-by-Side, 1 = PiP main, 2 = PiP secondary
     public static int kLimelightStartingPipeline = 1;        // The default pipeline to stream
 
     // Table IDs (for getting values from the Network Table)

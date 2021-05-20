@@ -68,6 +68,10 @@ public class Drivetrain extends SubsystemBase {
 
     // SmartDashboard.putString("Drivetrain Mode", CurrentMode.toString());
     SmartDashboard.putNumber("Gyro", GetGyroAngle());
+    SmartDashboard.putNumber("DT FrontLeft", mFrontLeft.getMotorOutputVoltage());
+    SmartDashboard.putNumber("DT FrontRight", mFrontRight.getMotorOutputVoltage());
+    SmartDashboard.putNumber("DT RearLeft", mRearLeft.getMotorOutputVoltage());
+    SmartDashboard.putNumber("DT RearRight", mRearRight.getMotorOutputVoltage());
   }
 
   // ***** TELEOP DRIVE METHODS ***** //

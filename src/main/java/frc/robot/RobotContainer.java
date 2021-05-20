@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.Rotate;
+import frc.robot.commands.Drivetrain.RotateTeleop;
 import frc.robot.commands.Drivetrain.StrafeStraight;
 
 import frc.robot.subsystems.Conveyor.Conveyor;
@@ -66,6 +67,7 @@ public class RobotContainer {
   private JoystickButton RetractIntake;
   private JoystickButton AgitatorTrigger2;
   private JoystickButton ResetGyro;
+  private JoystickButton RotateDriveButton;
 
   private JoystickButton SliderGreen;
   private JoystickButton SliderYellow;
@@ -128,6 +130,9 @@ public class RobotContainer {
 
       ResetGyro = new JoystickButton(OpStick, Constants.kXboxButtonStart);
       ResetGyro.whenPressed(new InstantCommand(() -> sDrivetrain.ResetGyro()));
+
+      RotateDriveButton = new JoystickButton(OpStick, Constants.kXboxLeftBumper);
+      RotateDriveButton.whileHeld(new RotateTeleop(sDrivetrain, sVision, -14));
       
       /* CoOpStick Buttons */
       // Shooter
