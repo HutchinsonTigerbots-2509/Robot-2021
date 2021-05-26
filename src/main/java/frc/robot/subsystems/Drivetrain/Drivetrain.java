@@ -28,7 +28,7 @@ public class Drivetrain extends SubsystemBase {
 
   private DrivetrainMode CurrentMode = DrivetrainMode.FULL;
 
-  private boolean enableRonDriveModified = false;
+  private boolean enableRonDriveModified = true;
   private boolean fieldOrientateWithRotation = false;
 
 
@@ -54,8 +54,8 @@ public class Drivetrain extends SubsystemBase {
         break;
       default:
         if (enableRonDriveModified) {
-          // ModifiedRonDrive(RobotContainer.OpStick);
-          RonDrive(RobotContainer.OpStick);
+          ModifiedRonDrive(RobotContainer.OpStick);
+          // RonDrive(RobotContainer.OpStick);
         } else {
           if(fieldOrientateWithRotation){
             FieldOrientedDriveRotation(RobotContainer.OpStick);
