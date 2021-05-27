@@ -63,8 +63,8 @@ public class Shooter extends SubsystemBase {
           break;
           
       case YELLOW:
-          MoveFlapTo(ZonesList[1]);
-          UpdateTargetVoltage(ZonesList[1]);
+          MoveFlapTo(ZonesList[9]);
+          UpdateTargetVoltage(ZonesList[9]);
           break;
 
       case BLUE:

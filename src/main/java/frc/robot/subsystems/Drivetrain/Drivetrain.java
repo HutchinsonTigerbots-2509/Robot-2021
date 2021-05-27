@@ -53,17 +53,21 @@ public class Drivetrain extends SubsystemBase {
         CreepDrive(RobotContainer.OpStick);
         break;
       default:
-        if (enableRonDriveModified) {
-          ModifiedRonDrive(RobotContainer.OpStick);
-          // RonDrive(RobotContainer.OpStick);
-        } else {
-          if(fieldOrientateWithRotation){
-            FieldOrientedDriveRotation(RobotContainer.OpStick);
-          } else {
-            FieldOrientedDrive(RobotContainer.OpStick);
-          }
-        }
+        ModifiedRonDrive(RobotContainer.OpStick);
         break;
+
+        // Uncomment these for feild orientated drive
+        // if (enableRonDriveModified) {
+        //   ModifiedRonDrive(RobotContainer.OpStick);
+        //   // RonDrive(RobotContainer.OpStick);
+        // } else {
+        //   if(fieldOrientateWithRotation){
+        //     FieldOrientedDriveRotation(RobotContainer.OpStick);
+        //   } else {
+        //     FieldOrientedDrive(RobotContainer.OpStick);
+        //   }
+        // }
+        // break;
     }
 
     // SmartDashboard.putString("Drivetrain Mode", CurrentMode.toString());
@@ -81,7 +85,7 @@ public class Drivetrain extends SubsystemBase {
   private static AxisAccel turnaxis = new AxisAccel(0.04, 0.04, 0.3, 0.4); // 1
 
   private void RonDrive(Joystick pStick) {
-    mDrive.driveCartesian(strafeaxis.periodic(-pStick.getRawAxis(4)),
+    mDrive.driveCartesian(strafeaxis.periodic(-pStick.getRawAxis(2)),
                           forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           turnaxis.periodic(pStick.getRawAxis(0)));
   }
@@ -96,7 +100,7 @@ public class Drivetrain extends SubsystemBase {
       mRearRight.set(1);
       skip = true;
     } else {
-      mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(4)),
+      mDrive.driveCartesian(strafeaxis.periodic(pStick.getRawAxis(2)),
                           forwardbackwardaxis.periodic(-pStick.getRawAxis(1)),
                           0);
     }

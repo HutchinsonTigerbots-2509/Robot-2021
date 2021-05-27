@@ -106,13 +106,13 @@ public class RobotContainer {
       SwitchMode = new JoystickButton(OpStick, 9);
       SwitchMode.whenPressed(new InstantCommand(() -> sDrivetrain.SwitchMode()));
 
-      // IntakeIn = new JoystickButton(CoOpStick, 1);
-      // IntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
-      // IntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
+      IntakeIn = new JoystickButton(CoOpStick, 7);
+      IntakeIn.whileHeld(new RunCommand(() -> sIntake.IntakeIn()));
+      IntakeIn.whenReleased(new InstantCommand(() -> sIntake.IntakeStop())); 
       
-      // IntakeOut = new JoystickButton(CoOpStick, 2);
-      // IntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
-      // IntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
+      IntakeOut = new JoystickButton(CoOpStick, 8);
+      IntakeOut.whileHeld(new RunCommand(() -> sIntake.IntakeOut()));
+      IntakeOut.whenReleased(new InstantCommand(() -> sIntake.IntakeStop()));
 
       ExtendIntake = new JoystickButton(CoOpStick, 9);
       ExtendIntake.whenPressed(new InstantCommand(() -> sIntake.Extend()));
